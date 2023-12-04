@@ -1,4 +1,10 @@
 {
   "extends": "eslint-config-egg",
-  "root": true
+  "root": true,
+  "rules": {
+    "semi": "off",
+    "quotes": "off",
+    "arrow-parens": "off",
+    "array-bracket-spacing": "off" // 数组每一项前后都要加空格，如[ 1 ]
+  }
 }

@@ -5,7 +5,7 @@ import { nextTick } from "vue"
 const api = axios.create({
   headers: {
     "Content-Type": "application/json"
-  }
+  },
 })
 // 请求拦截器
 api.interceptors.request.use(

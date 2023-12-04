@@ -5,7 +5,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import { testApi } from "@/api/index"
 
 testApi().then(res => {
-  console.log(res)
+  console.log(res.msg)
 })
 </script>
 

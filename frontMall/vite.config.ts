@@ -15,8 +15,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/cem": {
-        target: "http://localhost:8080",
+      "^/api": {
+        target: "http://localhost:7001",
         changeOrigin: true
       }
     }
