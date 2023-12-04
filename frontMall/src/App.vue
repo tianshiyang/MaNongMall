@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+
+import { testApi } from "@/api/index"
+
+testApi().then(res => {
+  console.log(res)
+})
 </script>
 
 <template>
@@ -9,6 +15,8 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
+
+      <el-button type="primary">按钮</el-button>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
