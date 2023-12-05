@@ -5,6 +5,7 @@
     "semi": "off",
     "quotes": "off",
     "arrow-parens": "off",
-    "array-bracket-spacing": "off" // 数组每一项前后都要加空格，如[ 1 ]
+    "array-bracket-spacing": "off", // 数组每一项前后都要加空格，如[ 1 ]
+    "jsdoc/require-param-description": "off"
   }
 }

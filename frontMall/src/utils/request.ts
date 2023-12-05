@@ -59,7 +59,7 @@ export function request<T = any>(config: MallAxiosRequestConfig): Promise<T> {
           resolve(res.data)
         } else {
           // 正常返回：处理失败的处理
-          reject(res.resultMsg)
+          reject(res.data)
         }
       })
       .catch((error) => {
@@ -70,7 +70,7 @@ export function request<T = any>(config: MallAxiosRequestConfig): Promise<T> {
           case 404:
             return reject("要访问的文件迷路了～")
           default:
-            return reject(error.response?.data?.resultMsg || "响应错误")
+            return reject(error.response.data.message || "服务端错误")
         }
       })
       .finally(() => {
