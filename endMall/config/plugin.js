@@ -8,4 +8,8 @@ module.exports = {
     enable: true,
     package: "egg-cors",
   },
+  jwt: {
+    enable: true,
+    package: "egg-jwt",
+  },
 }

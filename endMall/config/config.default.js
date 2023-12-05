@@ -14,9 +14,11 @@ module.exports = (appInfo) => {
   config.keys = appInfo.name + "_maNongMall"
 
   // add your middleware config here
+  // 这里配置全局中间件
   config.middleware = []
 
   config.security = {
+    // 配置csrf攻击
     csrf: {
       enable: false,
       ignoreJSON: true,
@@ -28,6 +30,13 @@ module.exports = (appInfo) => {
     origin: "*", // 允许所有跨域访问
     credentials: true, // 允许 Cookie 跨域跨域
     allowMethods: "GET,HEAD,PUT,POST,DELETE,PATCH",
+  }
+
+  config.jwt = {
+    secret: "MaNongMall",
+    sign: {
+      expiresIn: 7 * (24 * 60 * 60), // 7天免登录
+    },
   }
 
   // add your user config here

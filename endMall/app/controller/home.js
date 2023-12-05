@@ -1,14 +1,23 @@
-const { Controller } = require("egg")
+const BaseController = require("./globalController/BaseController")
 
-class HomeController extends Controller {
+class HomeController extends BaseController {
   async index() {
+    this.error({ aa: "asdsad" })
+  }
+
+  async login() {
     const { ctx } = this
-    ctx.body = {
-      data: {
-        msg: "nihao",
+    const data = ctx.app.jwt.sign(
+      {
+        data: {
+          name: "admin",
+        },
       },
-      isSuccess: true,
-    }
+      ctx.app.config.jwt.secret
+    )
+    this.success({
+      data,
+    })
   }
 }
 

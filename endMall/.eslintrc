@@ -6,6 +6,7 @@
     "quotes": "off",
     "arrow-parens": "off",
     "array-bracket-spacing": "off", // 数组每一项前后都要加空格，如[ 1 ]
-    "jsdoc/require-param-description": "off"
+    "jsdoc/require-param-description": "off",
+    "space-before-function-paren": "off"
   }
 }
