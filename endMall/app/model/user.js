@@ -23,6 +23,11 @@ module.exports = (app) => {
         comment: "手机号",
         unique: true,
       },
+      password: {
+        type: STRING(16),
+        allowNull: false,
+        comment: "密码",
+      },
       account_number: {
         type: STRING(36),
         allowNull: false,
@@ -47,7 +52,8 @@ module.exports = (app) => {
       },
     },
     {
-      timestamps: true,
+      freezeTableName: true, // 取消复数
+      timestamps: true, // 开启时间戳
       createdAt: "create_time",
       updatedAt: "update_time",
     }
