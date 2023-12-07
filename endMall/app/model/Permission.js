@@ -1,9 +1,9 @@
 "use strict"
 module.exports = (app) => {
-  const { STRING, BIGINT, BOOLEAN } = app.Sequelize
+  const { BIGINT, BOOLEAN } = app.Sequelize
 
-  const Role = app.model.define(
-    "permission",
+  const RolePermission = app.model.define(
+    "role_menu",
     {
       id: {
         type: BIGINT(11),
@@ -12,21 +12,15 @@ module.exports = (app) => {
         allowNull: false,
         comment: "主键ID",
       },
-      permission_name: {
-        type: STRING(10),
+      menu_id: {
+        type: BIGINT(11),
         allowNull: false,
-        comment: "权限名称",
+        comment: "菜单表主键id",
       },
-      permission_sign: {
-        type: STRING(20),
+      role_id: {
+        type: BIGINT(11),
         allowNull: false,
-        comment: "权限标识",
-        unique: true,
-      },
-      permission_remark: {
-        type: STRING(100),
-        allowNull: false,
-        comment: "权限描述",
+        comment: "角色表主键id",
       },
       is_delete: {
         type: BOOLEAN,
@@ -42,5 +36,5 @@ module.exports = (app) => {
     }
   )
 
-  return Role
+  return RolePermission
 }
