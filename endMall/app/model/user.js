@@ -48,7 +48,7 @@ module.exports = (app) => {
       is_delete: {
         type: BOOLEAN,
         defaultValue: false,
-        comment: "逻辑删除",
+        commeant: "逻辑删除",
       },
     },
     {
