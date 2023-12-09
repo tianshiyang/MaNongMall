@@ -3,7 +3,7 @@ module.exports = (app) => {
   const { BIGINT, BOOLEAN, STRING } = app.Sequelize
 
   const RolePermission = app.model.define(
-    "role_menu",
+    "permission",
     {
       id: {
         type: BIGINT(11),
