@@ -7,13 +7,13 @@ module.exports = () => {
         ctx.app.jwt.verify(token, ctx.app.jwt.secret)
         await next()
       } catch (error) {
-        let errorMessage = "认证失败"
+        let error_message = "认证失败"
         if (error.name === "TokenExpiredError") {
-          errorMessage = "登录过期, 请重新登录"
+          error_message = "登录过期, 请重新登录"
         }
         ctx.status = 401
         ctx.body = {
-          message: errorMessage,
+          message: error_message,
         }
         return
       }

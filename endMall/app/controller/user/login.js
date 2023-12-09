@@ -5,14 +5,14 @@ class HomeController extends BaseController {
   async login() {
     // Get请求，获取用户的账号和密码
     const rules = {
-      accountNumber: "string",
+      account_number: "string",
       password: "string",
     }
     // 校验参数
     const errors = await this.app.validator.validate(rules, this.ctx.query)
     if (errors) {
       // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
-      this.error({ errorMessage: `${errors[0].field}: ${errors[0].message}` })
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
     // 调用service层做数据查询
@@ -23,7 +23,7 @@ class HomeController extends BaseController {
       return this.error(e)
     }
     if (!result) {
-      return this.error({ errorMessage: "用户名或密码错误" })
+      return this.error({ error_message: "用户名或密码错误" })
     }
     // 返回用户的token
     const token = this.ctx.app.jwt.sign(

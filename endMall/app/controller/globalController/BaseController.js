@@ -18,7 +18,7 @@ class BaseController extends Controller {
     this.ctx.status = 200
     this.ctx.body = {
       data: {
-        errorMessage: "执行失败",
+        error_message: "执行失败",
         ...errorData,
       },
       isSuccess: false,
