@@ -33,7 +33,7 @@ class HomeController extends BaseController {
     // 返回用户的token
     const token = this.ctx.app.jwt.sign(
       {
-        id: result.id,
+        user_id: result.id,
         username: result.username,
         account_number: result.account_number,
       },
