@@ -10,4 +10,11 @@ module.exports = (app) => {
     __JWT,
     controller.permission.index.updatePermission
   )
+
+  // 获取权限列表
+  router.get(
+    "/api/permission/getPermissionList",
+    __JWT,
+    controller.permission.index.getPermissionList
+  )
 }
