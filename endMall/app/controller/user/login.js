@@ -1,9 +1,10 @@
 const BaseController = require("../globalController/BaseController")
 
-class HomeController extends BaseController {
+class LoginController extends BaseController {
   // 用户登录
   async login() {
-    // Get请求，获取用户的账号和密码
+    // Get请求，通过this.ctx.query获取参数
+    // 定义校验规则
     const rules = {
       account_number: "string",
       password: "string",
@@ -45,4 +46,4 @@ class HomeController extends BaseController {
   }
 }
 
-module.exports = HomeController
+module.exports = LoginController
