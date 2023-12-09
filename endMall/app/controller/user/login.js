@@ -4,7 +4,6 @@ class HomeController extends BaseController {
   // 用户登录
   async login() {
     // Get请求，获取用户的账号和密码
-    const { accountNumber, password } = this.ctx.query
     const rules = {
       accountNumber: "string",
       password: "string",
@@ -16,12 +15,27 @@ class HomeController extends BaseController {
       this.error({ errorMessage: `${errors[0].field}: ${errors[0].message}` })
       return
     }
-    console.log(errors)
-    console.log(accountNumber, password)
-    this.success({
-      data: {
-        message: "123",
+    // 调用service层做数据查询
+    let result = null
+    try {
+      result = await this.ctx.service.user.login.fineUserInfo(this.ctx.query)
+    } catch (e) {
+      return this.error(e)
+    }
+    if (!result) {
+      return this.error({ errorMessage: "用户名或密码错误" })
+    }
+    // 返回用户的token
+    const token = this.ctx.app.jwt.sign(
+      {
+        id: result.id,
+        username: result.username,
+        account_number: result.account_number,
       },
+      this.ctx.app.config.jwt.secret
+    )
+    this.success({
+      token,
     })
   }
 }
