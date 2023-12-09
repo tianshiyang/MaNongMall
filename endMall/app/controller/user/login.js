@@ -21,7 +21,7 @@ class LoginController extends BaseController {
     try {
       result = await this.ctx.service.user.login.fineUserInfo(this.ctx.query)
     } catch (e) {
-      return this.error(e)
+      return this.error({ error_message: e.errors[0].message })
     }
     // 找不到用户的信息，或者用户被删除
     if (!result || result.is_delete) {
