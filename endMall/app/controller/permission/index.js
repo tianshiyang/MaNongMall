@@ -126,6 +126,37 @@ class PermissionController extends BaseController {
       ...result.dataValues,
     })
   }
+
+  // 删除权限 - 逻辑删除
+  async deletePermission() {
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验rules
+    const rules = {
+      permission_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let result = null
+    try {
+      result = await this.ctx.service.permission.index.deletePermission(params)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    console.log(result[0])
+    if (result[0] >= 1) {
+      this.success({
+        message: "删除成功！",
+      })
+    } else {
+      this.error({ error_message: "当前权限不存在" })
+    }
+  }
 }
 
 module.exports = PermissionController

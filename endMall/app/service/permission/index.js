@@ -82,6 +82,23 @@ class PermissionService extends Service {
       },
     })
   }
+
+  /* 删除权限 - 逻辑删除
+   * @param {Object} - {permission_id} 权限唯一id
+   * @returns {Object} 返回结果
+   */
+  async deletePermission({ permission_id }) {
+    return await this.ctx.model.Permission.update(
+      {
+        is_delete: 1,
+      },
+      {
+        where: {
+          id: permission_id,
+        },
+      }
+    )
+  }
 }
 
 module.exports = PermissionService

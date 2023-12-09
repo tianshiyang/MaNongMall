@@ -24,4 +24,11 @@ module.exports = (app) => {
     __JWT,
     controller.permission.index.getPermissionDetail
   )
+
+  // 删除权限
+  router.post(
+    "/api/permission/deletePermission",
+    __JWT,
+    controller.permission.index.deletePermission
+  )
 }
