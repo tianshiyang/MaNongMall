@@ -28,6 +28,11 @@ module.exports = (app) => {
         allowNull: false,
         comment: "父级菜单ID",
       },
+      is_disabled: {
+        type: BOOLEAN,
+        defaultValue: false,
+        comment: "是否禁用",
+      },
       is_delete: {
         type: BOOLEAN,
         defaultValue: false,

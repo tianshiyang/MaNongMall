@@ -28,6 +28,11 @@ module.exports = (app) => {
         allowNull: false,
         comment: "角色备注",
       },
+      is_disabled: {
+        type: BOOLEAN,
+        defaultValue: false,
+        comment: "是否禁用",
+      },
       is_delete: {
         type: BOOLEAN,
         defaultValue: false,
