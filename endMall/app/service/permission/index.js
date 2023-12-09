@@ -40,8 +40,8 @@ class PermissionService extends Service {
   }
 
   /* 获取权限列表
-   * @param {Object} - {permission_id, permission_name, is_delete, page_no, page_size} 权限唯一id 权限名称, 权限是否删除, 当前页，每页大小
-   * @returns {Object} 创建信息
+   * @param {Object} - {permission_id, permission_name, is_delete, page_no = 1, page_size = 20} 权限唯一id 权限名称, 权限是否删除, 当前页，每页大小
+   * @returns {Object} 权限列表
    */
   async getPermissionList({
     page_no = 1,
@@ -69,6 +69,17 @@ class PermissionService extends Service {
       offset: (page_no - 1) * page_size,
       limit: page_size,
       order: [["create_time", "DESC"]],
+    })
+  }
+  /* 获取权限详情
+   * @param {Object} - {permission_id} 权限唯一id
+   * @returns {Object} 权限详情
+   */
+  async getPermissionDetail({ permission_id }) {
+    return await this.ctx.model.Permission.findOne({
+      where: {
+        id: permission_id,
+      },
     })
   }
 }

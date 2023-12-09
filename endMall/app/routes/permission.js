@@ -17,4 +17,11 @@ module.exports = (app) => {
     __JWT,
     controller.permission.index.getPermissionList
   )
+
+  // 获取权限详情
+  router.get(
+    "/api/permission/getPermissionDetail",
+    __JWT,
+    controller.permission.index.getPermissionDetail
+  )
 }
