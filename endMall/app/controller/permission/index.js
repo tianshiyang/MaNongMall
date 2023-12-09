@@ -148,7 +148,6 @@ class PermissionController extends BaseController {
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })
     }
-    console.log(result[0])
     if (result[0] >= 1) {
       this.success({
         message: "删除成功！",
