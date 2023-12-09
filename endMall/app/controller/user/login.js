@@ -22,8 +22,13 @@ class HomeController extends BaseController {
     } catch (e) {
       return this.error(e)
     }
-    if (!result) {
+    // 找不到用户的信息，或者用户被删除
+    if (!result || result.is_delete) {
       return this.error({ error_message: "用户名或密码错误" })
+    }
+    // 判断用户是否离职
+    if (result.is_depart) {
+      return this.error({ error_message: "您已离职，请联系老板" })
     }
     // 返回用户的token
     const token = this.ctx.app.jwt.sign(
