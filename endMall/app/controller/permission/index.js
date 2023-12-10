@@ -65,28 +65,11 @@ class PermissionController extends BaseController {
   async getPermissionList() {
     // 获取参数
     const params = this.ctx.query
-    // 定义校验rules
-    const rules = {
-      type: "int",
-    }
-    // 校验参数
-    const errors = await this.app.validator.validate(rules, params)
-    if (errors) {
-      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
-      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
-      return
-    }
     let result = null
-    // 通过参数确认返回的数据范围
-    if (params.type === 1) {
-      // 作为列表搜索（包含删除的）
-    } else if (params.type === 2) {
-      // 作为筛选条件搜索（不包含删除的）
-      params.is_delete = 0
-    }
     try {
       result = await this.ctx.service.permission.index.getPermissionList(params)
     } catch (e) {
+      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
     return this.success({
@@ -148,7 +131,7 @@ class PermissionController extends BaseController {
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })
     }
-    if (result[0] >= 1) {
+    if (result >= 1) {
       this.success({
         message: "删除成功！",
       })

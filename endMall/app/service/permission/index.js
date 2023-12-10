@@ -40,7 +40,7 @@ class PermissionService extends Service {
   }
 
   /* 获取权限列表
-   * @param {Object} - {permission_id, permission_name, is_delete, page_no = 1, page_size = 20} 权限唯一id 权限名称, 权限是否删除, 当前页，每页大小
+   * @param {Object} - {permission_id, permission_name, page_no = 1, page_size = 20} 权限唯一id 权限名称, 当前页，每页大小
    * @returns {Object} 权限列表
    */
   async getPermissionList({
@@ -48,13 +48,8 @@ class PermissionService extends Service {
     page_size = 10,
     permission_id,
     permission_name,
-    is_delete = "",
   }) {
     const where = {}
-    if (is_delete !== "") {
-      // 确定返回数据的范围，包不包含删除的权限
-      where.is_delete = is_delete
-    }
     if (permission_name) {
       // Op.substring 匹配字符串中包含某些字符
       where.permission_name = {
@@ -67,7 +62,7 @@ class PermissionService extends Service {
     return await this.ctx.model.Permission.findAndCountAll({
       where,
       offset: (page_no - 1) * page_size,
-      limit: page_size,
+      limit: Number(page_size),
       order: [["create_time", "DESC"]],
     })
   }
@@ -83,21 +78,16 @@ class PermissionService extends Service {
     })
   }
 
-  /* 删除权限 - 逻辑删除
+  /* 删除权限
    * @param {Object} - {permission_id} 权限唯一id
    * @returns {Object} 返回结果
    */
   async deletePermission({ permission_id }) {
-    return await this.ctx.model.Permission.update(
-      {
-        is_delete: 1,
+    return await this.ctx.model.Permission.destroy({
+      where: {
+        id: permission_id,
       },
-      {
-        where: {
-          id: permission_id,
-        },
-      }
-    )
+    })
   }
 }
 

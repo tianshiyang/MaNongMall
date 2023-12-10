@@ -32,11 +32,6 @@ module.exports = (app) => {
         defaultValue: false,
         comment: "是否禁用",
       },
-      is_delete: {
-        type: BOOLEAN,
-        defaultValue: false,
-        comment: "逻辑删除",
-      },
     },
     {
       freezeTableName: true, // 取消复数
