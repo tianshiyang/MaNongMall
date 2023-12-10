@@ -125,6 +125,7 @@ class PermissionController extends BaseController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
+    // TODO 获取当前权限与订单的绑定关系，如果绑定了角色，则不可删除
     let result = null
     try {
       result = await this.ctx.service.permission.index.deletePermission(params)
