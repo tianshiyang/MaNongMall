@@ -23,6 +23,19 @@ class MenuController extends BaseController {
     }
     if (params.menu_id) {
       // 编辑
+      let result = null
+      try {
+        result = await this.editMenu(params)
+      } catch (e) {
+        return this.error({ error_message: e })
+      }
+      if (result[0] >= 1) {
+        this.success({
+          message: "编辑成功！",
+        })
+      } else {
+        this.error({ message: "编辑失败！" })
+      }
     } else {
       // 新增
       let result = null
@@ -32,13 +45,13 @@ class MenuController extends BaseController {
         return this.error({ error_message: e })
       }
       this.success({
-        ...result.dataValues,
+        ...result,
         message: "创建成功！",
       })
     }
   }
-  // 创建菜单
-  async createMenu(params) {
+  // 校验菜单创建、编辑规则
+  async createOrUpdateMenuValidate(params) {
     if (params.menu_parent) {
       // 如果填写了menu_parent，需要判断当前父级菜单是否存在，并且此父级菜单是顶级菜单，即父级菜单的menu_parent为空
       let currentMenuDetail = null
@@ -51,7 +64,15 @@ class MenuController extends BaseController {
         return Promise.reject("父级菜单必须是顶级菜单！")
       }
     }
-    // 创建
+  }
+  // 创建菜单
+  async createMenu(params) {
+    // 校验菜单创建、编辑规则
+    try {
+      await this.createOrUpdateMenuValidate(params)
+    } catch (e) {
+      return Promise.reject(e)
+    }
     let result = null
     try {
       result = await this.ctx.service.menu.index.createMenu(params)
@@ -63,7 +84,19 @@ class MenuController extends BaseController {
   }
   // 编辑菜单
   async editMenu(params) {
-    console.log(params)
+    try {
+      await this.createOrUpdateMenuValidate(params)
+    } catch (e) {
+      return Promise.reject(e)
+    }
+    let result = null
+    try {
+      result = await this.ctx.service.menu.index.editMenu(params)
+    } catch (e) {
+      return Promise.reject(e.errors[0].message)
+    }
+    // 返回编辑结果
+    return result
   }
 
   /* 通过菜单ID获取菜单详情
