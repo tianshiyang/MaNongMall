@@ -7,6 +7,13 @@ module.exports = (app) => {
   // 编辑、创建菜单
   router.post("/api/menu/updateMenu", __JWT, controller.menu.index.updateMenu)
 
-  // 获取权限列表
+  // 获取菜单列表
   router.get("/api/menu/getMenuList", __JWT, controller.menu.index.getMenuList)
+
+  // 获取菜单详情
+  router.get(
+    "/api/menu/getMenuDetail",
+    __JWT,
+    controller.menu.index.getMenuDetail
+  )
 }

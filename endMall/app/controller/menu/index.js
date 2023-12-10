@@ -131,6 +131,32 @@ class MenuController extends BaseController {
       list: result.rows,
     })
   }
+
+  // 获取菜单详情
+  async getMenuDetail() {
+    // 获取参数
+    const params = this.ctx.query
+    // 定义校验规则
+    const rules = {
+      menu_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let result = null
+    try {
+      result = await this.getMenuDetailById(params.menu_id)
+    } catch (e) {
+      return this.error({ error_message: e })
+    }
+    this.success({
+      ...result.dataValues,
+    })
+  }
 }
 
 module.exports = MenuController

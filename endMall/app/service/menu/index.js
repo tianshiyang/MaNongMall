@@ -1,6 +1,5 @@
 const { Service } = require("egg")
 const { Op } = require("sequelize")
-const moment = require("moment")
 
 class MenuService extends Service {
   /* 通过menu_id获取权限
