@@ -25,7 +25,6 @@ module.exports = (app) => {
       },
       menu_parent: {
         type: BIGINT(11),
-        allowNull: false,
         comment: "父级菜单ID",
       },
       is_disabled: {
