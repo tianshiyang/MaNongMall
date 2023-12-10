@@ -43,14 +43,10 @@ module.exports = (app) => {
 
   // 声明菜单表的关联关系
   Menu.associate = function () {
-    // 与菜单的关联关系声明，通过menu_parent关联子菜单，并且一个父级菜单有多个子菜单
+    // 与菜单的关联关系声明，一个菜单列表中，包含多个子菜单。此处使用menu_parent作外建，关联另一个菜单表的主键
     Menu.hasMany(app.model.Menu, {
       foreignKey: "menu_parent",
       as: "children",
-    })
-    // 与菜单的关联关系声明 -> 子菜单通过id关联父级菜单, 并且一个子菜单只属于一个父级菜单的子菜单
-    Menu.belongsTo(app.model.Menu, {
-      foreignKey: "id",
     })
   }
 
