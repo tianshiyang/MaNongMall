@@ -60,8 +60,14 @@ module.exports = (appInfo) => {
     dialect: "mysql",
     host: "localhost",
     port: "3306",
+    timezone: "+08:00", // 选时区
     database: "ma_nong_mall",
     password: "12345678",
+    dialectOptions: {
+      // 返回格式YYYY-MM-DD HH:ss:mm
+      dateStrings: true,
+      typeCast: true,
+    },
   }
 
   // add your user config here

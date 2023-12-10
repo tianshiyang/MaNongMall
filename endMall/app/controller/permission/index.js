@@ -69,7 +69,6 @@ class PermissionController extends BaseController {
     try {
       result = await this.ctx.service.permission.index.getPermissionList(params)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
     return this.success({

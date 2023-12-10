@@ -115,6 +115,22 @@ class MenuController extends BaseController {
     }
     return result
   }
+
+  // 获取权限列表
+  async getMenuList() {
+    // 获取参数
+    const params = this.ctx.query
+    let result = null
+    try {
+      result = await this.ctx.service.menu.index.getMenuList(params)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    this.success({
+      total: result.count,
+      list: result.rows,
+    })
+  }
 }
 
 module.exports = MenuController
