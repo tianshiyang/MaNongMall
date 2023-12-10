@@ -1,6 +1,6 @@
 "use strict"
 module.exports = (app) => {
-  const { BIGINT, BOOLEAN } = app.Sequelize
+  const { BIGINT } = app.Sequelize
 
   const RolePermission = app.model.define(
     "role_permission",
@@ -21,11 +21,6 @@ module.exports = (app) => {
         type: BIGINT(11),
         allowNull: false,
         comment: "角色表主键id",
-      },
-      is_delete: {
-        type: BOOLEAN,
-        defaultValue: false,
-        comment: "逻辑删除",
       },
     },
     {
