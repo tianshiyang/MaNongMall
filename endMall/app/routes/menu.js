@@ -16,4 +16,7 @@ module.exports = (app) => {
     __JWT,
     controller.menu.index.getMenuDetail
   )
+
+  // 获取菜单树形结构
+  router.get("/api/menu/getMenuTree", __JWT, controller.menu.index.getMenuTree)
 }

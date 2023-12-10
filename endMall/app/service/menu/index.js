@@ -101,6 +101,23 @@ class MenuService extends Service {
       order: [["create_time", "DESC"]],
     })
   }
+
+  // 获取菜单树形结构
+  async getMenuTree() {
+    return await this.ctx.model.Menu.findAll({
+      where: {
+        menu_parent: {
+          [Op.is]: null,
+        },
+      },
+      include: [
+        {
+          model: this.ctx.model.Menu,
+          as: "children",
+        },
+      ],
+    })
+  }
 }
 
 module.exports = MenuService

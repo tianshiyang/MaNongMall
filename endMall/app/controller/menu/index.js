@@ -157,6 +157,20 @@ class MenuController extends BaseController {
       ...result.dataValues,
     })
   }
+
+  // 获取菜单树形结构
+  async getMenuTree() {
+    let result = null
+    try {
+      result = await this.ctx.service.menu.index.getMenuTree()
+    } catch (e) {
+      console.log(e)
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      list: result,
+    })
+  }
 }
 
 module.exports = MenuController
