@@ -2,8 +2,8 @@
 module.exports = (app) => {
   const { BIGINT } = app.Sequelize
 
-  const RolePermission = app.model.define(
-    "role_permission",
+  const MenuRole = app.model.define(
+    "role_menu",
     {
       id: {
         type: BIGINT(11),
@@ -12,10 +12,10 @@ module.exports = (app) => {
         allowNull: false,
         comment: "主键ID",
       },
-      permission_id: {
+      menu_id: {
         type: BIGINT(11),
         allowNull: false,
-        comment: "权限表主键ID",
+        comment: "菜单表主键ID",
       },
       role_id: {
         type: BIGINT(11),
@@ -31,5 +31,5 @@ module.exports = (app) => {
     }
   )
 
-  return RolePermission
+  return MenuRole
 }

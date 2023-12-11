@@ -4,6 +4,6 @@ module.exports = (app) => {
   const { router, controller, middleware } = app
   const __JWT = middleware.jwtHandler()
 
-  // 编辑、创建菜单
-  router.post("/api/menu/updateMenu", __JWT, controller.menu.index.updateMenu)
+  // 编辑、创建角色
+  router.post("/api/role/updateRole", __JWT, controller.role.index.updateRole)
 }
