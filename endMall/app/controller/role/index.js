@@ -84,8 +84,8 @@ class RoleController extends BaseController {
         )
       }
       // 同步角色权限表
-      if (params.permission_list1.length) {
-        const data = params.permission_list1.map((item) => {
+      if (params.permission_list.length) {
+        const data = params.permission_list.map((item) => {
           return {
             role_id: roleInfo.dataValues.id,
             permission_id: item,
