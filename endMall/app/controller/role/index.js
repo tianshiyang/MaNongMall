@@ -5,10 +5,9 @@ class RoleController extends BaseController {
     // Post请求，通过this.ctx.request.body获取参数
     // 获取参数
     const params = this.ctx.request.body
-    // 转化参数
-    console.log(JSON.parse(params.menu_list))
-    params.menu_list = JSON.parse(params.menu_list)
-    params.permission_list = JSON.parse(params.permission_list)
+    // 转化参数、参数去重
+    params.menu_list = [...new Set(JSON.parse(params.menu_list))]
+    params.permission_list = [...new Set(JSON.parse(params.permission_list))]
 
     // 定义校验规则
     const rules = {
@@ -46,7 +45,6 @@ class RoleController extends BaseController {
       try {
         result = await this.createRole(params)
       } catch (error) {
-        console.log(error, "error=========")
         return this.error({
           error_message: error,
         })
