@@ -8,6 +8,7 @@
     "array-bracket-spacing": "off", // 数组每一项前后都要加空格，如[ 1 ]
     "jsdoc/require-param-description": "off",
     "space-before-function-paren": "off",
-    "prefer-promise-reject-errors": "off"
+    "prefer-promise-reject-errors": "off",
+    "one-var-declaration-per-line": "off"
   }
 }

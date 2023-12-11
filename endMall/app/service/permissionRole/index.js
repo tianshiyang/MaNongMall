@@ -5,9 +5,9 @@ class PermissionRoleService extends Service {
    * @param {Array} - data {role_id, permission_id} 角色Id, 权限ID
    * @returns {Object} 创建信息
    */
-  async createPermissionRole(data) {
+  async createPermissionRole(data, transaction) {
     // 批量创建
-    return await this.ctx.model.PermissionRole.bulkCreate(data)
+    return await this.ctx.model.PermissionRole.bulkCreate(data, { transaction })
   }
 }
 

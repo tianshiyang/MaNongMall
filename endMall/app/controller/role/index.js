@@ -1,12 +1,15 @@
 const BaseController = require("../globalController/BaseController")
-const { transaction } = require("sequelize")
-
 class RoleController extends BaseController {
   // 编辑、创建权限
   async updateRole() {
     // Post请求，通过this.ctx.request.body获取参数
     // 获取参数
     const params = this.ctx.request.body
+    // 转化参数
+    console.log(JSON.parse(params.menu_list))
+    params.menu_list = JSON.parse(params.menu_list)
+    params.permission_list = JSON.parse(params.permission_list)
+
     // 定义校验规则
     const rules = {
       role_name: "string",
@@ -15,12 +18,12 @@ class RoleController extends BaseController {
         type: "array",
         allowEmpty: true,
       },
-      role_list: {
+      permission_list: {
         type: "array",
         allowEmpty: true,
       },
     }
-    if (!params.permission_id) {
+    if (!params.role_id) {
       // 创建 -> 需要校验权限标识
       rules.role_sign = "string"
     } else {
@@ -35,15 +38,16 @@ class RoleController extends BaseController {
       return
     }
 
-    if (params.permission_id) {
+    if (params.role_id) {
       // 编辑场景
     } else {
       // 新增场景
       let result = null
       try {
-        result = this.createRole(params)
+        result = await this.createRole(params)
       } catch (error) {
-        this.error({
+        console.log(error, "error=========")
+        return this.error({
           error_message: error,
         })
       }
@@ -56,41 +60,50 @@ class RoleController extends BaseController {
   // 创建角色
   async createRole(params) {
     // 创建事务
-    const work = await transaction()
+    let transaction = null
     let result = null
     try {
-      const workArray = []
+      transaction = await this.ctx.model.transaction()
+      let menuRoleInfo, permissionRoleInfo
       // 同步角色表
-      workArray.push(this.ctx.service.role.index.createRole(params))
+      const roleInfo = await this.ctx.service.role.index.createRole(
+        params,
+        transaction
+      )
       // 同步角色菜单表
       if (params.menu_list.length) {
         const data = params.menu_list.map((item) => {
           return {
-            role_id: params.role_id,
+            role_id: roleInfo.dataValues.id,
             menu_id: item,
           }
         })
-        workArray.push(this.ctx.service.menuRole.index.createMenuRole(data))
+        menuRoleInfo = await this.ctx.service.menuRole.index.createMenuRole(
+          data,
+          transaction
+        )
       }
       // 同步角色权限表
-      if (params.permission_list.length) {
-        const data = params.menu_list.map((item) => {
+      if (params.permission_list1.length) {
+        const data = params.permission_list1.map((item) => {
           return {
-            role_id: params.role_id,
+            role_id: roleInfo.dataValues.id,
             permission_id: item,
           }
         })
-        workArray.push(
-          this.ctx.service.permissionRole.index.createPermissionRole(data)
-        )
+        permissionRoleInfo =
+          await this.ctx.service.permissionRole.index.createPermissionRole(
+            data,
+            transaction
+          )
       }
-      result = await Promise.all(workArray)
+      result = [roleInfo, menuRoleInfo, permissionRoleInfo]
       // 提交事务
-      await work.commit()
+      await transaction.commit()
     } catch (e) {
       // 出错后事务回滚
-      await work.rollback()
-      return Promise.reject(e)
+      await transaction.rollback()
+      return Promise.reject(e.errors[0].message)
     }
     return result
   }
