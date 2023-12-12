@@ -3,12 +3,10 @@ class RoleController extends BaseController {
   // 编辑、创建权限
   async updateRole() {
     // Post请求，通过this.ctx.request.body获取参数
-    // 获取参数
     const params = this.ctx.request.body
     // 转化参数
     params.menu_list = JSON.parse(params.menu_list)
     params.permission_list = JSON.parse(params.permission_list)
-
     // 定义校验规则
     const rules = {
       role_name: "string",
@@ -36,53 +34,63 @@ class RoleController extends BaseController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
-
     if (params.role_id) {
-      // 编辑场景
-      let result = null
-      // 开启事务
-      let transaction = null
-      try {
-        // 开启事务
-        transaction = await this.ctx.model.transaction()
-        result = await this.updateCurrentRole(params, transaction)
-        // 提交事务
-        await transaction.commit()
-      } catch (error) {
-        // 回滚事务
-        await transaction.rollback()
-        return this.error({
-          error_message: error,
-        })
-      }
-      this.success({
-        result,
-      })
+      // 编辑
+      this.compileHandleUpdateRole(params)
     } else {
-      // 新增场景
-      let result = null
-      // 开启事务
-      let transaction = null
-      try {
-        transaction = await this.ctx.model.transaction()
-        result = await this.createRole(params, transaction)
-        // 提交事务
-        await transaction.commit()
-      } catch (error) {
-        // 回滚事务
-        await transaction.rollback()
-        return this.error({
-          error_message: error,
-        })
-      }
-      this.success({
-        result,
-      })
+      // 创建
+      this.compileHandleCreateRole(params)
     }
   }
 
-  // 创建角色
-  async createRole(params, transaction) {
+  // 处理编辑场景
+  async compileHandleUpdateRole(params) {
+    // 编辑场景
+    let result = null
+    // 开启事务
+    let transaction = null
+    try {
+      // 开启事务
+      transaction = await this.ctx.model.transaction()
+      result = await this.updateRolePublicFn(params, transaction)
+      // 提交事务
+      await transaction.commit()
+    } catch (error) {
+      // 回滚事务
+      await transaction.rollback()
+      return this.error({
+        error_message: error,
+      })
+    }
+    this.success({
+      result,
+    })
+  }
+
+  // 处理新增场景
+  async compileHandleCreateRole(params) {
+    let result,
+      transaction = null
+    try {
+      // 开启事务
+      transaction = await this.ctx.model.transaction()
+      result = await this.createRolePublicFn(params, transaction)
+      // 提交事务
+      await transaction.commit()
+    } catch (error) {
+      // 回滚事务
+      await transaction.rollback()
+      return this.error({
+        error_message: error,
+      })
+    }
+    this.success({
+      result,
+    })
+  }
+
+  // 创建角色公共方法
+  async createRolePublicFn(params, transaction) {
     let menuRoleInfo, permissionRoleInfo, role_id
     // 同步角色表
     if (params.role_id) {
@@ -96,10 +104,13 @@ class RoleController extends BaseController {
       )
       role_id = roleInfo.dataValues.id
     }
-
-    // 同步角色菜单表
+    /**
+     * 同步角色菜单表
+     * 逻辑：当前如果只选择了子菜单，则默认将父菜单也加入其中
+     */
     if (params.menu_list.length) {
       let menuList = [...params.menu_list]
+      // 获取当前菜单的父菜单
       const promiseResolve = await Promise.all(
         menuList.map((item) =>
           (async () => {
@@ -110,7 +121,7 @@ class RoleController extends BaseController {
           })()
         )
       )
-      // 参数去重 + 去除null
+      // 参数去重 + 去除null -> 拼接当前菜单+其父菜单
       menuList = [...new Set([...menuList, ...promiseResolve])].filter(
         (item) => item
       )
@@ -180,7 +191,7 @@ class RoleController extends BaseController {
     })
   }
 
-  // 删除角色
+  // 删除角色公共方法
   async deleteRolePublicFn(params, transaction) {
     // 删除角色信息
     const deleteRoleResult = await this.ctx.service.role.index.deleteRole(
@@ -199,10 +210,12 @@ class RoleController extends BaseController {
     return [deleteRoleResult, deleteRoleMenuResult, deleteRolePermissionResult]
   }
 
-  // 编辑角色信息
-  async updateCurrentRole(params, transaction) {
-    const createResult = await this.createRole(params, transaction)
+  // 编辑角色信息公共方法
+  async updateRolePublicFn(params, transaction) {
+    // 删除角色
     const deleteResult = await this.deleteRolePublicFn(params, transaction)
+    // 创建角色
+    const createResult = await this.createRolePublicFn(params, transaction)
     return [deleteResult, createResult]
   }
 }
