@@ -36,10 +36,10 @@ class RoleController extends BaseController {
     }
     if (params.role_id) {
       // 编辑
-      this.compileHandleUpdateRole(params)
+      await this.compileHandleUpdateRole(params)
     } else {
       // 创建
-      this.compileHandleCreateRole(params)
+      await this.compileHandleCreateRole(params)
     }
   }
 
@@ -84,26 +84,20 @@ class RoleController extends BaseController {
         error_message: error,
       })
     }
-    this.success({
+    await this.success({
       result,
     })
   }
 
   // 创建角色公共方法
   async createRolePublicFn(params, transaction) {
-    let menuRoleInfo, permissionRoleInfo, role_id
+    let menuRoleInfo, permissionRoleInfo
     // 同步角色表
-    if (params.role_id) {
-      // 如果存在用户ID，则为编辑场景，此时不需要重复创建角色
-      role_id = params.role_id
-    } else {
-      // 如果存在用户ID，则为创建场景
-      const roleInfo = await this.ctx.service.role.index.createRole(
-        params,
-        transaction
-      )
-      role_id = roleInfo.dataValues.id
-    }
+    const roleInfo = await this.ctx.service.role.index.createRole(
+      params,
+      transaction
+    )
+    const role_id = roleInfo.dataValues.id
     /**
      * 同步角色菜单表
      * 逻辑：当前如果只选择了子菜单，则默认将父菜单也加入其中
