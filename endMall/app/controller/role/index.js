@@ -5,9 +5,9 @@ class RoleController extends BaseController {
     // Post请求，通过this.ctx.request.body获取参数
     // 获取参数
     const params = this.ctx.request.body
-    // 转化参数、参数去重
-    params.menu_list = [...new Set(JSON.parse(params.menu_list))]
-    params.permission_list = [...new Set(JSON.parse(params.permission_list))]
+    // 转化参数
+    params.menu_list = JSON.parse(params.menu_list)
+    params.permission_list = JSON.parse(params.permission_list)
 
     // 定义校验规则
     const rules = {
@@ -70,7 +70,21 @@ class RoleController extends BaseController {
       )
       // 同步角色菜单表
       if (params.menu_list.length) {
-        const data = params.menu_list.map((item) => {
+        let menuList = [...params.menu_list]
+        const promiseResolve = await Promise.all(
+          menuList.map((item) =>
+            (async () => {
+              const result =
+                await this.ctx.service.menu.index.getMenuDetailById(item)
+              return result.dataValues.menu_parent
+            })()
+          )
+        )
+        // 参数去重 + 去除null
+        menuList = [...new Set([...menuList, ...promiseResolve])].filter(
+          (item) => item
+        )
+        const data = menuList.map((item) => {
           return {
             role_id: roleInfo.dataValues.id,
             menu_id: item,
@@ -83,7 +97,10 @@ class RoleController extends BaseController {
       }
       // 同步角色权限表
       if (params.permission_list.length) {
-        const data = params.permission_list.map((item) => {
+        // 参数去重
+        const permissionList = [...new Set(params.permission_list)]
+
+        const data = permissionList.map((item) => {
           return {
             role_id: roleInfo.dataValues.id,
             permission_id: item,
