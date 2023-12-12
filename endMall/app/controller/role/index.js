@@ -27,7 +27,7 @@ class RoleController extends BaseController {
       rules.role_sign = "string"
     } else {
       // 编辑 -> 需要校验权限唯一ID
-      rules.permission_id = "int"
+      rules.role_id = "int"
     }
     // 校验参数
     const errors = await this.app.validator.validate(rules, params)
@@ -39,11 +39,26 @@ class RoleController extends BaseController {
 
     if (params.role_id) {
       // 编辑场景
+      let result = null
+      try {
+        // 开启事务
+        const transaction = await this.ctx.model.transaction()
+        result = await this.updateCurrentRole(params, transaction)
+      } catch (error) {
+        return this.error({
+          error_message: error,
+        })
+      }
+      this.success({
+        result,
+      })
     } else {
       // 新增场景
       let result = null
       try {
-        result = await this.createRole(params)
+        // 开启事务
+        const transaction = await this.ctx.model.transaction()
+        result = await this.createRole(params, transaction)
       } catch (error) {
         return this.error({
           error_message: error,
@@ -56,18 +71,23 @@ class RoleController extends BaseController {
   }
 
   // 创建角色
-  async createRole(params) {
-    // 创建事务
-    let transaction = null
+  async createRole(params, transaction) {
     let result = null
     try {
-      transaction = await this.ctx.model.transaction()
-      let menuRoleInfo, permissionRoleInfo
+      let menuRoleInfo, permissionRoleInfo, role_id
       // 同步角色表
-      const roleInfo = await this.ctx.service.role.index.createRole(
-        params,
-        transaction
-      )
+      if (params.role_id) {
+        // 如果存在用户ID，则为编辑场景，此时不需要重复创建角色
+        role_id = params.role_id
+      } else {
+        // 如果存在用户ID，则为创建场景
+        const roleInfo = await this.ctx.service.role.index.createRole(
+          params,
+          transaction
+        )
+        role_id = roleInfo.dataValues.id
+      }
+
       // 同步角色菜单表
       if (params.menu_list.length) {
         let menuList = [...params.menu_list]
@@ -86,7 +106,7 @@ class RoleController extends BaseController {
         )
         const data = menuList.map((item) => {
           return {
-            role_id: roleInfo.dataValues.id,
+            role_id,
             menu_id: item,
           }
         })
@@ -102,7 +122,7 @@ class RoleController extends BaseController {
 
         const data = permissionList.map((item) => {
           return {
-            role_id: roleInfo.dataValues.id,
+            role_id,
             permission_id: item,
           }
         })
@@ -112,15 +132,64 @@ class RoleController extends BaseController {
             transaction
           )
       }
-      result = [roleInfo, menuRoleInfo, permissionRoleInfo]
+      result = [{ role_id }, menuRoleInfo, permissionRoleInfo]
       // 提交事务
       await transaction.commit()
     } catch (e) {
+      console.log(e)
       // 出错后事务回滚
       await transaction.rollback()
       return Promise.reject(e.errors[0].message)
     }
     return result
+  }
+
+  // 删除角色
+  async deleteRole(params, transaction) {
+    let deleteRoleResult,
+      deleteRoleMenuResult,
+      deleteRolePermissionResult = null
+    try {
+      // 删除角色信息
+      deleteRoleResult = await this.ctx.service.role.index.deleteRole(
+        params,
+        transaction
+      )
+      // 删除角色菜单信息
+      deleteRoleMenuResult =
+        await this.ctx.service.menuRole.index.deleteMenuRole(
+          params,
+          transaction
+        )
+      // 删除角色权限信息
+      deleteRolePermissionResult =
+        await this.ctx.service.permissionRole.index.deletePermissionRole(
+          params,
+          transaction
+        )
+      // 提交事务
+      await transaction.commit()
+    } catch (e) {
+      // 出错后事务回滚
+      console.log(e, "删除错误")
+      await transaction.rollback()
+      return Promise.reject(e.errors[0].message)
+    }
+    return [deleteRoleResult, deleteRoleMenuResult, deleteRolePermissionResult]
+  }
+
+  // 编辑角色信息
+  async updateCurrentRole(params, transaction) {
+    let deleteResult,
+      createResult = null
+    try {
+      deleteResult = await this.deleteRole(params, transaction)
+      createResult = await this.createRole(params, transaction)
+    } catch (e) {
+      console.log(e, "整体错误")
+      return Promise.reject(e)
+    }
+    return [deleteResult, createResult]
   }
 }
 

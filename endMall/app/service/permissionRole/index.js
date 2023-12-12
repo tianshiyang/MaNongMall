@@ -9,6 +9,17 @@ class PermissionRoleService extends Service {
     // 批量创建
     return await this.ctx.model.PermissionRole.bulkCreate(data, { transaction })
   }
+
+  /* 删除角色绑定权限关系
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 删除信息
+   */
+  async deletePermissionRole({ role_id }, transaction) {
+    return await this.ctx.model.PermissionRole.destroy(
+      { where: { role_id } },
+      { transaction }
+    )
+  }
 }
 
 module.exports = PermissionRoleService

@@ -17,6 +17,23 @@ class RoleService extends Service {
       }
     )
   }
+
+  /* 删除角色
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 删除信息
+   */
+  async deleteRole({ role_id }, transaction) {
+    return await this.ctx.model.Role.destroy(
+      {
+        where: {
+          id: role_id,
+        },
+      },
+      {
+        transaction,
+      }
+    )
+  }
 }
 
 module.exports = RoleService
