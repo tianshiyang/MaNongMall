@@ -6,4 +6,6 @@ module.exports = (app) => {
 
   // 编辑、创建角色
   router.post("/api/role/updateRole", __JWT, controller.role.index.updateRole)
+  // 删除角色
+  router.post("/api/role/deleteRole", __JWT, controller.role.index.deleteRole)
 }
