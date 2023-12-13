@@ -51,7 +51,6 @@ class PermissionController extends BaseController {
           params
         )
       } catch (e) {
-        console.log(e)
         return this.error({ error_message: e.errors[0].message })
       }
       // 返回创建完成的权限信息
