@@ -55,10 +55,14 @@ class RoleService extends Service {
     )
   }
 
-  // 获取角色列表
+  /* 获取角色列表
+   * @param {Object} - {role_id, role_name, role_sign, page_no, page_size, create_time} 角色ID, 角色名称，角色标识，分页，创建时间
+   * @returns {Object} 角色列表
+   */
   async getRoleList({
     role_id,
     role_sign,
+    role_name,
     create_time,
     page_no = 1,
     page_size = 10,
@@ -69,6 +73,12 @@ class RoleService extends Service {
     }
     if (role_sign) {
       where.role_sign = role_sign
+    }
+    if (role_name) {
+      where.role_name = {
+        // 模糊匹配角色名称
+        [Op.substring]: role_name,
+      }
     }
     if (create_time) {
       const parseCreateTime = JSON.parse(create_time)
@@ -81,6 +91,18 @@ class RoleService extends Service {
       offset: (page_no - 1) * page_size,
       limit: Number(page_size),
       order: [["create_time", "DESC"]],
+    })
+  }
+
+  /* 获取角色列表
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 角色详情信息
+   */
+  async getRoleDetail({ role_id }) {
+    return await this.ctx.model.Role.findOne({
+      where: {
+        id: role_id,
+      },
     })
   }
 }

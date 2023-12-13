@@ -10,4 +10,10 @@ module.exports = (app) => {
   router.post("/api/role/deleteRole", __JWT, controller.role.index.deleteRole)
   // 获取角色列表
   router.get("/api/role/getRoleList", __JWT, controller.role.index.getRoleList)
+  // 获取角色详情
+  router.get(
+    "/api/role/getRoleDetail",
+    __JWT,
+    controller.role.index.getRoleDetail
+  )
 }

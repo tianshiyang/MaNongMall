@@ -251,12 +251,37 @@ class RoleController extends BaseController {
     try {
       result = await this.ctx.service.role.index.getRoleList(params)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e })
     }
     this.success({
       total: result.count,
       list: result.rows,
+    })
+  }
+
+  // 获取角色详情
+  async getRoleDetail() {
+    // 获取参数
+    const params = this.ctx.query
+    // 定义校验规则
+    const rules = {
+      role_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let result = null
+    try {
+      result = await this.ctx.service.role.index.getRoleDetail(params)
+    } catch (e) {
+      return this.error({ error_message: e })
+    }
+    this.success({
+      ...result.dataValues,
     })
   }
 }
