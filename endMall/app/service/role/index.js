@@ -34,6 +34,27 @@ class RoleService extends Service {
       }
     )
   }
+
+  /* 编辑角色
+   * @param {Object} - {role_id, role_name, role_remark} 角色ID, 角色名称，角色描述
+   * @returns {Object} 编辑信息
+   */
+  async updateRole({ role_id, role_name, role_remark }, transaction) {
+    return await this.ctx.model.Role.update(
+      {
+        role_name,
+        role_remark,
+      },
+      {
+        where: {
+          id: role_id,
+        },
+      },
+      {
+        transaction,
+      }
+    )
+  }
 }
 
 module.exports = RoleService

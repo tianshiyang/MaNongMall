@@ -56,6 +56,7 @@ class RoleController extends BaseController {
       // 提交事务
       await transaction.commit()
     } catch (error) {
+      console.log(error, "error=====")
       // 回滚事务
       await transaction.rollback()
       return this.error({
@@ -89,19 +90,13 @@ class RoleController extends BaseController {
     })
   }
 
-  // 创建角色公共方法
-  async createRolePublicFn(params, transaction) {
-    let menuRoleInfo, permissionRoleInfo
-    // 同步角色表
-    const roleInfo = await this.ctx.service.role.index.createRole(
-      params,
-      transaction
-    )
-    const role_id = roleInfo.dataValues.id
+  // 创建角色的关联关系
+  async createRoleRelation(role_id, params, transaction) {
     /**
      * 同步角色菜单表
      * 逻辑：当前如果只选择了子菜单，则默认将父菜单也加入其中
      */
+    let menuRoleInfo, permissionRoleInfo
     if (params.menu_list.length) {
       let menuList = [...params.menu_list]
       // 获取当前菜单的父菜单
@@ -147,7 +142,23 @@ class RoleController extends BaseController {
           transaction
         )
     }
-    return [{ role_id }, menuRoleInfo, permissionRoleInfo]
+    return [menuRoleInfo, permissionRoleInfo]
+  }
+
+  // 创建角色公共方法
+  async createRolePublicFn(params, transaction) {
+    // 同步角色表
+    const roleInfo = await this.ctx.service.role.index.createRole(
+      params,
+      transaction
+    )
+    const role_id = roleInfo.dataValues.id
+    const createRelationResult = await this.createRoleRelation(
+      role_id,
+      params,
+      transaction
+    )
+    return [{ role_id }, ...createRelationResult]
   }
 
   // 删除角色
@@ -185,13 +196,8 @@ class RoleController extends BaseController {
     })
   }
 
-  // 删除角色公共方法
-  async deleteRolePublicFn(params, transaction) {
-    // 删除角色信息
-    const deleteRoleResult = await this.ctx.service.role.index.deleteRole(
-      params,
-      transaction
-    )
+  // 删除与角色的关联关系
+  async deleteRoleRelation(params, transaction) {
     // 删除角色菜单信息
     const deleteRoleMenuResult =
       await this.ctx.service.menuRole.index.deleteMenuRole(params, transaction)
@@ -201,16 +207,41 @@ class RoleController extends BaseController {
         params,
         transaction
       )
-    return [deleteRoleResult, deleteRoleMenuResult, deleteRolePermissionResult]
+    return [deleteRoleMenuResult, deleteRolePermissionResult]
+  }
+
+  // 删除角色公共方法
+  async deleteRolePublicFn(params, transaction) {
+    // 删除角色信息
+    const deleteRoleResult = await this.ctx.service.role.index.deleteRole(
+      params,
+      transaction
+    )
+    const deleteRoleRelationResult = await this.deleteRoleRelation(
+      params,
+      transaction
+    )
+    return [deleteRoleResult, [...deleteRoleRelationResult]]
+  }
+
+  // 更新角色
+  async updateRoleInfo(params, transaction) {
+    return await this.ctx.service.role.index.updateRole(params, transaction)
   }
 
   // 编辑角色信息公共方法
   async updateRolePublicFn(params, transaction) {
-    // 删除角色
-    const deleteResult = await this.deleteRolePublicFn(params, transaction)
-    // 创建角色
-    const createResult = await this.createRolePublicFn(params, transaction)
-    return [deleteResult, createResult]
+    // 更改角色信息
+    const updateResult = await this.updateRoleInfo(params, transaction)
+    // 删除角色之前绑定的关联关系
+    const deleteResult = await this.deleteRoleRelation(params, transaction)
+    // 创建角色的关联关系
+    const createResult = await this.createRoleRelation(
+      params.role_id,
+      params,
+      transaction
+    )
+    return [updateResult, deleteResult, createResult]
   }
 }
 
