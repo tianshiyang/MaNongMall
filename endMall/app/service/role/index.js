@@ -1,4 +1,5 @@
 const { Service } = require("egg")
+const { Op } = require("sequelize")
 
 class RoleService extends Service {
   /* 创建角色 - 同步角色表
@@ -52,6 +53,35 @@ class RoleService extends Service {
         transaction, // 踩坑-.-, update等操作回滚放第二个参数中，看官网
       }
     )
+  }
+
+  // 获取角色列表
+  async getRoleList({
+    role_id,
+    role_sign,
+    create_time,
+    page_no = 1,
+    page_size = 10,
+  }) {
+    const where = {}
+    if (role_id) {
+      where.id = role_id
+    }
+    if (role_sign) {
+      where.role_sign = role_sign
+    }
+    if (create_time) {
+      const parseCreateTime = JSON.parse(create_time)
+      where.create_time = {
+        [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
+      }
+    }
+    return await this.ctx.model.Role.findAndCountAll({
+      where,
+      offset: (page_no - 1) * page_size,
+      limit: Number(page_size),
+      order: [["create_time", "DESC"]],
+    })
   }
 }
 

@@ -242,6 +242,23 @@ class RoleController extends BaseController {
     )
     return [updateResult, deleteResult, createResult]
   }
+
+  // 获取角色列表
+  async getRoleList() {
+    // 获取参数
+    const params = this.ctx.query
+    let result = null
+    try {
+      result = await this.ctx.service.role.index.getRoleList(params)
+    } catch (e) {
+      console.log(e)
+      return this.error({ error_message: e })
+    }
+    this.success({
+      total: result.count,
+      list: result.rows,
+    })
+  }
 }
 
 module.exports = RoleController
