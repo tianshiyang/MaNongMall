@@ -42,5 +42,19 @@ module.exports = (app) => {
     }
   )
 
+  // 声明角色与其他表关联关系
+  Role.associate = function () {
+    // 与菜单表的关联关系声明，一个角色表中，包含多个角色菜单表
+    Role.hasMany(app.model.MenuRole, {
+      foreignKey: "role_id",
+      as: "role_menu",
+    })
+    // 与权限表的关联关系声明，一个角色表中，包含多个角色权限表
+    Role.hasMany(app.model.PermissionRole, {
+      foreignKey: "role_id",
+      as: "permission_role",
+    })
+  }
+
   return Role
 }

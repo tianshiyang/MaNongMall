@@ -103,6 +103,16 @@ class RoleService extends Service {
       where: {
         id: role_id,
       },
+      include: [
+        {
+          model: this.ctx.model.MenuRole,
+          as: "role_menu",
+        },
+        {
+          model: this.ctx.model.PermissionRole,
+          as: "permission_role",
+        },
+      ],
     })
   }
 }
