@@ -49,9 +49,7 @@ class RoleService extends Service {
         where: {
           id: role_id,
         },
-      },
-      {
-        transaction,
+        transaction, // 踩坑-.-, update等操作回滚放第二个参数中，看官网
       }
     )
   }

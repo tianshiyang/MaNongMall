@@ -56,7 +56,6 @@ class RoleController extends BaseController {
       // 提交事务
       await transaction.commit()
     } catch (error) {
-      console.log(error, "error=====")
       // 回滚事务
       await transaction.rollback()
       return this.error({
