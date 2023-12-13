@@ -20,6 +20,16 @@ class PermissionRoleService extends Service {
       { transaction }
     )
   }
+
+  /* 获取当前权限绑定的角色信息
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 删除信息
+   */
+  async checkCurrentPermissionRoleInfo(permission_id) {
+    return await this.ctx.model.PermissionRole.findAll({
+      where: { permission_id },
+    })
+  }
 }
 
 module.exports = PermissionRoleService

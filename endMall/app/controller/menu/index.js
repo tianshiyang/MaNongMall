@@ -164,7 +164,6 @@ class MenuController extends BaseController {
     try {
       result = await this.ctx.service.menu.index.getMenuTree()
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
     return this.success({

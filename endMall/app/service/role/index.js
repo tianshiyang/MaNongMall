@@ -94,7 +94,19 @@ class RoleService extends Service {
     })
   }
 
-  /* 获取角色列表
+  /* 只获取角色详情
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 角色详情信息
+   */
+  async getRoleDetailInfoOnly(role_id) {
+    return await this.ctx.model.Role.findOne({
+      where: {
+        id: role_id,
+      },
+    })
+  }
+
+  /* 获取角色详情
    * @param {Object} - {role_id} 角色ID
    * @returns {Object} 角色详情信息
    */

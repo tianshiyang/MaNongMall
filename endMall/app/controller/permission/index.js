@@ -51,6 +51,7 @@ class PermissionController extends BaseController {
           params
         )
       } catch (e) {
+        console.log(e)
         return this.error({ error_message: e.errors[0].message })
       }
       // 返回创建完成的权限信息
@@ -109,7 +110,30 @@ class PermissionController extends BaseController {
     })
   }
 
-  // 删除权限 - 逻辑删除
+  // 获取当前权限关联的角色信息
+  async checkCurrentPermissionRoleInfo(permission_id) {
+    const relationRoleInfo =
+      await this.ctx.service.permissionRole.index.checkCurrentPermissionRoleInfo(
+        permission_id
+      )
+    if (relationRoleInfo.length) {
+      // 去重参数
+      const role_ids = [...new Set(relationRoleInfo.map((res) => res.role_id))]
+      const bindRoleNames = await Promise.all(
+        role_ids.map((item) =>
+          (async () => {
+            const result =
+              await this.ctx.service.role.index.getRoleDetailInfoOnly(item)
+            return result.dataValues.role_name
+          })()
+        )
+      )
+      return Promise.reject(bindRoleNames)
+    }
+    return Promise.resolve()
+  }
+
+  // 删除权限
   async deletePermission() {
     // 获取参数
     const params = this.ctx.request.body
@@ -124,7 +148,14 @@ class PermissionController extends BaseController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
-    // TODO 获取当前权限与订单的绑定关系，如果绑定了角色，则不可删除
+    // 获取当前权限与订单的绑定关系，如果绑定了角色，则不可删除
+    try {
+      await this.checkCurrentPermissionRoleInfo(params.permission_id)
+    } catch (e) {
+      return this.error({
+        error_message: `创建失败，当前权限与${e + ""}关联`,
+      })
+    }
     let result = null
     try {
       result = await this.ctx.service.permission.index.deletePermission(params)
