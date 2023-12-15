@@ -20,6 +20,16 @@ class MenuRoleService extends Service {
       { transaction }
     )
   }
+
+  /* 获取当前菜单绑定的角色信息
+   * @param {Object} - {menu_id} 菜单ID
+   * @returns {Object} 删除信息
+   */
+  async checkCurrentMenuRoleInfo(menu_id) {
+    return await this.ctx.model.MenuRole.findAll({
+      where: { menu_id },
+    })
+  }
 }
 
 module.exports = MenuRoleService

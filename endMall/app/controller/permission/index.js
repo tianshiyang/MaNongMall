@@ -152,7 +152,7 @@ class PermissionController extends BaseController {
       await this.checkCurrentPermissionRoleInfo(params.permission_id)
     } catch (e) {
       return this.error({
-        error_message: `创建失败，当前权限与${e + ""}关联`,
+        error_message: `删除失败，当前权限与${e + ""}关联`,
       })
     }
     let result = null

@@ -19,4 +19,7 @@ module.exports = (app) => {
 
   // 获取菜单树形结构
   router.get("/api/menu/getMenuTree", __JWT, controller.menu.index.getMenuTree)
+
+  // 删除菜单
+  router.post("/api/menu/deleteMenu", __JWT, controller.menu.index.deleteMenu)
 }
