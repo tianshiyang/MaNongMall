@@ -118,6 +118,24 @@ class MenuService extends Service {
       ],
     })
   }
+
+  // 获取当前父菜单下的所有子菜单
+  async getRelationAllMenuById(menu_id) {
+    return await this.ctx.model.Menu.findAll({
+      where: {
+        menu_parent: menu_id,
+      },
+    })
+  }
+
+  // 删除菜单
+  async deleteMenuById(menu_id) {
+    return await this.ctx.model.Menu.destroy({
+      where: {
+        id: menu_id,
+      },
+    })
+  }
 }
 
 module.exports = MenuService

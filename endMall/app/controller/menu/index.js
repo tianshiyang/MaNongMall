@@ -116,7 +116,7 @@ class MenuController extends BaseController {
     return result
   }
 
-  // 获取权限列表
+  // 获取菜单列表
   async getMenuList() {
     // 获取参数
     const params = this.ctx.query
@@ -168,6 +168,101 @@ class MenuController extends BaseController {
     }
     return this.success({
       list: result,
+    })
+  }
+
+  // 获取当前菜单关联的角色信息
+  async checkCurrentPermissionRoleInfo(menu_id) {
+    const relationRoleInfo =
+      await this.ctx.service.menuRole.index.checkCurrentMenuRoleInfo(menu_id)
+    if (relationRoleInfo.length) {
+      // 去重参数
+      const role_ids = [...new Set(relationRoleInfo.map((res) => res.role_id))]
+      const bindRoleNames = await Promise.all(
+        role_ids.map((item) =>
+          (async () => {
+            const result =
+              await this.ctx.service.role.index.getRoleDetailInfoOnly(item)
+            return result.dataValues.role_name
+          })()
+        )
+      )
+      return Promise.reject(bindRoleNames)
+    }
+    return Promise.resolve()
+  }
+
+  // 获取当前父级菜单下，所有子菜单的名称
+  async getCurrentParentMenuChildrenName(menu_id) {
+    return await this.ctx.service.menu.index.getRelationAllMenuById(menu_id)
+  }
+
+  // 删除菜单
+  async deleteMenu() {
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验规则
+    const rules = {
+      menu_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    // 如果当前菜单关联了角色，则抛出错误
+    try {
+      await this.checkCurrentPermissionRoleInfo(params.menu_id)
+    } catch (e) {
+      return this.error({ error_message: `删除失败，当前菜单与${e + ""}关联` })
+    }
+    /**
+     * 判断当前菜单为父菜单还是子菜单
+     * - 子菜单
+     *  - 结合上面的角色关联，如果没有关联角色，可删除
+     * - 父菜单
+     *  - 1. 结合上面的角色关联，如果没有关联角色，则依次执行如下逻辑
+     *  - 2. 判断当前父菜单下有没有子菜单，如果有不可删除
+     *  - 3. 如果没有子菜单，可以删除
+     */
+    let currentMenuInfo = null
+    try {
+      currentMenuInfo = await this.getMenuDetailById(params.menu_id)
+    } catch (e) {
+      return this.error({ error_message: e })
+    }
+
+    // 如果是父菜单
+    if (!currentMenuInfo.menu_parent) {
+      let result = null
+      try {
+        result = await this.getCurrentParentMenuChildrenName(currentMenuInfo.id)
+      } catch (e) {
+        return this.error(e)
+      }
+      if (result.length > 0) {
+        // 当前父菜单下有子菜单
+        return this.error({
+          error_message: `当前菜单关联了子菜单【${
+            result.map((res) => res.menu_name) + ""
+          }】不可删除`,
+        })
+      }
+    }
+
+    // 删除菜单
+    try {
+      await this.ctx.service.menu.index.deleteMenuById(params.menu_id)
+    } catch (e) {
+      console.log(e)
+      return this.error({
+        error_message: e.errors[0].message,
+      })
+    }
+    this.success({
+      message: "删除成功",
     })
   }
 }
