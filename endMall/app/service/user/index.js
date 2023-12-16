@@ -18,6 +18,12 @@ class LoginService extends Service {
     }
     return await this.ctx.model.User.findOne({
       where,
+      include: [
+        {
+          model: this.ctx.model.UserRole,
+          as: "role_list",
+        },
+      ],
     })
   }
 

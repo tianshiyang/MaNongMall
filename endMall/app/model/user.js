@@ -58,6 +58,14 @@ module.exports = (app) => {
       updatedAt: "update_time",
     }
   )
+  // 声明用户与其他表关联关系
+  User.associate = function () {
+    // 用户表和用户角色表的关联关系 -> 一个用户关联多个角色
+    User.hasMany(app.model.UserRole, {
+      foreignKey: "user_id",
+      as: "role_list",
+    })
+  }
 
   return User
 }

@@ -190,6 +190,32 @@ class LoginController extends BaseController {
       message: "操作成功",
     })
   }
+
+  // 获取用户详情
+  async getUserDetail() {
+    // 获取参数
+    const params = this.ctx.query
+    // 定义校验规则
+    const rules = {
+      user_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let result = null
+    try {
+      result = await this.ctx.service.user.index.fineUserInfo(params)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      ...result.dataValues,
+    })
+  }
 }
 
 module.exports = LoginController
