@@ -19,7 +19,7 @@ class LoginController extends BaseController {
     // 调用service层做数据查询
     let result = null
     try {
-      result = await this.ctx.service.user.login.fineUserInfo(this.ctx.query)
+      result = await this.ctx.service.user.index.fineUserInfo(this.ctx.query)
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })
     }
@@ -43,6 +43,29 @@ class LoginController extends BaseController {
     this.success({
       token,
     })
+  }
+
+  // 新增员工
+  async addUser() {
+    // Post请求，通过this.ctx.request.body获取参数
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验规则
+    const rules = {
+      username: "string",
+      password: "string",
+      phone: "string",
+      id_number: "string",
+      account_number: "string",
+      role: "string",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
   }
 }
 
