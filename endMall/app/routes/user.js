@@ -12,4 +12,9 @@ module.exports = (app) => {
   router.post("/api/user/updateUser", controller.user.index.updateUser)
   // 操作员工离职
   router.post("/api/user/makeUserDepart", controller.user.index.makeUserDepart)
+  // 更改员工密码
+  router.post(
+    "/api/user/updateUserPassword",
+    controller.user.index.updateUserPassword
+  )
 }

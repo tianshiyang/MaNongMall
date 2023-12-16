@@ -78,6 +78,23 @@ class LoginService extends Service {
       }
     )
   }
+
+  /* 更新员工密码
+   * @param {Object} - {user_id, password} 用户ID, 用户密码
+   * @returns {Object} 更新信息
+   */
+  async updateUserPassword({ user_id, password }) {
+    return await this.ctx.model.User.update(
+      {
+        password,
+      },
+      {
+        where: {
+          id: user_id,
+        },
+      }
+    )
+  }
 }
 
 module.exports = LoginService

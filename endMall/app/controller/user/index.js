@@ -163,6 +163,33 @@ class LoginController extends BaseController {
       message: "操作成功",
     })
   }
+
+  // 更新员工密码
+  async updateUserPassword() {
+    // Post请求，通过this.ctx.request.body获取参数
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验规则
+    const rules = {
+      user_id: "int",
+      password: "string",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    try {
+      await this.ctx.service.user.index.updateUserPassword(params)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      message: "操作成功",
+    })
+  }
 }
 
 module.exports = LoginController
