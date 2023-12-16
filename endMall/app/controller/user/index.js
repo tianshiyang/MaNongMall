@@ -216,6 +216,50 @@ class LoginController extends BaseController {
       ...result.dataValues,
     })
   }
+
+  // 更新用户角色信息
+  async updateUserRole() {
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验规则
+    const rules = {
+      user_id: "int",
+      role_list: "string",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let transaction = null
+    try {
+      // 开启事务
+      transaction = await this.ctx.model.transaction()
+      await this.ctx.service.userRole.index.deleteUserRelationRole(
+        params.user_id,
+        transaction
+      )
+      const role_list = JSON.parse(params.role_list)
+      const data = role_list.map((item) => {
+        return {
+          user_id: params.user_id,
+          role_id: item,
+        }
+      })
+      await this.ctx.service.userRole.index.createUserRole(data, transaction)
+      // 提交事务
+      await transaction.commit()
+    } catch (e) {
+      // 回滚事务
+      await transaction.rollback()
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      message: "更新用户角色信息成功",
+    })
+  }
 }
 
 module.exports = LoginController

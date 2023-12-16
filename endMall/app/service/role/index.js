@@ -24,16 +24,12 @@ class RoleService extends Service {
    * @returns {Object} 删除信息
    */
   async deleteRole({ role_id }, transaction) {
-    return await this.ctx.model.Role.destroy(
-      {
-        where: {
-          id: role_id,
-        },
+    return await this.ctx.model.Role.destroy({
+      where: {
+        id: role_id,
       },
-      {
-        transaction,
-      }
-    )
+      transaction,
+    })
   }
 
   /* 编辑角色

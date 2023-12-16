@@ -15,10 +15,10 @@ class MenuRoleService extends Service {
    * @returns {Object} 删除信息
    */
   async deleteMenuRole({ role_id }, transaction) {
-    return await this.ctx.model.MenuRole.destroy(
-      { where: { role_id } },
-      { transaction }
-    )
+    return await this.ctx.model.MenuRole.destroy({
+      where: { role_id },
+      transaction,
+    })
   }
 
   /* 获取当前菜单绑定的角色信息

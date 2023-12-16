@@ -256,7 +256,6 @@ class MenuController extends BaseController {
     try {
       await this.ctx.service.menu.index.deleteMenuById(params.menu_id)
     } catch (e) {
-      console.log(e)
       return this.error({
         error_message: e.errors[0].message,
       })

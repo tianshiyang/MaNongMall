@@ -28,4 +28,10 @@ module.exports = (app) => {
     __JWT,
     controller.user.index.getUserDetail
   )
+  // 更新用户角色
+  router.post(
+    "/api/user/updateUserRole",
+    __JWT,
+    controller.user.index.updateUserRole
+  )
 }
