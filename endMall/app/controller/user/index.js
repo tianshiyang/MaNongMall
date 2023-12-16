@@ -57,7 +57,7 @@ class LoginController extends BaseController {
       phone: "string",
       id_number: "string",
       account_number: "string",
-      role: "string",
+      role_list: "string",
     }
     // 校验参数
     const errors = await this.app.validator.validate(rules, params)
@@ -66,6 +66,32 @@ class LoginController extends BaseController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
+    let transaction = null
+    try {
+      // 开启事务
+      transaction = await this.ctx.model.transaction()
+      // 创建角色
+      const userInfo = await this.ctx.service.user.index.addUser(params, transaction)
+      const user_id = userInfo.dataValues.id
+      const role_list = JSON.parse(params.role_list)
+      const data = role_list.map(item => {
+        return {
+          user_id,
+          role_id: item,
+        }
+      })
+      // 同步创建员工角色
+      await this.ctx.service.userRole.index.createUserRole(data, transaction)
+      // 提交事务
+      await transaction.commit()
+    } catch (e) {
+      // 回滚事务
+      await transaction.rollback()
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      message: "创建成功",
+    })
   }
 }
 
