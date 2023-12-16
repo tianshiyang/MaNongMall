@@ -71,10 +71,13 @@ class LoginController extends BaseController {
       // 开启事务
       transaction = await this.ctx.model.transaction()
       // 创建角色
-      const userInfo = await this.ctx.service.user.index.addUser(params, transaction)
+      const userInfo = await this.ctx.service.user.index.addUser(
+        params,
+        transaction
+      )
       const user_id = userInfo.dataValues.id
       const role_list = JSON.parse(params.role_list)
-      const data = role_list.map(item => {
+      const data = role_list.map((item) => {
         return {
           user_id,
           role_id: item,
@@ -91,6 +94,47 @@ class LoginController extends BaseController {
     }
     return this.success({
       message: "创建成功",
+    })
+  }
+
+  // 编辑员工信息
+  async updateUser() {
+    // Post请求，通过this.ctx.request.body获取参数
+    // 获取参数
+    const params = this.ctx.request.body
+    // 定义校验规则
+    const rules = {
+      user_id: "int",
+      username: "string",
+      phone: "string",
+      id_number: "string",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    let result = null
+    try {
+      result = await this.ctx.service.user.index.fineUserInfo({
+        user_id: params.user_id,
+      })
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    if (!result) {
+      return this.error({ error_message: "用户不存在" })
+    }
+    try {
+      // 更新用户信息
+      await this.ctx.service.user.index.updateUser(params)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+    return this.success({
+      message: "更新成功",
     })
   }
 }

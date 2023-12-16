@@ -8,4 +8,6 @@ module.exports = (app) => {
   router.get("/api/user/login", controller.user.index.login)
   // 创建员工
   router.post("/api/user/addUser", controller.user.index.addUser)
+  // 创建员工
+  router.post("/api/user/updateUser", controller.user.index.updateUser)
 }
