@@ -61,6 +61,23 @@ class LoginService extends Service {
       }
     )
   }
+
+  /* 更新员工离职
+   * @param {Object} - {user_id} 用户ID
+   * @returns {Object} 更新信息
+   */
+  async makeUserDepart({ user_id }) {
+    return this.ctx.model.User.update(
+      {
+        is_depart: true,
+      },
+      {
+        where: {
+          id: user_id,
+        },
+      }
+    )
+  }
 }
 
 module.exports = LoginService

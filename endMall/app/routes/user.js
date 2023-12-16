@@ -10,4 +10,6 @@ module.exports = (app) => {
   router.post("/api/user/addUser", controller.user.index.addUser)
   // 创建员工
   router.post("/api/user/updateUser", controller.user.index.updateUser)
+  // 操作员工离职
+  router.post("/api/user/makeUserDepart", controller.user.index.makeUserDepart)
 }
