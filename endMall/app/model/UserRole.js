@@ -33,7 +33,7 @@ module.exports = (app) => {
 
   // 声明用户角色表与其他表关联关系
   UserRole.associate = function () {
-    // 用户角色表与角色表属于的关系 -> 一条用户角色，属于一个角色
+    // 关联用户角色表和角色表的一对一关系
     UserRole.belongsTo(app.model.Role, {
       foreignKey: "role_id",
       as: "role_info",

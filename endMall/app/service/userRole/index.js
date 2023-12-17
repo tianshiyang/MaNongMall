@@ -21,6 +21,24 @@ class UserRoleService extends Service {
       transaction,
     })
   }
+
+  /* 获取当前用户的角色
+   * @param {int} - {user_id} 用户ID
+   * @returns {Object} 角色列表
+   */
+  async getUserRole(user_id) {
+    return this.ctx.model.UserRole.findAll({
+      where: {
+        user_id,
+      },
+      include: [
+        {
+          model: this.ctx.model.Role,
+          as: "role_info",
+        },
+      ],
+    })
+  }
 }
 
 module.exports = UserRoleService

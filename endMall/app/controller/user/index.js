@@ -285,6 +285,19 @@ class LoginController extends BaseController {
       list,
     })
   }
+
+  // 获取员工角色
+  async getUserRole() {
+    const userInfo = await this.getUserTokenVerify()
+    try {
+      const role = await this.ctx.service.userRole.index.getUserRole(
+        userInfo.user_id
+      )
+      return this.success(role.map((item) => item.role_info))
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+  }
 }
 
 module.exports = LoginController

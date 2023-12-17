@@ -25,9 +25,13 @@ class BaseController extends Controller {
     }
   }
 
-  // 没有权限、登录失败等认证失败
-  noAuthority(data = {}) {
-    this.error(data)
+  // 获取Token信息
+  async getUserTokenVerify() {
+    // 解码token
+    return this.ctx.app.jwt.verify(
+      this.ctx.request.header.authorization,
+      this.ctx.app.jwt.secret
+    )
   }
 }
 
