@@ -260,6 +260,31 @@ class LoginController extends BaseController {
       message: "更新用户角色信息成功",
     })
   }
+
+  // 获取人员列表
+  async getUserList() {
+    // 获取参数
+    const params = this.ctx.query
+    let result = null
+    try {
+      result = await this.ctx.service.user.index.getUserList(params)
+    } catch (e) {
+      console.log(e)
+      return this.error({ error_message: e.errors[0].message })
+    }
+    const list = result.rows.map((item) => {
+      item.dataValues.role_list = item.dataValues.role_list.map((role_item) => {
+        return {
+          ...role_item.role_info.dataValues,
+        }
+      })
+      return item.dataValues
+    })
+    return this.success({
+      total: result.count,
+      list,
+    })
+  }
 }
 
 module.exports = LoginController

@@ -34,4 +34,6 @@ module.exports = (app) => {
     __JWT,
     controller.user.index.updateUserRole
   )
+  // 获取人员列表
+  router.get("/api/user/getUserList", __JWT, controller.user.index.getUserList)
 }

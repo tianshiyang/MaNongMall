@@ -1,4 +1,5 @@
 const { Service } = require("egg")
+const { Op, literal } = require("sequelize")
 
 class LoginService extends Service {
   /* 查询用户信息
@@ -100,6 +101,57 @@ class LoginService extends Service {
         },
       }
     )
+  }
+
+  // 获取人员列表
+  async getUserList({
+    user_id,
+    phone,
+    // role_id,
+    is_depart = 0,
+    create_time,
+    page_no = 1,
+    page_size = 20,
+  }) {
+    const where = {}
+    if (user_id) {
+      where.id = user_id
+    }
+    if (phone) {
+      where.phone = {
+        [Op.substring]: phone,
+      }
+    }
+    if (is_depart) {
+      where.is_depart = is_depart
+    }
+    if (create_time) {
+      where.create_time = {
+        [Op.between]: create_time,
+      }
+    }
+    // if (role_id) {
+    // where.role_id = literal("`role_list.role_id`=" + role_id)
+    // }
+    return await this.ctx.model.User.findAndCountAll({
+      where,
+      include: [
+        {
+          model: this.ctx.model.UserRole,
+          as: "role_list",
+          include: [
+            {
+              model: this.ctx.model.Role,
+              as: "role_info",
+            },
+          ],
+        },
+      ],
+      offset: (page_no - 1) * page_size,
+      limit: Number(page_size),
+      order: [["create_time", "DESC"]],
+      distinct: true,
+    })
   }
 }
 
