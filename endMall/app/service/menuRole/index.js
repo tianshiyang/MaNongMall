@@ -30,6 +30,16 @@ class MenuRoleService extends Service {
       where: { menu_id },
     })
   }
+
+  /* 通过角色ID获取当前用户的所有菜单
+   * @param {Object} - {role_id} 角色ID
+   * @returns {Object} 菜单列表
+   */
+  async getUserAllMenuByRole({ role_id }) {
+    return await this.ctx.model.MenuRole.findAll({
+      where: { role_id },
+    })
+  }
 }
 
 module.exports = MenuRoleService

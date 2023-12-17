@@ -45,4 +45,5 @@ module.exports = (app) => {
     controller.user.index.getUserPermission
   )
   // 获取人员菜单
+  router.get("/api/user/getUserMenu", __JWT, controller.user.index.getUserMenu)
 }

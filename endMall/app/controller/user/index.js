@@ -337,6 +337,51 @@ class LoginController extends BaseController {
       return this.error({ error_message: e.errors[0].message })
     }
   }
+
+  // 转换菜单，数组转树
+  transformMenu(arr, menu_parent) {
+    return arr
+      .filter((res) => res.dataValues.menu_parent === menu_parent)
+      .map((item) => {
+        return {
+          ...item.dataValues,
+          children: this.transformMenu(arr, item.dataValues.id),
+        }
+      })
+  }
+
+  // 获取用户菜单
+  async getUserMenu() {
+    const userInfo = await this.getUserTokenVerify()
+    try {
+      // 获取用户所有角色
+      const roleList = await this.ctx.service.userRole.index.getUserOnlyRole(
+        userInfo.user_id
+      )
+      // 获取当前用户的所有菜单列表
+      const userAllMenuPromise = roleList.map(
+        async (item) =>
+          await this.ctx.service.menuRole.index.getUserAllMenuByRole({
+            role_id: item.role_id,
+          })
+      )
+      const userAllMenu = await Promise.all(userAllMenuPromise)
+      // 去重相同的菜单id，并将数据只返回menu_id
+      const menuIds = [
+        ...new Set(userAllMenu.flat(2).map((item) => item.menu_id)),
+      ]
+      // 通过菜单ID获取菜单详情
+      const resultPromise = menuIds.map(
+        async (item) =>
+          await this.ctx.service.menu.index.getMenuDetailById(item)
+      )
+      const result = await Promise.all(resultPromise)
+      // 返回转化为树形结构的数据给前端
+      this.success(this.transformMenu(result, null))
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+  }
 }
 
 module.exports = LoginController
