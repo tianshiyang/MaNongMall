@@ -30,6 +30,13 @@ class PermissionRoleService extends Service {
       where: { permission_id },
     })
   }
+
+  // 获取当前角色的所有权限
+  async getRolePermissions(role_id) {
+    return await this.ctx.model.PermissionRole.findAll({
+      where: { role_id },
+    })
+  }
 }
 
 module.exports = PermissionRoleService

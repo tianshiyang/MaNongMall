@@ -39,6 +39,18 @@ class UserRoleService extends Service {
       ],
     })
   }
+
+  /* 获取当前用户的角色, 不进行子查询，获取当前角色的详情信息
+   * @param {int} - {user_id} 用户ID
+   * @returns {Object} 角色列表
+   */
+  async getUserOnlyRole(user_id) {
+    return this.ctx.model.UserRole.findAll({
+      where: {
+        user_id,
+      },
+    })
+  }
 }
 
 module.exports = UserRoleService

@@ -39,5 +39,10 @@ module.exports = (app) => {
   // 获取人员角色
   router.get("/api/user/getUserRole", __JWT, controller.user.index.getUserRole)
   // 获取人员权限
+  router.get(
+    "/api/user/getUserPermission",
+    __JWT,
+    controller.user.index.getUserPermission
+  )
   // 获取人员菜单
 }
