@@ -1,5 +1,5 @@
 const { Service } = require("egg")
-const { Op, literal } = require("sequelize")
+const { Op } = require("sequelize")
 
 class LoginService extends Service {
   /* 查询用户信息
@@ -107,7 +107,7 @@ class LoginService extends Service {
   async getUserList({
     user_id,
     phone,
-    // role_id,
+    role_id,
     is_depart = 0,
     create_time,
     page_no = 1,
@@ -130,15 +130,17 @@ class LoginService extends Service {
         [Op.between]: create_time,
       }
     }
-    // if (role_id) {
-    // where.role_id = literal("`role_list.role_id`=" + role_id)
-    // }
+    const subWhere = {}
+    if (role_id) {
+      subWhere.role_id = role_id
+    }
     return await this.ctx.model.User.findAndCountAll({
       where,
       include: [
         {
           model: this.ctx.model.UserRole,
           as: "role_list",
+          where: subWhere,
           include: [
             {
               model: this.ctx.model.Role,
