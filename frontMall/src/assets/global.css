@@ -1,0 +1,6 @@
+body {
+  min-width: 80vw;
+  height: 100vh;
+  overflow: scroll;
+  margin: 0;
+}

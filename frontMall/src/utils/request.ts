@@ -4,7 +4,8 @@ import { nextTick } from "vue"
 
 const api = axios.create({
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Authorization": localStorage.getItem("token")
   },
 })
 // 请求拦截器
@@ -70,7 +71,7 @@ export function request<T = any>(config: MallAxiosRequestConfig): Promise<T> {
           case 404:
             return reject("要访问的文件迷路了～")
           default:
-            return reject(error.response.data.message || "服务端错误")
+            return reject(error.response.data || "服务端错误")
         }
       })
       .finally(() => {
