@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { userLogin } from "@/api/user"
+import { userLoginAPI } from "@/api/user"
 import { ElNotification } from "element-plus"
 
 // 表单实例
@@ -41,14 +41,14 @@ const handleLogin = async () => {
   await LoginRef.value.validate(async (valid: boolean) => {
     if (valid) {
       try {
-        const data = await userLogin(formData)
+        const data = await userLoginAPI(formData)
         localStorage.setItem('token', data.token)
         ElNotification({
           title: '成功',
           message: '登录成功',
           type: 'success',
         })
-      } catch (err) {
+      } catch (err: any) {
         ElNotification({
           title: '失败',
           message: err.error_message,

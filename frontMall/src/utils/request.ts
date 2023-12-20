@@ -60,18 +60,18 @@ export function request<T = any>(config: MallAxiosRequestConfig): Promise<T> {
           resolve(res.data)
         } else {
           // 正常返回：处理失败的处理
-          reject(res.data)
+          reject(res.data as { error_message: string })
         }
       })
       .catch((error) => {
         switch (error.response.status) {
           case 401:   
             // 未认证/认证失败
-            return reject("认证失败")
+            return reject({ error_message: "认证失败" })
           case 404:
-            return reject("要访问的文件迷路了～")
+            return reject({ error_message: "要访问的文件迷路了～" })
           default:
-            return reject(error.response.data || "服务端错误")
+            return reject(error.response.data || {error_message: "服务端错误"})
         }
       })
       .finally(() => {
