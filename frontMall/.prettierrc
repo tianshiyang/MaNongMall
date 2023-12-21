@@ -1,0 +1,7 @@
+{
+  "semi": false,
+  "singleQuote": false,
+  "trailingComma": "none",
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleAttributePerLine": true
+}

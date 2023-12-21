@@ -8,9 +8,9 @@ const routes = [{
     name: 'home',
     component: () => import("@/components/MenuLayout/MenuLayout.vue"),
     children: [{
-      path: "/home",
-      name: "home",
-      component: () => import("@/views/HomeView.vue")
+      path: "/menu",
+      name: "menu",
+      component: () => import("@/views/Settings/Menu/Menu.vue")
     },
     {
       path: "/about",

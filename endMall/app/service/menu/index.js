@@ -97,7 +97,7 @@ class MenuService extends Service {
     return await this.ctx.model.Menu.findAndCountAll({
       where,
       offset: (page_no - 1) * page_size,
-      limit: page_size,
+      limit: Number(page_size),
       order: [["create_time", "DESC"]],
     })
   }
