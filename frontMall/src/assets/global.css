@@ -9,3 +9,7 @@ body {
   float: right;
   margin-top: 20px;
 }
+
+.table-button-group {
+  margin: 20px 0;
+}

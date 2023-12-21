@@ -40,7 +40,7 @@
     </el-form-item>
   </el-form>
 
-  <div class="button-group">
+  <div class="table-button-group">
     <el-button
       type="primary"
       @click="handleAddMenu"
