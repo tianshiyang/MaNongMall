@@ -4,3 +4,8 @@ body {
   overflow: scroll;
   margin: 0;
 }
+
+.el-pagination-class {
+  float: right;
+  margin-top: 20px;
+}

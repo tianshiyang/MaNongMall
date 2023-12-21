@@ -40,6 +40,15 @@
     </el-form-item>
   </el-form>
 
+  <div class="button-group">
+    <el-button
+      type="primary"
+      @click="handleAddMenu"
+    >
+      新增菜单
+    </el-button>
+  </div>
+
   <el-table
     :data="tableData.list"
     border
@@ -64,15 +73,52 @@
       prop="create_time"
       label="创建时间"
     />
+    <el-table-column label="操作">
+      <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleEditMenu(row.id)"
+        >
+          编辑
+        </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="handleDeleteMenu(row.id)"
+        >
+          删除
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
+
+  <el-pagination
+    class="el-pagination-class"
+    v-model:current-page="form.page_no"
+    v-model:page-size="form.page_size"
+    :page-sizes="[2, 5, 10, 20]"
+    layout="total, sizes, prev, pager, next, jumper"
+    :total="tableData.total"
+    @size-change="getMenuList"
+    @current-change="getMenuList"
+  />
+
+  <UpdateMenu
+    v-if="editData.visible"
+    v-model="editData.visible"
+    :menu_id="editData.menu_id"
+    @updateSuccess="getMenuList"
+  />
 </template>
 
 <script lang="ts" setup>
 import { defaultTime } from "@/utils/DataFormat"
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 import MenuSelect from "../components/MenuSelect.vue"
-import { getMenuListAPI } from "@/api/user"
-import { ElNotification } from "element-plus"
+import { getMenuListAPI, deleteMenuAPI } from "@/api/user"
+import { ElMessageBox, ElNotification } from "element-plus"
+import UpdateMenu from "./components/UpdateMenu.vue"
 
 // 表单搜索数据源
 const form = reactive({
@@ -81,7 +127,7 @@ const form = reactive({
   menu_parent: "", // 父级菜单
   create_time: null, // 创建时间
   page_no: 1,
-  page_size: 10
+  page_size: 5
 })
 
 // 表格数据源
@@ -130,6 +176,46 @@ const initPageData = () => {
   getMenuList()
 }
 
+// 删除
+const handleDeleteMenu = (menu_id: number) => {
+  ElMessageBox.confirm("确定删除该菜单吗？", "提示").then(async () => {
+    try {
+      await deleteMenuAPI({ menu_id })
+      ElNotification({
+        title: "成功",
+        message: "删除菜单成功",
+        type: "success"
+      })
+    } catch (e: any) {
+      ElNotification({
+        title: "失败",
+        message: e.error_message,
+        type: "error"
+      })
+    }
+  })
+}
+
+// 编辑的数据源
+const menu_id = ref<string | number>("")
+const editData = reactive({
+  visible: false,
+  menu_id
+})
+
+// 编辑菜单
+const handleEditMenu = (menu_id: number) => {
+  editData.visible = true
+  editData.menu_id = menu_id
+}
+
+// 新增菜单
+const handleAddMenu = () => {
+  editData.visible = true
+  editData.menu_id = ""
+}
+
+// 初始化
 initPageData()
 </script>
 

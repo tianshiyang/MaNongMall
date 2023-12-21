@@ -4,6 +4,7 @@
     filterable
     remote
     reserve-keyword
+    clearable
     placeholder="请输入菜单名称"
     :remote-method="getMenuAllList"
     :loading="formData.loading"
@@ -40,9 +41,10 @@ const formData = reactive({
 const menuList = ref<any[]>([])
 
 // 请求获取菜单列表
-const getMenuAllList = (menu_name: string) => {
+const getMenuAllList = (menu_name: string, menu_id: string | number) => {
   const params = {
-    menu_name: menu_name,
+    menu_name,
+    menu_id: !menu_name ? menu_id : "", // 兼容：如果有menu_name就用menu_name搜，如果没有，就用menu_id搜
     page_no: 1,
     page_size: 10
   }
@@ -61,7 +63,10 @@ const getMenuAllList = (menu_name: string) => {
 
 watch(
   () => props.modelValue,
-  () => (formData.modelValue = props.modelValue)
+  () => {
+    formData.modelValue = props.modelValue
+    getMenuAllList("", props.modelValue as string | number)
+  }
 )
 // 更新modelValue
 const handleChange = (e: string | number) => {
