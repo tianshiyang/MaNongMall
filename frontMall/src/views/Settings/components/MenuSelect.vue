@@ -1,13 +1,13 @@
 <template>
   <el-select
     v-model="formData.modelValue"
-    multiple
     filterable
     remote
     reserve-keyword
     placeholder="请输入菜单名称"
     :remote-method="getMenuAllList"
     :loading="formData.loading"
+    @change="handleChange"
   >
     <el-option
       v-for="item in menuList"
@@ -19,9 +19,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue"
+import { reactive, ref, defineEmits } from "vue"
 import { getMenuListAPI } from "@/api/user/index"
 import { ElNotification } from "element-plus"
+
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string | number): void
+}>()
 
 const props = defineProps({
   modelValue: [Number, String]
@@ -53,5 +57,10 @@ const getMenuAllList = (menu_name: string) => {
         type: "error"
       })
     })
+}
+
+// 更新modelValue
+const handleChange = (e: string | number) => {
+  emit("update:modelValue", e)
 }
 </script>

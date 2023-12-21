@@ -4,12 +4,14 @@
       <el-input
         v-model="form.menu_name"
         clearable
+        placeholder="请输入菜单名称"
       />
     </el-form-item>
     <el-form-item label="菜单路径">
       <el-input
         v-model="form.menu_path"
         clearable
+        placeholder="请输入菜单路径"
       />
     </el-form-item>
     <el-form-item label="父级菜单">
@@ -39,12 +41,30 @@
     </el-form-item>
   </el-form>
 
-  <el-table :data="tableData.list" border>
-    <el-table-column prop="id" label="菜单ID" />
-    <el-table-column prop="menu_name" label="菜单名称" />
-    <el-table-column prop="menu_path" label="菜单路径" />
-    <el-table-column prop="menu_parent" label="父级菜单" />
-    <el-table-column prop="create_time" label="创建时间" />
+  <el-table
+    :data="tableData.list"
+    border
+  >
+    <el-table-column
+      prop="id"
+      label="菜单ID"
+    />
+    <el-table-column
+      prop="menu_name"
+      label="菜单名称"
+    />
+    <el-table-column
+      prop="menu_path"
+      label="菜单路径"
+    />
+    <el-table-column
+      prop="menu_parent_name"
+      label="父级菜单"
+    />
+    <el-table-column
+      prop="create_time"
+      label="创建时间"
+    />
   </el-table>
 </template>
 

@@ -48,6 +48,11 @@ module.exports = (app) => {
       foreignKey: "menu_parent",
       as: "children",
     })
+    Menu.hasOne(app.model.Menu, {
+      foreignKey: "id",
+      sourceKey: "menu_parent",
+      as: "parent",
+    })
   }
 
   return Menu

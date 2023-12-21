@@ -126,6 +126,13 @@ class MenuController extends BaseController {
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })
     }
+    // 格式化，返回当前菜单父菜单的名称
+    result.rows.forEach((res) => {
+      res.dataValues.menu_parent_name = res.dataValues.parent
+        ? res.dataValues.parent.menu_name
+        : ""
+      delete res.dataValues.parent
+    })
     this.success({
       total: result.count,
       list: result.rows,
