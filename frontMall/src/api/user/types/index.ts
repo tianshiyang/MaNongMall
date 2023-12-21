@@ -5,5 +5,5 @@ export interface getMenuListAPIParams extends BaseListRequest {
   menu_name?: string
   menu_parent?: number | string
   menu_path?: string
-  create_time?: string[]
+  create_time?: string | null
 }

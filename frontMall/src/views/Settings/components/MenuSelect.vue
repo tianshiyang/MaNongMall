@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, defineEmits } from "vue"
+import { reactive, ref, defineEmits, watch } from "vue"
 import { getMenuListAPI } from "@/api/user/index"
 import { ElNotification } from "element-plus"
 
@@ -59,6 +59,10 @@ const getMenuAllList = (menu_name: string) => {
     })
 }
 
+watch(
+  () => props.modelValue,
+  () => (formData.modelValue = props.modelValue)
+)
 // 更新modelValue
 const handleChange = (e: string | number) => {
   emit("update:modelValue", e)

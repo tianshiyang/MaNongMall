@@ -20,11 +20,10 @@
     <el-form-item label="创建时间">
       <el-date-picker
         v-model="form.create_time"
-        type="daterange"
+        type="datetimerange"
         range-separator="到"
         value-format="YYYY-MM-DD HH:mm:ss"
-        format="YYYY-MM-DD"
-        time-format="YYYY-MM-DD"
+        format="YYYY-MM-DD HH:mm:ss"
         start-placeholder="开始时间"
         end-placeholder="结束时间"
         :default-time="defaultTime"
@@ -80,7 +79,7 @@ const form = reactive({
   menu_name: "", // 菜单名称
   menu_path: "", // 菜单路径
   menu_parent: "", // 父级菜单
-  create_time: [], // 创建时间
+  create_time: null, // 创建时间
   page_no: 1,
   page_size: 10
 })
@@ -93,7 +92,11 @@ const tableData = reactive({
 
 // 获取菜单列表
 const getMenuList = () => {
-  getMenuListAPI(form)
+  const data = {
+    ...form,
+    create_time: form.create_time ? JSON.stringify(form.create_time) : null
+  }
+  getMenuListAPI(data)
     .then((res) => {
       tableData.list = res.list
       tableData.total = res.total
@@ -118,7 +121,7 @@ const handleReset = () => {
   form.menu_name = ""
   form.menu_parent = ""
   form.menu_path = ""
-  form.create_time = []
+  form.create_time = null
   handleSearch()
 }
 
