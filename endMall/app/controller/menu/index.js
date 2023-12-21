@@ -84,6 +84,9 @@ class MenuController extends BaseController {
   }
   // 编辑菜单
   async editMenu(params) {
+    if (params.menu_id === params.menu_parent) {
+      return Promise.reject("父级菜单不能是自己！")
+    }
     try {
       await this.createOrUpdateMenuValidate(params)
     } catch (e) {

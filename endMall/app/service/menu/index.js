@@ -34,9 +34,10 @@ class MenuService extends Service {
    * @returns {Object} 菜单信息
    */
   async editMenu({ menu_id, menu_name, menu_path, menu_parent }) {
-    const attribute = { menu_name, menu_path }
-    if (menu_parent) {
-      attribute.menu_parent = menu_parent
+    const attribute = {
+      menu_name,
+      menu_path,
+      menu_parent: menu_parent || null,
     }
     return await this.ctx.model.Menu.update(attribute, {
       where: {
