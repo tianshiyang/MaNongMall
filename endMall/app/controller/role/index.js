@@ -280,7 +280,15 @@ class RoleController extends BaseController {
       // 为满足前端树形结构展示，在此过滤父级菜单,只留下最底层的子菜单
       const role_menu = result.dataValues.role_menu
         .filter((item) => {
-          return item.dataValues.parent?.dataValues?.menu_parent
+          if (!item.dataValues.parent?.dataValues?.menu_parent) {
+            // 如果没有menu_parent，则证明为顶级菜单
+            if (!item.dataValues.parent?.dataValues?.children?.length) {
+              // 顶级菜单并且没有子菜单的一级菜单，正常返回
+              return true
+            }
+            return false
+          }
+          return true
         })
         .map((res) => res.dataValues.parent)
       if (result.dataValues) {
