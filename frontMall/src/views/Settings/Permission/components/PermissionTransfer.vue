@@ -3,6 +3,7 @@
     :disabled="props.disabled"
     v-model="selectedValue"
     :data="permissionList"
+    @change="handleChange"
   />
 </template>
 
@@ -15,6 +16,10 @@ const props = defineProps({
   modelValue: Array,
   disabled: Boolean
 })
+
+const emit = defineEmits<{
+  (event: "update:modelValue", value: number[]): void
+}>()
 
 // 已选择的
 const selectedValue = ref(props.modelValue)
@@ -43,6 +48,11 @@ const getPermissionList = async () => {
       type: "error"
     })
   }
+}
+
+// 改变更新modelValue
+const handleChange = () => {
+  emit("update:modelValue", selectedValue.value as number[])
 }
 
 watch(

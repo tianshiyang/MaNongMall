@@ -44,6 +44,6 @@ export interface UpdateRoleData {
   role_name: string
   role_sign: string
   role_remark: string
-  menu_list: any[]
-  permission_list: any[]
+  menu_list: string
+  permission_list: string
 }

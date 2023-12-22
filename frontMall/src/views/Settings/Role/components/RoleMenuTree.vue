@@ -6,11 +6,12 @@
     :disabled="props.disabled"
     :render-after-expand="false"
     show-checkbox
+    @change="handleChange"
   />
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, watch } from "vue"
+import { defineProps, ref, watch, defineEmits } from "vue"
 import { getMenuTreeAPI } from "@/api/setting"
 import { ElNotification } from "element-plus"
 
@@ -18,6 +19,10 @@ const props = defineProps({
   modelValue: Array,
   disabled: Boolean
 })
+
+const emit = defineEmits<{
+  (event: "update:modelValue", value: number[]): void
+}>()
 
 // 当前选中的值
 const selectedValue = ref(props.modelValue)
@@ -48,6 +53,11 @@ const getMenuTree = async () => {
       type: "error"
     })
   }
+}
+
+// 改变更新modelValue
+const handleChange = () => {
+  emit("update:modelValue", selectedValue.value as number[])
 }
 
 watch(

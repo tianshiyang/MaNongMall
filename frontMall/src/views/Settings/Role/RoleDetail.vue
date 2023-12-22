@@ -138,7 +138,12 @@ const getRouteParams = () => {
 // 保存
 const handleSave = async () => {
   try {
-    await updateRoleAPI(formData)
+    const data = {
+      ...formData,
+      menu_list: JSON.stringify(formData.menu_list),
+      permission_list: JSON.stringify(formData.permission_list)
+    }
+    await updateRoleAPI(data)
     ElNotification({
       title: "成功",
       message: "更改成功！",
