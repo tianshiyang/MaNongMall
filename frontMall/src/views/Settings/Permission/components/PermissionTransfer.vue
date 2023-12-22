@@ -1,8 +1,9 @@
 <template>
   <el-transfer
-    :disabled="props.disabled"
     v-model="selectedValue"
     :data="permissionList"
+    filterable
+    filter-placeholder="请搜索菜单"
     @change="handleChange"
   />
 </template>
@@ -14,7 +15,10 @@ import { ElNotification } from "element-plus"
 
 const props = defineProps({
   modelValue: Array,
-  disabled: Boolean
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits<{
@@ -38,7 +42,8 @@ const getPermissionList = async () => {
     permissionList.value = data.list.map((res: any) => {
       return {
         key: res.id,
-        label: res.permission_name
+        label: res.permission_name,
+        disabled: props.disabled
       }
     })
   } catch (err: any) {

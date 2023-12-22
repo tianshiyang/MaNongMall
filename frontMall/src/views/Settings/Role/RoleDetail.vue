@@ -56,6 +56,7 @@
     <el-button
       type="primary"
       @click="handleSave"
+      v-show="isEdit || isAdd"
     >
       保存
     </el-button>
@@ -83,6 +84,9 @@ const isShow = computed(() => pageType.value === "show")
 
 // 页面是否是编辑状态，编辑状态不可更改权限标识
 const isEdit = computed(() => pageType.value === "edit")
+
+// 页面是否是创建状态
+const isAdd = computed(() => pageType.value === "add")
 
 const formData = reactive({
   role_id: "", // 角色ID
@@ -165,6 +169,10 @@ getRoleDetail()
 </script>
 
 <style lang="scss" scoped>
+.el-input,
+.el-select {
+  width: 560px;
+}
 .button-bottom-style {
   float: right;
   margin: 20px;

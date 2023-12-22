@@ -34,7 +34,12 @@
   </el-form>
 
   <div class="table-button-group">
-    <el-button type="primary">新增角色</el-button>
+    <el-button
+      type="primary"
+      @click="goRoleDetail({ type: 'add' })"
+    >
+      新增角色
+    </el-button>
   </div>
 
   <el-table
@@ -72,6 +77,13 @@
           @click="goRoleDetail({ role_id: row.id, type: 'edit' })"
         >
           编辑
+        </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="goRoleDetail({ role_id: row.id, type: 'show' })"
+        >
+          查看
         </el-button>
       </template>
     </el-table-column>
@@ -174,7 +186,7 @@ const goRoleDetail = ({
   role_id,
   type
 }: {
-  role_id: string | number
+  role_id?: string | number
   type: "show" | "edit" | "add"
 }) => {
   router.push({
@@ -189,3 +201,10 @@ const goRoleDetail = ({
 // 初始化
 getRoleList()
 </script>
+
+<style scoped lang="scss">
+.el-input,
+.el-select {
+  width: 260px;
+}
+</style>
