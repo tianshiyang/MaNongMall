@@ -14,6 +14,15 @@
     </el-form-item>
   </el-form>
 
+  <div class="table-button-group">
+    <el-button
+      type="primary"
+      @click="handleAddPermission"
+    >
+      新增权限
+    </el-button>
+  </div>
+
   <el-table
     :data="tableData.list"
     border
@@ -34,7 +43,24 @@
       prop="create_time"
       label="创建时间"
     />
-    <el-table-column label="操作" />
+    <el-table-column label="操作">
+      <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleDeletePermission(row.id)"
+        >
+          删除
+        </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="handleUpdatePermission(row.id)"
+        >
+          编辑
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
 
   <el-pagination
@@ -47,13 +73,22 @@
     @size-change="getPermissionList"
     @current-change="getPermissionList"
   />
+
+  <!-- 更新权限 -->
+  <UpdatePermission
+    v-if="updatePermissionData.visible"
+    v-model="updatePermissionData.visible"
+    :permission_id="updatePermissionData.permission_id"
+    @updateSuccess="getPermissionList"
+  />
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 import PermissionSelect from "../components/PermissionSelect.vue"
-import { getPermissionListAPI } from "@/api/setting"
-import { ElNotification } from "element-plus"
+import { getPermissionListAPI, deletePermissionAPI } from "@/api/setting"
+import { ElNotification, ElMessageBox } from "element-plus"
+import UpdatePermission from "./components/UpdatePermission.vue"
 
 // 表单数据源
 const formData = reactive({
@@ -93,6 +128,46 @@ const handleSearch = () => {
 const handleReset = () => {
   formData.permission_id = ""
   handleSearch()
+}
+
+// 删除
+const handleDeletePermission = (permission_id: number) => {
+  ElMessageBox.confirm("确定删除该权限吗？", "提示").then(async () => {
+    try {
+      await deletePermissionAPI({ permission_id })
+      ElNotification({
+        title: "成功",
+        message: "删除权限成功",
+        type: "success"
+      })
+      getPermissionList()
+    } catch (e: any) {
+      ElNotification({
+        title: "失败",
+        message: e.error_message,
+        type: "error"
+      })
+    }
+  })
+}
+
+// 编辑权限数据源
+const permission_id = ref<number | string>("")
+const updatePermissionData = reactive({
+  visible: false,
+  permission_id
+})
+
+// 编辑权限
+const handleUpdatePermission = (permission_id: number) => {
+  updatePermissionData.permission_id = permission_id
+  updatePermissionData.visible = true
+}
+
+// 新增权限
+const handleAddPermission = () => {
+  updatePermissionData.permission_id = ""
+  updatePermissionData.visible = true
 }
 
 // 初始化

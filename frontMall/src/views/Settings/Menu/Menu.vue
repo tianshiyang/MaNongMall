@@ -186,6 +186,7 @@ const handleDeleteMenu = (menu_id: number) => {
         message: "删除菜单成功",
         type: "success"
       })
+      getMenuList()
     } catch (e: any) {
       ElNotification({
         title: "失败",

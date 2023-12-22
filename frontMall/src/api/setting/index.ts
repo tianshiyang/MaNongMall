@@ -1,5 +1,5 @@
 import { request } from "@/utils/request";
-import type { getMenuListAPIParams, UpdateMenuData, GetPermissionListAPIParams } from "./types/index"
+import type { getMenuListAPIParams, UpdateMenuData, GetPermissionListAPIParams, UpdatePermissionData } from "./types/index"
 // 获取菜单列表
 export const getMenuListAPI = (params: getMenuListAPIParams) => {
   return request({
@@ -43,4 +43,31 @@ export const getPermissionListAPI = (params: GetPermissionListAPIParams) => {
     method: 'get',
     params
   })
- }
+}
+
+// 删除权限
+export const deletePermissionAPI = (data: { permission_id: number }) => {
+  return request({
+    url: '/api/permission/deletePermission',
+    method: 'post',
+    data
+  })
+}
+
+// 获取权限详情
+export const getPermissionDetailAPI = (params: { permission_id: number | string }) => {
+  return request({
+    url: '/api/permission/getPermissionDetail',
+    method: 'get',
+    params
+  })
+}
+
+// 更新、编辑权限
+export const updatePermissionAPI = (data: UpdatePermissionData) => { 
+  return request({
+    url: '/api/permission/updatePermission',
+    method: 'post',
+    data
+  })
+}

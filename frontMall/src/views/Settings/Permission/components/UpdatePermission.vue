@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="props.menu_id ? '编辑菜单' : '创建菜单'"
+    :title="props.permission_id ? '编辑权限' : '创建权限'"
     @closed="handleClose"
     :validate-on-rule-change="false"
   >
@@ -9,32 +9,37 @@
       :model="formData"
       label-width="120px"
       :rules="rules"
-      ref="UpdateMenuRef"
+      ref="UpdatePermissionRef"
     >
       <el-form-item
-        prop="menu_name"
-        label="菜单名称"
+        prop="permission_name"
+        label="权限名称"
       >
         <el-input
-          v-model="formData.menu_name"
-          placeholder="请输入菜单名称"
+          v-model="formData.permission_name"
+          placeholder="请输入权限名称"
           clearable
         />
       </el-form-item>
       <el-form-item
-        prop="menu_path"
-        label="菜单路径"
+        prop="permission_sign"
+        label="权限标识"
       >
         <el-input
-          v-model="formData.menu_path"
-          placeholder="请输入菜单路径"
+          v-model="formData.permission_sign"
+          placeholder="请输入权限标识"
+          :disabled="!!props.permission_id"
           clearable
         />
       </el-form-item>
-      <el-form-item label="父级菜单">
-        <MenuSelect
-          v-model="formData.menu_parent"
-          v-model:menu_name="formData.menu_parent_name"
+      <el-form-item
+        prop="permission_remark"
+        label="权限描述"
+      >
+        <el-input
+          v-model="formData.permission_remark"
+          placeholder="请输入权限描述"
+          clearable
         />
       </el-form-item>
     </el-form>
@@ -52,8 +57,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref, watch } from "vue"
-import MenuSelect from "../../components/MenuSelect.vue"
-import { getMenuDetailAPI, UpdateMenuAPI } from "@/api/setting/index"
+import { getPermissionDetailAPI, updatePermissionAPI } from "@/api/setting"
 import { ElNotification } from "element-plus"
 
 const emit = defineEmits<{
@@ -63,8 +67,8 @@ const emit = defineEmits<{
 
 const props = defineProps({
   modelValue: Boolean,
-  menu_id: {
-    // 当前菜单的id, 如果有ID则为编辑，没有则为新增
+  permission_id: {
+    // 当前权限的id, 如果有ID则为编辑，没有则为新增
     type: [Number, String],
     required: true
   }
@@ -73,30 +77,38 @@ const props = defineProps({
 const visible = ref(true)
 
 // 表单实例
-const UpdateMenuRef = ref()
+const UpdatePermissionRef = ref()
 
 // 表单数据源
 const formData = reactive({
-  menu_name: "", // 菜单名称
-  menu_path: "", // 菜单路径
-  menu_parent: "", // 父级菜单
-  menu_parent_name: "" // 父级菜单的名称
+  permission_id: "", // 权限id
+  permission_name: "", // 菜单名称
+  permission_sign: "", // 菜单路径
+  permission_remark: "" // 权限描述
 })
 
 // 表单校验规则
 const rules = {
-  menu_name: [{ required: true, message: "请输入菜单名称", trigger: "change" }],
-  menu_path: [{ required: true, message: "请输入菜单路径", trigger: "change" }]
+  permission_name: [
+    { required: true, message: "请输入权限名称", trigger: "change" }
+  ],
+  permission_sign: [
+    { required: true, message: "请输入权限标识", trigger: "change" }
+  ],
+  permission_remark: [
+    { required: true, message: "请输入权限描述", trigger: "change" }
+  ]
 }
 
-// 获取菜单详情
-const getMenuDetail = async () => {
+// 获取权限详情
+const getPermissionDetail = async () => {
   try {
-    const data = await getMenuDetailAPI({ menu_id: props.menu_id })
-    formData.menu_name = data.menu_name
-    formData.menu_path = data.menu_path
-    formData.menu_parent = data.menu_parent
-    formData.menu_parent_name = data.menu_parent_name
+    const data = await getPermissionDetailAPI({
+      permission_id: props.permission_id
+    })
+    formData.permission_name = data.permission_name
+    formData.permission_sign = data.permission_sign
+    formData.permission_remark = data.permission_remark
   } catch (e: any) {
     ElNotification({
       title: "失败",
@@ -113,18 +125,18 @@ const handleClose = () => {
 
 // 提交
 const handleCommit = async () => {
-  await UpdateMenuRef.value.validate((valid: boolean) => {
+  await UpdatePermissionRef.value.validate((valid: boolean) => {
     if (valid) {
       const params = {
-        menu_id: props.menu_id,
-        menu_name: formData.menu_name,
-        menu_path: formData.menu_path,
-        menu_parent: formData.menu_parent
+        permission_id: props.permission_id,
+        permission_name: formData.permission_name,
+        permission_sign: formData.permission_sign,
+        permission_remark: formData.permission_remark
       }
-      UpdateMenuAPI(params)
+      updatePermissionAPI(params)
         .then(() => {
           let message = ""
-          if (props.menu_id) {
+          if (props.permission_id) {
             message = "编辑成功"
           } else {
             message = "创建成功"
@@ -150,8 +162,8 @@ const handleCommit = async () => {
 
 // 初始化
 const initData = () => {
-  if (props.menu_id) {
-    getMenuDetail()
+  if (props.permission_id) {
+    getPermissionDetail()
   }
 }
 
