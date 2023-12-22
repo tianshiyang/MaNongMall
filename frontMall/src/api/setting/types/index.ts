@@ -29,3 +29,11 @@ export interface UpdatePermissionData {
   permission_sign: string
   permission_remark: string
 }
+
+// 获取角色列表
+export interface GetRoleListAPIParams extends BaseListRequest { 
+  role_name?: string
+  role_id?: string | number
+  role_sign?: string
+  create_time?: string | null
+}

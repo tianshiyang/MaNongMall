@@ -1,5 +1,5 @@
 import { request } from "@/utils/request";
-import type { getMenuListAPIParams, UpdateMenuData, GetPermissionListAPIParams, UpdatePermissionData } from "./types/index"
+import type { getMenuListAPIParams, UpdateMenuData, GetPermissionListAPIParams, UpdatePermissionData, GetRoleListAPIParams } from "./types/index"
 // 获取菜单列表
 export const getMenuListAPI = (params: getMenuListAPIParams) => {
   return request({
@@ -68,6 +68,24 @@ export const updatePermissionAPI = (data: UpdatePermissionData) => {
   return request({
     url: '/api/permission/updatePermission',
     method: 'post',
+    data
+  })
+}
+
+// 获取角色列表
+export const getRoleListAPI = (params: GetRoleListAPIParams) => {
+  return request({
+    url: '/api/role/getRoleList',
+    method: 'get',
+    params
+  })
+}
+
+// 删除角色
+export const deleteRoleAPI = (data: { role_id: number | string }) => {
+  return request({
+    url: "/api/role/deleteRole",
+    method: "post",
     data
   })
 }
