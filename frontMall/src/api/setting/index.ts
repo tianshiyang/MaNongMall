@@ -89,3 +89,20 @@ export const deleteRoleAPI = (data: { role_id: number | string }) => {
     data
   })
 }
+
+// 获取角色详情
+export const getRoleDetailAPI = (params: { role_id: number | string }) => {
+  return request({
+    url: "/api/role/getRoleDetail",
+    method: "get",
+    params
+  })
+}
+
+// 获取菜单树形结构
+export const getMenuTreeAPI = () => {
+  return request({
+    url: "/api/menu/getMenuTree",
+    method: "get"
+  })
+}

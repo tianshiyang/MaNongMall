@@ -1,4 +1,5 @@
-const routes = [{
+const routes = [
+  {
     path: '/login',
     name: 'login',
     component: () => import("@/views/Login/Login.vue")
@@ -21,6 +22,11 @@ const routes = [{
       path: "/role",
       name: "role",
       component: () => import("@/views/Settings/Role/Role.vue")
+      },
+    {
+      path: "/role-detail",
+      name: "roleDetail",
+      component: () => import("@/views/Settings/Role/RoleDetail.vue")
     }]
   }, 
   {

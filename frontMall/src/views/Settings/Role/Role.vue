@@ -69,6 +69,7 @@
         <el-button
           type="primary"
           link
+          @click="goRoleDetail({ role_id: row.id, type: 'edit' })"
         >
           编辑
         </el-button>
@@ -94,6 +95,9 @@ import { getRoleListAPI, deleteRoleAPI } from "@/api/setting"
 import RoleSelect from "../components/RoleSelect.vue"
 import { ElMessageBox, ElNotification } from "element-plus"
 import { defaultTime } from "@/utils/DataFormat"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
 
 // 表单数据源
 const formData = reactive({
@@ -161,6 +165,23 @@ const handleDeleteRole = (role_id: number | string) => {
         message: e.error_message,
         type: "error"
       })
+    }
+  })
+}
+
+// 跳转到详情
+const goRoleDetail = ({
+  role_id,
+  type
+}: {
+  role_id: string | number
+  type: "show" | "edit" | "add"
+}) => {
+  router.push({
+    path: "/role-detail",
+    query: {
+      role_id,
+      type
     }
   })
 }

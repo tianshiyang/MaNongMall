@@ -115,6 +115,7 @@ class RoleService extends Service {
         {
           model: this.ctx.model.MenuRole,
           as: "role_menu",
+          include: [{ model: this.ctx.model.Menu, as: "parent" }],
         },
         {
           model: this.ctx.model.PermissionRole,

@@ -277,6 +277,15 @@ class RoleController extends BaseController {
     let result = null
     try {
       result = await this.ctx.service.role.index.getRoleDetail(params)
+      // 为满足前端树形结构展示，在此过滤父级菜单,只留下最底层的子菜单
+      const role_menu = result.dataValues.role_menu
+        .filter((item) => {
+          return item.dataValues.parent?.dataValues?.menu_parent
+        })
+        .map((res) => res.dataValues.parent)
+      if (result.dataValues) {
+        result.dataValues.role_menu = role_menu
+      }
     } catch (e) {
       return this.error({ error_message: e })
     }
