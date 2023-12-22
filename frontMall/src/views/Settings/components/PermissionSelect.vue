@@ -5,15 +5,15 @@
     remote
     reserve-keyword
     clearable
-    placeholder="请输入菜单名称"
-    :remote-method="getMenuAllList"
+    placeholder="请输入权限名称"
+    :remote-method="getPermissionList"
     :loading="formData.loading"
     @change="handleChange"
   >
     <el-option
-      v-for="item in menuList"
+      v-for="item in permissionList"
       :key="item.id"
-      :label="item.menu_name"
+      :label="item.permission_name"
       :value="item.id"
     />
   </el-select>
@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref, defineEmits, watch } from "vue"
-import { getMenuListAPI } from "@/api/setting"
+import { getPermissionListAPI } from "@/api/setting/index"
 import { ElNotification } from "element-plus"
 
 const emit = defineEmits<{
@@ -38,19 +38,22 @@ const formData = reactive({
   loading: false
 })
 
-const menuList = ref<any[]>([])
+const permissionList = ref<any[]>([])
 
 // 请求获取菜单列表
-const getMenuAllList = (menu_name: string, menu_id: string | number) => {
+const getPermissionList = (
+  permission_name: string,
+  permission_id: string | number
+) => {
   const params = {
-    menu_name,
-    menu_id: !menu_name ? menu_id : "", // 兼容：如果有menu_name就用menu_name搜，如果没有，就用menu_id搜
+    permission_name,
+    permission_id: !permission_name ? permission_id : "", // 兼容：如果有permission_name就用permission_name搜，如果没有，就用permission_id搜
     page_no: 1,
     page_size: 10
   }
-  getMenuListAPI(params)
+  getPermissionListAPI(params)
     .then((res) => {
-      menuList.value = res.list
+      permissionList.value = res.list
     })
     .catch((err) => {
       ElNotification({
@@ -65,7 +68,7 @@ watch(
   () => props.modelValue,
   () => {
     formData.modelValue = props.modelValue
-    getMenuAllList("", props.modelValue as string | number)
+    getPermissionList("", props.modelValue as string | number)
   }
 )
 // 更新modelValue

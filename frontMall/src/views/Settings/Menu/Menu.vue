@@ -116,7 +116,7 @@
 import { defaultTime } from "@/utils/DataFormat"
 import { reactive, ref } from "vue"
 import MenuSelect from "../components/MenuSelect.vue"
-import { getMenuListAPI, deleteMenuAPI } from "@/api/user"
+import { getMenuListAPI, deleteMenuAPI } from "@/api/setting"
 import { ElMessageBox, ElNotification } from "element-plus"
 import UpdateMenu from "./components/UpdateMenu.vue"
 
