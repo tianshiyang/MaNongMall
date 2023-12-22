@@ -3,6 +3,7 @@
     v-model="selectedValue"
     :data="treeDataList"
     multiple
+    :disabled="props.disabled"
     :render-after-expand="false"
     show-checkbox
   />
@@ -14,7 +15,8 @@ import { getMenuTreeAPI } from "@/api/setting"
 import { ElNotification } from "element-plus"
 
 const props = defineProps({
-  modelValue: Array
+  modelValue: Array,
+  disabled: Boolean
 })
 
 // 当前选中的值

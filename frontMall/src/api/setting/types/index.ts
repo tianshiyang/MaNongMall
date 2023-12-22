@@ -37,3 +37,13 @@ export interface GetRoleListAPIParams extends BaseListRequest {
   role_sign?: string
   create_time?: string | null
 }
+
+// 编辑角色
+export interface UpdateRoleData { 
+  role_id?: string | number
+  role_name: string
+  role_sign: string
+  role_remark: string
+  menu_list: any[]
+  permission_list: any[]
+}
