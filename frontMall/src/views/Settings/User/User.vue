@@ -121,7 +121,7 @@
           link
           @click="handleUpdateUserPassword(row.id)"
         >
-          更新密码
+          修改密码
         </el-button>
       </template>
     </el-table-column>
