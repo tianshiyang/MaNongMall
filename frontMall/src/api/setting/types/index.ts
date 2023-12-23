@@ -47,3 +47,12 @@ export interface UpdateRoleData {
   menu_list: string
   permission_list: string
 }
+
+// 用户列表查询参数
+export interface GetUserListAPIParams extends BaseListRequest { 
+  role_id?: string | number
+  user_id?: string | number
+  phone?: string
+  create_time?: string | null
+  is_depart?: number | string
+}

@@ -132,8 +132,9 @@ class LoginService extends Service {
       where.is_depart = is_depart
     }
     if (create_time) {
+      const parseCreateTime = JSON.parse(create_time)
       where.create_time = {
-        [Op.between]: create_time,
+        [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
       }
     }
     const subWhere = {}

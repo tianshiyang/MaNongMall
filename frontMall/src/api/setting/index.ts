@@ -1,5 +1,13 @@
 import { request } from "@/utils/request";
-import type { getMenuListAPIParams, UpdateMenuData, GetPermissionListAPIParams, UpdatePermissionData, GetRoleListAPIParams, UpdateRoleData } from "./types/index"
+import type {
+  getMenuListAPIParams,
+  UpdateMenuData,
+  GetPermissionListAPIParams,
+  UpdatePermissionData,
+  GetRoleListAPIParams,
+  UpdateRoleData,
+  GetUserListAPIParams
+} from "./types/index"
 // 获取菜单列表
 export const getMenuListAPI = (params: getMenuListAPIParams) => {
   return request({
@@ -113,5 +121,14 @@ export const updateRoleAPI = (data: UpdateRoleData) => {
     url: "/api/role/updateRole",
     method: "post",
     data
+  })
+}
+
+// 获取用户列表
+export const getUserListAPI = (params: GetUserListAPIParams) => { 
+  return request({
+    url: "/api/user/getUserList",
+    method: "get",
+    params
   })
 }
