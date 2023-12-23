@@ -151,3 +151,12 @@ export const userDepartAPI = (data: { user_id: number }) => {
     data
   })
 }
+
+// 更新员工密码
+export const updateUserPasswordAPI = (data: { user_id: number; password: string }) => { 
+  return request({
+    url: "/api/user/updateUserPassword",
+    method: "post",
+    data
+  })
+}

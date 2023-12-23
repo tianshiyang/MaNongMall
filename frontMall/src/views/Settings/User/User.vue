@@ -116,6 +116,13 @@
         >
           离职
         </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="handleUpdateUserPassword(row.id)"
+        >
+          更新密码
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -137,6 +144,14 @@
     v-if="createUserVisible"
     @updateSuccess="getUserlist"
   />
+
+  <!-- 更新员工密码 -->
+  <UpdateUserPassword
+    v-model="updateUserPasswordForm.visible"
+    :user_id="updateUserPasswordForm.user_id"
+    v-if="updateUserPasswordForm.visible"
+    @updateSuccess="getUserlist"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -147,6 +162,7 @@ import RoleSelect from "../components/RoleSelect.vue"
 import { ElNotification, ElMessageBox } from "element-plus"
 import { defaultTime } from "@/utils/DataFormat"
 import CreateUser from "./components/CreateUser.vue"
+import UpdateUserPassword from "./components/UpdateUserPassword.vue"
 
 const formData = reactive({
   user_id: "", // 员工姓名的ID值
@@ -222,6 +238,17 @@ const handleUserDepart = (user_id: number) => {
       })
     }
   })
+}
+
+// 更新用户密码数据源
+const updateUserPasswordForm = reactive({
+  visible: false,
+  user_id: ""
+})
+// 更新用户密码
+const handleUpdateUserPassword = (user_id: string) => {
+  updateUserPasswordForm.user_id = user_id
+  updateUserPasswordForm.visible = true
 }
 
 // 初始化
