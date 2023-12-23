@@ -142,3 +142,12 @@ export const createUserAPI = (data: CreateUserData) => {
     data
   })
 }
+
+// 员工离职
+export const userDepartAPI = (data: { user_id: number }) => { 
+  return request({
+    url: "/api/user/makeUserDepart",
+    method: "post",
+    data
+  })
+}

@@ -77,6 +77,10 @@
       label="手机号"
     />
     <el-table-column
+      prop="id_number"
+      label="身份证号"
+    />
+    <el-table-column
       prop="account_number"
       label="账号"
     />
@@ -103,7 +107,17 @@
       prop="create_time"
       label="入职时间"
     />
-    <el-table-column label="操作" />
+    <el-table-column label="操作">
+      <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleUserDepart(row.id)"
+        >
+          离职
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
 
   <el-pagination
@@ -127,10 +141,10 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue"
-import { getUserListAPI } from "@/api/setting"
+import { getUserListAPI, userDepartAPI } from "@/api/setting"
 import UserSelect from "../components/UserSelect.vue"
 import RoleSelect from "../components/RoleSelect.vue"
-import { ElNotification } from "element-plus"
+import { ElNotification, ElMessageBox } from "element-plus"
 import { defaultTime } from "@/utils/DataFormat"
 import CreateUser from "./components/CreateUser.vue"
 
@@ -183,6 +197,31 @@ const createUserVisible = ref(false)
 // 创建员工
 const handleCreateUser = () => {
   createUserVisible.value = true
+}
+
+// 员工离职
+const handleUserDepart = (user_id: number) => {
+  ElMessageBox.confirm("确定要离职该员工吗?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    try {
+      await userDepartAPI({ user_id })
+      ElNotification({
+        title: "成功",
+        message: "员工离职成功！",
+        type: "success"
+      })
+      getUserlist()
+    } catch (err: any) {
+      ElNotification({
+        title: "失败",
+        message: err.error_message,
+        type: "error"
+      })
+    }
+  })
 }
 
 // 初始化
