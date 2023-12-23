@@ -105,6 +105,7 @@ class LoginService extends Service {
 
   // 获取人员列表
   async getUserList({
+    username,
     user_id,
     phone,
     role_id,
@@ -116,6 +117,11 @@ class LoginService extends Service {
     const where = {}
     if (user_id) {
       where.id = user_id
+    }
+    if (username) {
+      where.username = {
+        [Op.substring]: username,
+      }
     }
     if (phone) {
       where.phone = {
