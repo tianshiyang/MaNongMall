@@ -56,3 +56,13 @@ export interface GetUserListAPIParams extends BaseListRequest {
   create_time?: string | null
   is_depart?: number | string
 }
+
+// 创建员工
+export interface CreateUserData { 
+  username: string
+  phone: string
+  id_number: string
+  password: string
+  account_number: string
+  role_list: string
+}

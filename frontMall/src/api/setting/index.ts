@@ -6,7 +6,8 @@ import type {
   UpdatePermissionData,
   GetRoleListAPIParams,
   UpdateRoleData,
-  GetUserListAPIParams
+  GetUserListAPIParams,
+  CreateUserData
 } from "./types/index"
 // 获取菜单列表
 export const getMenuListAPI = (params: getMenuListAPIParams) => {
@@ -130,5 +131,14 @@ export const getUserListAPI = (params: GetUserListAPIParams) => {
     url: "/api/user/getUserList",
     method: "get",
     params
+  })
+}
+
+// 创建员工
+export const createUserAPI = (data: CreateUserData) => { 
+  return request({
+    url: "/api/user/addUser",
+    method: "post",
+    data
   })
 }

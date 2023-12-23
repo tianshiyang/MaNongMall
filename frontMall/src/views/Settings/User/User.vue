@@ -55,6 +55,15 @@
     </el-form-item>
   </el-form>
 
+  <section class="table-button-group">
+    <el-button
+      type="primary"
+      @click="handleCreateUser"
+    >
+      新增人员
+    </el-button>
+  </section>
+
   <el-table
     :data="tableData.list"
     border
@@ -107,15 +116,23 @@
     @size-change="getUserlist"
     @current-change="getUserlist"
   />
+
+  <!-- 创建员工 -->
+  <CreateUser
+    v-model="createUserVisible"
+    v-if="createUserVisible"
+    @updateSuccess="getUserlist"
+  />
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 import { getUserListAPI } from "@/api/setting"
 import UserSelect from "../components/UserSelect.vue"
 import RoleSelect from "../components/RoleSelect.vue"
 import { ElNotification } from "element-plus"
 import { defaultTime } from "@/utils/DataFormat"
+import CreateUser from "./components/CreateUser.vue"
 
 const formData = reactive({
   user_id: "", // 员工姓名的ID值
@@ -158,6 +175,14 @@ const getUserlist = async () => {
 const handleSearch = () => {
   formData.page_no = 1
   getUserlist()
+}
+
+// 创建员工数据源
+const createUserVisible = ref(false)
+
+// 创建员工
+const handleCreateUser = () => {
+  createUserVisible.value = true
 }
 
 // 初始化

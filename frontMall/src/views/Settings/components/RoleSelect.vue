@@ -1,10 +1,13 @@
 <template>
   <el-select
     v-model="formData.modelValue"
+    collapse-tags
+    collapse-tags-tooltip
     filterable
     remote
     reserve-keyword
     clearable
+    multiple
     placeholder="请输入角色名称"
     :remote-method="getRoleList"
     :loading="formData.loading"
@@ -29,7 +32,11 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
-  modelValue: [Number, String]
+  modelValue: [Number, String, Array],
+  multiple: {
+    type: Boolean,
+    default: false
+  }
 })
 
 // 定义数据源
@@ -66,6 +73,9 @@ watch(
   () => {
     formData.modelValue = props.modelValue
     getRoleList("", props.modelValue as string | number)
+  },
+  {
+    immediate: true
   }
 )
 // 更新modelValue
