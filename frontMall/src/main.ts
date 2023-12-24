@@ -20,7 +20,11 @@ app.mount('#app')
 const store = useUserMenuStore()
 
 const whiteList = ['/login', '/', '/404', '/welcome'] // 不重定向白名单
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  if (!store.flatMenu?.length) {
+    // 如果没有flatMenu，则证明是第一次加载，第一次加载的时候，请求数据，之后便不再请求
+    await store.getUserMenu()
+  }
   if (!whiteList.includes(to.path) && !store.flatMenu.includes(to.path)) {
     next("/404")
   }

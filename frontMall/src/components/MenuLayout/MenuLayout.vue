@@ -54,7 +54,6 @@ import { useUserMenuStore } from "@/stores/useUserMenu"
 
 // 获取用户菜单
 const store = useUserMenuStore()
-store.getUserMenu()
 </script>
 
 <style lang="scss" scoped>
