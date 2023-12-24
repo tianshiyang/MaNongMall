@@ -16,11 +16,23 @@ export const useUserMenuStore = defineStore('userMenu', () => {
   }
 
   // 获取用户菜单
-  const menuList = ref()
+  const menuList = ref<any[]>([])
+  // 过滤菜单，去除不应在菜单栏中展示的菜单
+  const filterMenu = (data: any) => {
+    return data.filter((item: any) => item.is_in_menu).map((item2: any) => {
+      return {
+        ...item2,
+        children: item2.children.length ? filterMenu(item2.children as any) : []
+      }
+    })
+  }
+
+  // 获取用户菜单
   const getUserMenu = async () => {
     try {
-      menuList.value = await getUserMenuAPI() 
-      transformMenuTree(menuList.value)
+      const data = await getUserMenuAPI() 
+      menuList.value = filterMenu(data)
+      transformMenuTree(data)
     } catch (err: any) {
       ElNotification({
         title: '失败',

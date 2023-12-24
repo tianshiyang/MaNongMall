@@ -32,6 +32,11 @@ module.exports = (app) => {
         defaultValue: false,
         comment: "是否禁用",
       },
+      is_in_menu: {
+        type: BOOLEAN,
+        defaultValue: true,
+        comment: "是否在菜单中显示",
+      },
     },
     {
       freezeTableName: true, // 取消复数
