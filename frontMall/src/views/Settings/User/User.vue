@@ -8,7 +8,7 @@
     </el-form-item>
     <el-form-item label="员工手机号">
       <el-input
-        v-model="formData.mobile"
+        v-model="formData.phone"
         placeholder="请输入员工手机号"
         clearable
       />
@@ -123,6 +123,13 @@
         >
           修改密码
         </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="handleUpdateUserRole(row.id)"
+        >
+          配置角色
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -152,6 +159,14 @@
     v-if="updateUserPasswordForm.visible"
     @updateSuccess="getUserlist"
   />
+
+  <!-- 更新用户角色 -->
+  <UpdateUserRole
+    v-model="updateUserRoleForm.visible"
+    v-if="updateUserRoleForm.visible"
+    :user_id="updateUserRoleForm.user_id"
+    @updateSuccess="getUserlist"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -163,6 +178,7 @@ import { ElNotification, ElMessageBox } from "element-plus"
 import { defaultTime } from "@/utils/DataFormat"
 import CreateUser from "./components/CreateUser.vue"
 import UpdateUserPassword from "./components/UpdateUserPassword.vue"
+import UpdateUserRole from "./components/UpdateUserRole.vue"
 
 const formData = reactive({
   user_id: "", // 员工姓名的ID值
@@ -249,6 +265,18 @@ const updateUserPasswordForm = reactive({
 const handleUpdateUserPassword = (user_id: string) => {
   updateUserPasswordForm.user_id = user_id
   updateUserPasswordForm.visible = true
+}
+
+// 更新用户角色数据源
+const updateUserRoleForm = reactive({
+  user_id: "",
+  visible: false
+})
+
+// 打开更新用户角色坦诚
+const handleUpdateUserRole = (user_id: string) => {
+  updateUserRoleForm.user_id = user_id
+  updateUserRoleForm.visible = true
 }
 
 // 初始化

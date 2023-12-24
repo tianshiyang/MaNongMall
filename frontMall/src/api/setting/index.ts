@@ -160,3 +160,21 @@ export const updateUserPasswordAPI = (data: { user_id: number; password: string 
     data
   })
 }
+
+// 获取员工信息
+export const getUserDetailAPI = (params: { user_id: string | number }) => {
+  return request({
+    url: "/api/user/getUserDetail",
+    method: "get",
+    params
+  })
+}
+
+// 更改用户角色
+export const updateUserRoleListAPI = (data: { role_list: string, user_id: number }) => {
+  return request({
+    url: '/api/user/updateUserRole',
+    method: 'post',
+    data
+  })
+}
