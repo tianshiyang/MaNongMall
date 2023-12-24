@@ -107,8 +107,19 @@
       prop="create_time"
       label="入职时间"
     />
-    <el-table-column label="操作">
+    <el-table-column
+      fixed="right"
+      width="300"
+      label="操作"
+    >
       <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleEditUser(row.id)"
+        >
+          编辑
+        </el-button>
         <el-button
           type="primary"
           link
@@ -167,6 +178,14 @@
     :user_id="updateUserRoleForm.user_id"
     @updateSuccess="getUserlist"
   />
+
+  <!-- 更新用户信息 -->
+  <EditUser
+    v-model="editUserForm.visible"
+    v-if="editUserForm.visible"
+    :user_id="editUserForm.user_id"
+    @updateSuccess="getUserlist"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -179,6 +198,7 @@ import { defaultTime } from "@/utils/DataFormat"
 import CreateUser from "./components/CreateUser.vue"
 import UpdateUserPassword from "./components/UpdateUserPassword.vue"
 import UpdateUserRole from "./components/UpdateUserRole.vue"
+import EditUser from "./components/EditUser.vue"
 
 const formData = reactive({
   user_id: "", // 员工姓名的ID值
@@ -277,6 +297,17 @@ const updateUserRoleForm = reactive({
 const handleUpdateUserRole = (user_id: string) => {
   updateUserRoleForm.user_id = user_id
   updateUserRoleForm.visible = true
+}
+
+// 编辑用户数据源
+const editUserForm = reactive({
+  user_id: "",
+  visible: false
+})
+// 打开编辑用户弹窗
+const handleEditUser = (user_id: string) => {
+  editUserForm.user_id = user_id
+  editUserForm.visible = true
 }
 
 // 初始化

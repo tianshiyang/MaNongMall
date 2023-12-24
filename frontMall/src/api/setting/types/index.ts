@@ -66,3 +66,10 @@ export interface CreateUserData {
   account_number: string
   role_list: string
 }
+
+// 更新员工信息
+export interface EditUserInfoData {
+  username: string
+  phone: string
+  id_number: string
+}

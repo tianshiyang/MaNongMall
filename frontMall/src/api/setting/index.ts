@@ -7,7 +7,8 @@ import type {
   GetRoleListAPIParams,
   UpdateRoleData,
   GetUserListAPIParams,
-  CreateUserData
+  CreateUserData,
+  EditUserInfoData
 } from "./types/index"
 // 获取菜单列表
 export const getMenuListAPI = (params: getMenuListAPIParams) => {
@@ -174,6 +175,15 @@ export const getUserDetailAPI = (params: { user_id: string | number }) => {
 export const updateUserRoleListAPI = (data: { role_list: string, user_id: number }) => {
   return request({
     url: '/api/user/updateUserRole',
+    method: 'post',
+    data
+  })
+}
+
+// 更改用户信息
+export const editUserInfoAPI = (data: EditUserInfoData) => {
+  return request({
+    url: '/api/user/updateUser',
     method: 'post',
     data
   })
