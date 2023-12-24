@@ -1,25 +1,56 @@
 <template>
   <div class="container">
-    <el-card shadow="hover" class="login-card" header="登录">
-      <el-form :model="formData" ref="LoginRef" :rules="rules">
-        <el-form-item label="账号" prop="account_number">
-          <el-input v-model="formData.account_number" maxlength="48" />
+    <el-card
+      shadow="hover"
+      class="login-card"
+      header="登录"
+    >
+      <el-form
+        :model="formData"
+        ref="LoginRef"
+        :rules="rules"
+      >
+        <el-form-item
+          label="账号"
+          prop="account_number"
+        >
+          <el-input
+            v-model="formData.account_number"
+            maxlength="48"
+          />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="formData.password" type="password" show-password maxlength="16" />
+        <el-form-item
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            v-model="formData.password"
+            type="password"
+            show-password
+            maxlength="16"
+          />
         </el-form-item>
       </el-form>
       <section class="button-box">
-        <el-button type="primary" @click="handleLogin">登录</el-button>
+        <el-button
+          type="primary"
+          @click="handleLogin"
+        >
+          登录
+        </el-button>
       </section>
     </el-card>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref } from "vue"
 import { userLoginAPI } from "@/api/user"
 import { ElNotification } from "element-plus"
+import { useRouter } from "vue-router"
+
+// 路由实例
+const router = useRouter()
 
 // 表单实例
 const LoginRef = ref()
@@ -27,12 +58,12 @@ const LoginRef = ref()
 // 表单数据源
 const formData = reactive({
   account_number: "",
-  password: "",
+  password: ""
 })
 
 // 校验规则
 const rules = {
-  account_number: [{ required: true, message: '请输入账号' }],
+  account_number: [{ required: true, message: "请输入账号" }],
   password: [{ required: true, message: "请输入密码" }]
 }
 
@@ -42,17 +73,20 @@ const handleLogin = async () => {
     if (valid) {
       try {
         const data = await userLoginAPI(formData)
-        localStorage.setItem('token', data.token)
+        localStorage.setItem("token", data.token)
         ElNotification({
-          title: '成功',
-          message: '登录成功',
-          type: 'success',
+          title: "成功",
+          message: "登录成功",
+          type: "success"
+        })
+        router.push({
+          path: "/welcome"
         })
       } catch (err: any) {
         ElNotification({
-          title: '失败',
+          title: "失败",
           message: err.error_message,
-          type: 'error',
+          type: "error"
         })
       }
     }
