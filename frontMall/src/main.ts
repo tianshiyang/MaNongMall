@@ -19,10 +19,10 @@ app.mount('#app')
 
 const store = useUserMenuStore()
 
-// const whiteList = ['/login', '/', '/404'] // 不重定向白名单
-// router.beforeEach((to, from, next) => {
-//   if (!whiteList.includes(to.path) && !store.flatMenu.includes(to.path)) {
-//     next("/404")
-//   }
-//   next()
-// })
+const whiteList = ['/login', '/', '/404', '/welcome'] // 不重定向白名单
+router.beforeEach((to, from, next) => {
+  if (!whiteList.includes(to.path) && !store.flatMenu.includes(to.path)) {
+    next("/404")
+  }
+  next()
+})

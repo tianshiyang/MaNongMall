@@ -32,10 +32,25 @@
         />
       </el-form-item>
       <el-form-item label="父级菜单">
-        <MenuSelect
-          v-model="formData.menu_parent"
-          v-model:menu_name="formData.menu_parent_name"
-        />
+        <MenuSelect v-model="formData.menu_parent" />
+      </el-form-item>
+      <el-form-item
+        label="菜单栏中展示"
+        prop="is_in_menu"
+      >
+        <el-select
+          v-model="formData.is_in_menu"
+          placeholder="请选择是否在菜单栏展示"
+        >
+          <el-option
+            :value="1"
+            label="是"
+          />
+          <el-option
+            :value="0"
+            label="否"
+          />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -80,13 +95,16 @@ const formData = reactive({
   menu_name: "", // 菜单名称
   menu_path: "", // 菜单路径
   menu_parent: "", // 父级菜单
-  menu_parent_name: "" // 父级菜单的名称
+  is_in_menu: 1 // 是否在菜单栏中战绩，默认是
 })
 
 // 表单校验规则
 const rules = {
   menu_name: [{ required: true, message: "请输入菜单名称", trigger: "change" }],
-  menu_path: [{ required: true, message: "请输入菜单路径", trigger: "change" }]
+  menu_path: [{ required: true, message: "请输入菜单路径", trigger: "change" }],
+  is_in_menu: [
+    { required: true, message: "请选择是否在菜单栏中展示", trigger: "change" }
+  ]
 }
 
 // 获取菜单详情
@@ -96,7 +114,7 @@ const getMenuDetail = async () => {
     formData.menu_name = data.menu_name
     formData.menu_path = data.menu_path
     formData.menu_parent = data.menu_parent
-    formData.menu_parent_name = data.menu_parent_name
+    formData.is_in_menu = data.is_in_menu
   } catch (e: any) {
     ElNotification({
       title: "失败",
@@ -119,7 +137,8 @@ const handleCommit = async () => {
         menu_id: props.menu_id,
         menu_name: formData.menu_name,
         menu_path: formData.menu_path,
-        menu_parent: formData.menu_parent
+        menu_parent: formData.menu_parent,
+        is_in_menu: formData.is_in_menu
       }
       UpdateMenuAPI(params)
         .then(() => {

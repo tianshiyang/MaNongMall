@@ -6,7 +6,7 @@ const routes = [
   },
   {
     path: '/',
-    name: 'home',
+    redirect: "/welcome",
     component: () => import("@/components/MenuLayout/MenuLayout.vue"),
     children: [
       {

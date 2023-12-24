@@ -11,7 +11,7 @@ export const useUserMenuStore = defineStore('userMenu', () => {
       if (item?.children?.length) {
         transformMenuTree(item.children)
       }
-      flatMenu.value.push(item.menu_name)
+      flatMenu.value.push(item.menu_path)
     })
   }
 

@@ -69,6 +69,11 @@
       prop="menu_parent_name"
       label="父级菜单"
     />
+    <el-table-column label="是否在菜单栏中展示">
+      <template #default="{ row }">
+        {{ row.is_in_menu ? "是" : "否" }}
+      </template>
+    </el-table-column>
     <el-table-column
       prop="create_time"
       label="创建时间"
