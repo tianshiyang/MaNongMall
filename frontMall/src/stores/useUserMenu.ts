@@ -4,14 +4,14 @@ import { getUserMenuAPI } from "@/api/user"
 import { ElNotification } from "element-plus"
 
 export const useUserMenuStore = defineStore('userMenu', () => {
-  // 平铺后的菜单，仅包含menu_path
+  // 所有的菜单
   const flatMenu = ref<any[]>([])
   const transformMenuTree = (menuList: any[]) => {
     return menuList.forEach((item: any) => {
       if (item?.children?.length) {
         transformMenuTree(item.children)
       }
-      flatMenu.value.push(item.menu_path)
+      flatMenu.value.push(item)
     })
   }
 
