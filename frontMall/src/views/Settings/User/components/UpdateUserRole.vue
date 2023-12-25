@@ -5,10 +5,15 @@
     @closed="handleClose"
     :validate-on-rule-change="false"
   >
-    <el-form label-width="120px">
+    <el-form
+      ref="UserRoleRef"
+      :model="formData"
+      :rules="rules"
+      label-width="120px"
+    >
       <el-form-item
         label="角色名称"
-        prop="name"
+        prop="role_list"
       >
         <RoleSelect v-model="formData.role_list" />
       </el-form-item>
@@ -57,9 +62,17 @@ const getUserRoleList = async () => {
   }
 }
 
+// 表单实例
+const UserRoleRef = ref()
+
 // 表单数据源
 const formData = reactive({
   role_list: []
+})
+
+// 表单校验
+const rules = reactive({
+  role_list: [{ required: true, message: "请选择角色", trigger: "change" }]
 })
 
 // 关闭
@@ -69,26 +82,30 @@ const handleClose = () => {
 
 // 提交
 const handleCommit = async () => {
-  try {
-    const params = {
-      user_id: props.user_id as number,
-      role_list: JSON.stringify(formData.role_list)
+  await UserRoleRef.value.validate(async (valid: boolean) => {
+    if (valid) {
+      try {
+        const params = {
+          user_id: props.user_id as number,
+          role_list: JSON.stringify(formData.role_list)
+        }
+        await updateUserRoleListAPI(params)
+        ElNotification({
+          title: "成功",
+          message: "修改员工角色成功",
+          type: "success"
+        })
+        emit("updateSuccess")
+        handleClose()
+      } catch (err: any) {
+        ElNotification({
+          title: "失败",
+          message: err.error_message,
+          type: "error"
+        })
+      }
     }
-    await updateUserRoleListAPI(params)
-    ElNotification({
-      title: "成功",
-      message: "修改员工密码成功",
-      type: "success"
-    })
-    emit("updateSuccess")
-    handleClose()
-  } catch (err: any) {
-    ElNotification({
-      title: "失败",
-      message: err.error_message,
-      type: "error"
-    })
-  }
+  })
 }
 
 // 初始化
