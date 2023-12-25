@@ -43,11 +43,11 @@
           placeholder="请选择是否在菜单栏展示"
         >
           <el-option
-            :value="1"
+            :value="true"
             label="是"
           />
           <el-option
-            :value="0"
+            :value="false"
             label="否"
           />
         </el-select>
@@ -95,7 +95,7 @@ const formData = reactive({
   menu_name: "", // 菜单名称
   menu_path: "", // 菜单路径
   menu_parent: "", // 父级菜单
-  is_in_menu: 1 // 是否在菜单栏中战绩，默认是
+  is_in_menu: true // 是否在菜单栏中战绩，默认是
 })
 
 // 表单校验规则
