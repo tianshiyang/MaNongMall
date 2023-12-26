@@ -72,7 +72,7 @@ class GoodsService extends Service {
     goods_name,
     goods_classification,
     has_inventory,
-    // is_in_discount_time,
+    is_in_discount_time,
     create_time,
     listing_status,
     page_no = 1,
@@ -89,6 +89,15 @@ class GoodsService extends Service {
     }
     if (goods_classification) {
       where.goods_classification = goods_classification
+    }
+    if (is_in_discount_time) {
+      // 是否打折期内
+      where.discount_time_start = {
+        [Op.lte]: new Date(),
+      }
+      where.discount_time_end = {
+        [Op.gte]: new Date(),
+      }
     }
     if (has_inventory !== null) {
       // 是否有库存
