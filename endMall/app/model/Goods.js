@@ -64,5 +64,14 @@ module.exports = (app) => {
     }
   )
 
+  // 声明商品表的关联关系
+  Goods.associate = function () {
+    // 一个商品属于一个商品分类
+    Goods.belongsTo(app.model.GoodsClassification, {
+      foreignKey: "goods_classification",
+      as: "classification",
+    })
+  }
+
   return Goods
 }

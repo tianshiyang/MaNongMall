@@ -58,6 +58,31 @@ class RoleGoodsClassificationController extends BaseController {
   async editGoods(params) {
     return await this.ctx.service.goods.index.editGoods(params)
   }
+
+  // 获取商品列表
+  async getGoodsList() {
+    const params = this.ctx.query
+    let result = null
+    try {
+      result = await this.ctx.service.goods.index.getGoodsList(params)
+      // 转化参数
+      const list = result.rows.map((item) => {
+        const data = {
+          ...item.dataValues,
+          goods_classification_name: item.classification.classification_name,
+        }
+        delete data.classification
+        return data
+      })
+      this.success({
+        list,
+        total: result.count,
+      })
+    } catch (err) {
+      console.log(err)
+      this.error({ error_message: err.errors[0].message })
+    }
+  }
 }
 
 module.exports = RoleGoodsClassificationController

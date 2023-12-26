@@ -10,4 +10,7 @@ module.exports = (app) => {
     __JWT,
     controller.goods.index.updateGoods
   )
+
+  // 获取商品列表
+  router.get("/api/goods/getGoodsList", controller.goods.index.getGoodsList)
 }
