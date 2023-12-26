@@ -6,6 +6,7 @@ const Permission = require("./routes/permission")
 const Menu = require("./routes/menu")
 const role = require("./routes/role")
 const goodsClassification = require("./routes/goodsClassification")
+const goods = require("./routes/goods")
 
 module.exports = (app) => {
   // 用户相关
@@ -18,4 +19,6 @@ module.exports = (app) => {
   role(app)
   // 商品分类相关
   goodsClassification(app)
+  // 商品相关
+  goods(app)
 }

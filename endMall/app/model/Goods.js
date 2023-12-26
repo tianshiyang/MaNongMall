@@ -12,12 +12,12 @@ module.exports = (app) => {
         allowNull: false,
         comment: "主键ID",
       },
-      good_name: {
+      goods_name: {
         type: STRING(50),
         allowNull: false,
         comment: "商品名称",
       },
-      good_classification: {
+      goods_classification: {
         type: BIGINT(11),
         allowNull: false,
         comment: "商品分类",
