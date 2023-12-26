@@ -161,6 +161,35 @@ class RoleGoodsClassificationController extends BaseController {
       return this.error({ error_message: err.errors[0].message })
     }
   }
+
+  // 获取当前用户所拥有的分类列表
+  async getCurrentUserHasClassificationList() {
+    const userInfo = await this.getUserTokenVerify()
+    try {
+      // 获取当前用户所拥有的角色
+      const role = await this.ctx.service.userRole.index.getUserRole(
+        userInfo.user_id
+      )
+      const role_list = role.map((item) => item.role_info.id)
+      // 获取每个角色所对应的所有分类
+      const result =
+        await this.ctx.service.roleGoodsClassification.index.getAllClassificationByRoleList(
+          role_list
+        )
+      // 去重数据, 并且转化为前端所需要的数据
+      const res = new Map()
+      const data = result
+        .filter(
+          (item) =>
+            !res.has(item.classification_info.dataValues.id) &&
+            res.set(item.classification_info.dataValues.id, 1)
+        )
+        .map((item) => item.classification_info)
+      return this.success(data)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+  }
 }
 
 module.exports = RoleGoodsClassificationController

@@ -15,4 +15,9 @@ module.exports = (app) => {
     "/api/classification/getGoodsClassificationList",
     controller.classification.index.getGoodsClassificationList
   )
+  // 获取当前角色所具有的分类
+  router.get(
+    "/api/classification/getCurrentUserHasClassificationList",
+    controller.classification.index.getCurrentUserHasClassificationList
+  )
 }
