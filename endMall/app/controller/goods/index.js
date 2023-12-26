@@ -26,14 +26,37 @@ class RoleGoodsClassificationController extends BaseController {
       return
     }
 
-    try {
-      const result = await this.ctx.service.goods.index.createGoods(params)
-      this.success({
-        ...result.dataValues,
-      })
-    } catch (err) {
-      this.error({ error_message: err.errors[0].message })
+    if (params.goods_id) {
+      // 编辑
+      try {
+        await this.editGoods(params)
+        this.success({
+          message: "编辑成功！",
+        })
+      } catch (err) {
+        this.error({ error_message: err.errors[0].message })
+      }
+    } else {
+      // 新增
+      try {
+        const result = await this.addGoods(params)
+        this.success({
+          ...result.dataValues,
+        })
+      } catch (err) {
+        this.error({ error_message: err.errors[0].message })
+      }
     }
+  }
+
+  // 新增商品
+  async addGoods(params) {
+    return await this.ctx.service.goods.index.createGoods(params)
+  }
+
+  // 编辑商品
+  async editGoods(params) {
+    return await this.ctx.service.goods.index.editGoods(params)
   }
 }
 

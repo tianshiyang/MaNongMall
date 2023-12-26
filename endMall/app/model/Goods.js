@@ -1,6 +1,6 @@
 "use strict"
 module.exports = (app) => {
-  const { STRING, BIGINT, DECIMAL, INTEGER, DATE, BOOLEAN } = app.Sequelize
+  const { STRING, BIGINT, DECIMAL, DATE, BOOLEAN } = app.Sequelize
 
   const Goods = app.model.define(
     "goods",
@@ -38,12 +38,17 @@ module.exports = (app) => {
         comment: "商品售价",
       },
       discount: {
-        type: INTEGER,
+        type: DECIMAL(10, 2),
         comment: "折扣",
+        default: 1.0,
       },
-      discount_time: {
+      discount_time_start: {
         type: DATE,
-        comment: "折扣时间",
+        comment: "折扣开始时间",
+      },
+      discount_time_end: {
+        type: DATE,
+        comment: "折扣结束时间",
       },
       listing_status: {
         type: BOOLEAN,
