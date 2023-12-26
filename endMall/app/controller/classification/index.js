@@ -24,10 +24,22 @@ class RoleGoodsClassificationController extends BaseController {
     }
     if (params.classification_id) {
       // 编辑
+      await this.compileHandleEditClassification(params)
     } else {
       // 新增
       await this.compileHandleCreateClassification(params)
     }
+  }
+
+  // 创建分类与角色的绑定关系公共方法
+  async compileCreateGoodsClassificationBindRoleRelationPublicFn(
+    data,
+    transaction
+  ) {
+    return await this.ctx.service.roleGoodsClassification.index.createRoleGoodsClassification(
+      data,
+      transaction
+    )
   }
 
   // 新增分类
@@ -51,7 +63,8 @@ class RoleGoodsClassificationController extends BaseController {
           goods_classification_id,
         }
       })
-      await this.ctx.service.roleGoodsClassification.index.createRoleGoodsClassification(
+      // 创建商品分类与角色的绑定关系
+      await this.compileCreateGoodsClassificationBindRoleRelationPublicFn(
         data,
         transaction
       )
@@ -69,6 +82,58 @@ class RoleGoodsClassificationController extends BaseController {
         message: "新增成功",
       },
     })
+  }
+
+  // 编辑分类
+  async compileHandleEditClassification(params) {
+    let transaction = null
+    try {
+      // 开启事务
+      transaction = await this.ctx.model.transaction()
+      // 先删除这个分类绑定的角色信息
+      await this.compileHandleDeleteClassificationBindRole(params, transaction)
+      const role_list = JSON.parse(params.role_list)
+      const data = role_list.map((item) => {
+        return {
+          role_id: item,
+          goods_classification_id: params.classification_id,
+        }
+      })
+      // 创建商品分类与角色的绑定关系
+      await this.compileCreateGoodsClassificationBindRoleRelationPublicFn(
+        data,
+        transaction
+      )
+      // 更新商品分类信息
+      await this.ctx.service.goodsClassification.index.updateGoodsClassification(
+        params,
+        transaction
+      )
+      // 提交事务
+      await transaction.commit()
+    } catch (error) {
+      // 回滚事务
+      await transaction.rollback()
+      return this.error({
+        error_message: error,
+      })
+    }
+    await this.success({
+      data: {
+        message: "新增成功",
+      },
+    })
+  }
+
+  // 删除分类绑定的角色信息
+  async compileHandleDeleteClassificationBindRole(params, transaction) {
+    const data = {
+      goods_classification_id: params.classification_id,
+    }
+    await this.ctx.service.roleGoodsClassification.index.deleteRoleGoodsClassification(
+      data,
+      transaction
+    )
   }
 }
 
