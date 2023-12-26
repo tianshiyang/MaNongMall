@@ -135,6 +135,32 @@ class RoleGoodsClassificationController extends BaseController {
       transaction
     )
   }
+
+  // 获取分类列表
+  async getGoodsClassificationList() {
+    // 获取参数
+    const params = this.ctx.query
+    try {
+      const result =
+        await this.ctx.service.goodsClassification.index.getGoodsClassificationList(
+          params
+        )
+      // 转换返回结果
+      const list = result.rows.map((item) => {
+        item.dataValues.role_list = item.dataValues.role_list.map(
+          (role_item) => {
+            return {
+              ...role_item.role_info.dataValues,
+            }
+          }
+        )
+        return item.dataValues
+      })
+      return this.success({ list, total: result.count })
+    } catch (err) {
+      return this.error({ error_message: err.errors[0].message })
+    }
+  }
 }
 
 module.exports = RoleGoodsClassificationController

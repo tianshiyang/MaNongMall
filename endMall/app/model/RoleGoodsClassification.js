@@ -31,5 +31,15 @@ module.exports = (app) => {
     }
   )
 
+  // 声明菜单表的关联关系
+  RoleGoodsClassification.associate = function () {
+    // 与菜单的关联关系声明，一个菜单列表中，包含多个子菜单。此处使用menu_parent作外建，关联另一个菜单表的主键
+    RoleGoodsClassification.hasOne(app.model.Role, {
+      foreignKey: "id",
+      sourceKey: "role_id",
+      as: "role_info",
+    })
+  }
+
   return RoleGoodsClassification
 }

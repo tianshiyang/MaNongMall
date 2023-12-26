@@ -36,6 +36,28 @@ class GoodsClassificationService extends Service {
       },
     })
   }
+
+  // 获取分类列表
+  async getGoodsClassificationList({ page_no = 1, page_size = 10 }) {
+    return await this.ctx.model.GoodsClassification.findAndCountAll({
+      include: [
+        {
+          model: this.ctx.model.RoleGoodsClassification,
+          as: "role_list",
+          include: [
+            {
+              model: this.ctx.model.Role,
+              as: "role_info",
+            },
+          ],
+        },
+      ],
+      offset: (page_no - 1) * page_size,
+      limit: Number(page_size),
+      order: [["create_time", "DESC"]],
+      distinct: true,
+    })
+  }
 }
 
 module.exports = GoodsClassificationService

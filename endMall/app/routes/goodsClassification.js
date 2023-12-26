@@ -10,4 +10,9 @@ module.exports = (app) => {
     __JWT,
     controller.classification.index.updateGoodsClassification
   )
+  // 获取商品分类列表
+  router.get(
+    "/api/classification/getGoodsClassificationList",
+    controller.classification.index.getGoodsClassificationList
+  )
 }
