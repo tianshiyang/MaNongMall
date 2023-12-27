@@ -78,9 +78,7 @@ class RoleGoodsClassificationController extends BaseController {
       })
     }
     await this.success({
-      data: {
-        message: "新增成功",
-      },
+      message: "新增成功",
     })
   }
 
@@ -119,9 +117,7 @@ class RoleGoodsClassificationController extends BaseController {
       })
     }
     await this.success({
-      data: {
-        message: "新增成功",
-      },
+      message: "编辑成功",
     })
   }
 
