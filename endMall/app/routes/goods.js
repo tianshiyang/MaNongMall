@@ -13,4 +13,7 @@ module.exports = (app) => {
 
   // 获取商品列表
   router.get("/api/goods/getGoodsList", controller.goods.index.getGoodsList)
+
+  // 更新库存
+  router.post("/api/goods/updateInventory", controller.goods.index.updateInventory)
 }

@@ -128,6 +128,21 @@ class GoodsService extends Service {
       distinct: true,
     })
   }
+
+  /* 获取商品列表
+   * @param {Object} - {goods_id, inventory} 商品id，商品数量
+   * @returns {Object} 编辑信息
+   */
+  async updateInventory({ goods_id, inventory }) {
+    const attribute = {
+      inventory,
+    }
+    return await this.ctx.model.Goods.update(attribute, {
+      where: {
+        id: goods_id,
+      },
+    })
+  }
 }
 
 module.exports = GoodsService
