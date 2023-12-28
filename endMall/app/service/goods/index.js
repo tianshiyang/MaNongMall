@@ -158,6 +158,17 @@ class GoodsService extends Service {
       },
     })
   }
+
+  // 获取该商品分类集合下的所有商品
+  async getAllGoodsByClassification(classification_ids) {
+    return this.ctx.model.Goods.findAll({
+      where: {
+        goods_classification: {
+          [Op.or]: classification_ids,
+        },
+      },
+    })
+  }
 }
 
 module.exports = GoodsService
