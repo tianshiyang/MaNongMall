@@ -7,6 +7,7 @@ const Menu = require("./routes/menu")
 const role = require("./routes/role")
 const goodsClassification = require("./routes/goodsClassification")
 const goods = require("./routes/goods")
+const order = require("./routes/order")
 
 module.exports = (app) => {
   // 用户相关
@@ -21,4 +22,6 @@ module.exports = (app) => {
   goodsClassification(app)
   // 商品相关
   goods(app)
+  // 订单相关
+  order(app)
 }

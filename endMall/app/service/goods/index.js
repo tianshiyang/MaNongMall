@@ -144,6 +144,24 @@ class GoodsService extends Service {
     })
   }
 
+  /* 通过售卖更新库存
+   * @param {Object} - {goods_id, inventory} 商品id，库存数量
+   * @returns {Object} 编辑信息
+   */
+  async updateInventoryAfterSales({ goods_id, inventory }, transaction) {
+    return await this.ctx.model.Goods.update(
+      {
+        inventory,
+      },
+      {
+        where: {
+          id: goods_id,
+        },
+        transaction, // 踩坑-.-, update等操作回滚放第二个参数中，看官网
+      }
+    )
+  }
+
   /* 更新上架状态
    * @param {Object} - {goods_id, inventory} 商品id，商品数量
    * @returns {Object} 编辑信息

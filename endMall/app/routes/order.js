@@ -8,6 +8,6 @@ module.exports = (app) => {
   router.post(
     "/api/order/createOrder",
     __JWT,
-    controller.order.index.updateGoods
+    controller.order.index.createOrder
   )
 }
