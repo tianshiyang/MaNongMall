@@ -1,4 +1,5 @@
 const BaseController = require("../globalController/BaseController")
+const moment = require("moment")
 
 class RoleGoodsClassificationController extends BaseController {
   // 更新、创建商品分类
@@ -74,8 +75,19 @@ class RoleGoodsClassificationController extends BaseController {
       result = await this.ctx.service.goods.index.getGoodsList(params)
       // 转化参数
       const list = result.rows.map((item) => {
+        // 是否折扣中
+        const is_discount = moment().isBetween(
+          item.dataValues.discount_time_start,
+          item.dataValues.discount_time_end
+        )
+        const currentPrice =
+          is_discount && item.dataValues.discount
+            ? item.dataValues.discount * item.dataValues.price
+            : item.dataValues.price
         const data = {
           ...item.dataValues,
+          is_discount,
+          currentPrice,
           goods_classification_name: item.classification.classification_name,
         }
         delete data.classification
