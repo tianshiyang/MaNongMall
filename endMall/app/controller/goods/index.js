@@ -111,6 +111,32 @@ class RoleGoodsClassificationController extends BaseController {
       this.error({ error_message: err.errors[0].message })
     }
   }
+
+  // 更新上架状态
+  async UpdateListingStatus() {
+    // 获取参数
+    const params = this.ctx.request.body
+    // 参数校验rules
+    const rules = {
+      listing_status: "boolean",
+      goods_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    try {
+      await this.ctx.service.goods.index.updateListingStatus(params)
+      this.success({
+        message: "更新上架状态成功",
+      })
+    } catch (err) {
+      this.error({ error_message: err.errors[0].message })
+    }
+  }
 }
 
 module.exports = RoleGoodsClassificationController
