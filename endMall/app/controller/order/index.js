@@ -23,7 +23,7 @@ class OrderController extends BaseController {
   }
   // 更新库存公共方法
   async updateInventoryPublicFn({ goods_id, inventory }, transaction) {
-    return await this.ctx.service.goods.index.updateInventoryAfterSales(
+    return await this.ctx.service.goods.index.updateInventory(
       {
         goods_id,
         inventory,

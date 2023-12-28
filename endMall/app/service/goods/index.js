@@ -133,22 +133,7 @@ class GoodsService extends Service {
    * @param {Object} - {goods_id, inventory} 商品id，库存数量
    * @returns {Object} 编辑信息
    */
-  async updateInventory({ goods_id, inventory }) {
-    const attribute = {
-      inventory,
-    }
-    return await this.ctx.model.Goods.update(attribute, {
-      where: {
-        id: goods_id,
-      },
-    })
-  }
-
-  /* 通过售卖更新库存
-   * @param {Object} - {goods_id, inventory} 商品id，库存数量
-   * @returns {Object} 编辑信息
-   */
-  async updateInventoryAfterSales({ goods_id, inventory }, transaction) {
+  async updateInventory({ goods_id, inventory }, transaction) {
     return await this.ctx.model.Goods.update(
       {
         inventory,
