@@ -1,7 +1,7 @@
 const BaseController = require("../globalController/BaseController")
 const moment = require("moment")
 
-class RoleGoodsClassificationController extends BaseController {
+class GoodsController extends BaseController {
   // 更新、创建商品分类
   async updateGoods() {
     // 获取参数
@@ -233,4 +233,4 @@ class RoleGoodsClassificationController extends BaseController {
   }
 }
 
-module.exports = RoleGoodsClassificationController
+module.exports = GoodsController
