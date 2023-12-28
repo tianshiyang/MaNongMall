@@ -32,6 +32,11 @@ module.exports = (app) => {
         allowNull: false,
         comment: "获利",
       },
+      transaction_volume: {
+        type: DECIMAL(11, 2),
+        allowNull: false,
+        comment: "成交额",
+      },
     },
     {
       freezeTableName: true, // 取消复数

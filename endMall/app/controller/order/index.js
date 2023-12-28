@@ -8,7 +8,7 @@ class OrderController extends BaseController {
   }
   // 创建订单公共方法
   async createOrderPublicFn(
-    { profit, goods_id, sales_num, seller_id },
+    { profit, goods_id, sales_num, seller_id, transaction_volume },
     transaction
   ) {
     return await this.ctx.service.order.index.createOrder(
@@ -17,6 +17,7 @@ class OrderController extends BaseController {
         goods_id,
         sales_num,
         seller_id,
+        transaction_volume,
       },
       transaction
     )
@@ -83,6 +84,10 @@ class OrderController extends BaseController {
       transaction = await this.ctx.model.transaction()
       // 卖出后的库存
       const inventory_after_sale = inventory - params.sales_num
+      // 成交额
+      const transaction_volume = Number(
+        params.sales_num * current_price
+      ).toFixed(2)
       // 更新库存
       await this.updateInventoryPublicFn(
         { goods_id: params.goods_id, inventory: inventory_after_sale },
@@ -91,6 +96,7 @@ class OrderController extends BaseController {
       // 创建订单
       await this.createOrderPublicFn(
         {
+          transaction_volume,
           profit,
           ...params,
           seller_id: user_id,
