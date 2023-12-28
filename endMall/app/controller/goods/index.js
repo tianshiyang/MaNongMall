@@ -26,6 +26,13 @@ class RoleGoodsClassificationController extends BaseController {
       return
     }
 
+    // 校验价格
+    if (params.discount) {
+      if (params.price * params.discount < params.purchase_price) {
+        this.error({ error_message: "商品售价不能低于进价！" })
+        return
+      }
+    }
     if (params.goods_id) {
       // 编辑
       try {
