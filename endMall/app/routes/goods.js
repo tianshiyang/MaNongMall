@@ -26,6 +26,9 @@ module.exports = (app) => {
     controller.goods.index.UpdateListingStatus
   )
 
+  // 获取商品详情
+  router.get("/api/goods/getGoodsDetail", controller.goods.index.getGoodsDetail)
+
   // 获取当前角色所能售卖的所有商品
   router.get(
     "/api/goods/getCurrentRoleAllGoods",

@@ -80,14 +80,14 @@ class RoleGoodsClassificationController extends BaseController {
           item.dataValues.discount_time_start,
           item.dataValues.discount_time_end
         )
-        const currentPrice =
+        const current_price =
           is_discount && item.dataValues.discount
             ? item.dataValues.discount * item.dataValues.price
             : item.dataValues.price
         const data = {
           ...item.dataValues,
           is_discount,
-          currentPrice,
+          current_price,
           goods_classification_name: item.classification.classification_name,
         }
         delete data.classification
@@ -154,6 +154,43 @@ class RoleGoodsClassificationController extends BaseController {
       })
     } catch (err) {
       this.error({ error_message: err.errors[0].message })
+    }
+  }
+
+  // 获取商品详情
+  async getGoodsDetail() {
+    // 获取参数
+    const params = this.ctx.query
+    // 参数校验rules
+    const rules = {
+      goods_id: "int",
+    }
+    // 校验参数
+    const errors = await this.app.validator.validate(rules, params)
+    if (errors) {
+      // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+      this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+      return
+    }
+    try {
+      let data = await this.ctx.service.goods.index.getGoodsDetail(params)
+      // 是否折扣中
+      const is_discount = moment().isBetween(
+        data.dataValues.discount_time_start,
+        data.dataValues.discount_time_end
+      )
+      const current_price =
+        is_discount && data.dataValues.discount
+          ? data.dataValues.discount * data.dataValues.price
+          : data.dataValues.price
+      data = {
+        ...data.dataValues,
+        is_discount,
+        current_price,
+      }
+      return this.success(data)
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
     }
   }
 

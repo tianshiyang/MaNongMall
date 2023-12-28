@@ -159,6 +159,18 @@ class GoodsService extends Service {
     })
   }
 
+  /* 获取商品详情
+   * @param {Object} - {goods_id} 商品id
+   * @returns {Object} 商品详情
+   */
+  async getGoodsDetail({ goods_id }) {
+    return await this.ctx.model.Goods.findOne({
+      where: {
+        id: goods_id,
+      },
+    })
+  }
+
   // 获取该商品分类集合下的所有商品
   async getAllGoodsByClassification(classification_ids) {
     return this.ctx.model.Goods.findAll({
