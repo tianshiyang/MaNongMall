@@ -46,5 +46,19 @@ module.exports = (app) => {
     }
   )
 
+  // 声明订单表的关联关系
+  Orders.associate = function () {
+    // 一个订单商品有属于一个商品
+    Orders.belongsTo(app.model.Goods, {
+      foreignKey: "goods_id",
+      as: "goods_info",
+    })
+    // 一个订单数据一个销售
+    Orders.belongsTo(app.model.User, {
+      foreignKey: "seller_id",
+      as: "user_info",
+    })
+  }
+
   return Orders
 }

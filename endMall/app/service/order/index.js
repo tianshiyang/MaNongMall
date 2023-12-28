@@ -22,6 +22,28 @@ class MenuRoleService extends Service {
       }
     )
   }
+
+  // 获取订单列表
+  async getOrderList() {
+    return this.ctx.model.Orders.findAndCountAll({
+      include: [
+        {
+          model: this.ctx.model.Goods,
+          as: "goods_info",
+          include: [
+            {
+              model: this.ctx.model.GoodsClassification,
+              as: "classification",
+            },
+          ],
+        },
+        {
+          model: this.ctx.model.User,
+          as: "user_info",
+        },
+      ],
+    })
+  }
 }
 
 module.exports = MenuRoleService

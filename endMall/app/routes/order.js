@@ -10,4 +10,10 @@ module.exports = (app) => {
     __JWT,
     controller.order.index.createOrder
   )
+  // 获取订单列表
+  router.get(
+    "/api/order/getOrderList",
+    __JWT,
+    controller.order.index.getOrderList
+  )
 }

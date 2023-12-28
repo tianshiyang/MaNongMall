@@ -115,6 +115,32 @@ class OrderController extends BaseController {
       message: "下单成功",
     })
   }
+
+  // 获取订单列表
+  async getOrderList() {
+    try {
+      const result = await this.ctx.service.order.index.getOrderList()
+      const list = result.rows.map((item) => {
+        const result = {
+          ...item.dataValues,
+          goods_name: item.dataValues.goods_info.dataValues.goods_name,
+          classification_name:
+            item.dataValues.goods_info.dataValues.classification.dataValues
+              .classification_name,
+          classification_id:
+            item.dataValues.goods_info.dataValues.classification.dataValues.id,
+          seller_id: item.dataValues.user_info.dataValues.id,
+          seller_name: item.dataValues.user_info.dataValues.username,
+        }
+        delete result.goods_info
+        delete result.user_info
+        return result
+      })
+      return this.success({ list, total: result.count })
+    } catch (e) {
+      return this.error({ error_message: e.errors[0].message })
+    }
+  }
 }
 
 module.exports = OrderController
