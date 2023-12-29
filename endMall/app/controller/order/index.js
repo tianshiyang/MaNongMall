@@ -118,8 +118,9 @@ class OrderController extends BaseController {
 
   // 获取订单列表
   async getOrderList() {
+    const params = this.ctx.query
     try {
-      const result = await this.ctx.service.order.index.getOrderList()
+      const result = await this.ctx.service.order.index.getOrderList(params)
       const list = result.rows.map((item) => {
         const result = {
           ...item.dataValues,
