@@ -71,6 +71,12 @@ module.exports = (app) => {
       foreignKey: "goods_classification",
       as: "classification",
     })
+
+    // 一个商品可能具有多个订单
+    Goods.hasMany(app.model.Orders, {
+      foreignKey: "goods_id",
+      as: "goods_orders",
+    })
   }
 
   return Goods

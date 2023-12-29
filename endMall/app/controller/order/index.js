@@ -120,11 +120,10 @@ class OrderController extends BaseController {
   async getOrderList() {
     const params = this.ctx.query
     const { user_id } = await this.getUserTokenVerify()
-    // 获取当前用户所拥有的角色标识
-    const role = await this.ctx.service.userRole.index.getUserRole(user_id)
-    const role_list = role.map((item) => item.role_info.role_sign)
+
     // 判断当前用户是不是admin，如果是不是admin，则强制将params的seller_id，变成当前角色的id，已此实现数据的角色过滤需求
-    if (!role_list.includes("SUPPER_ADMIN")) {
+    const is_admin = await this.hasPermission("SUPPER_ADMIN")
+    if (!is_admin) {
       params.seller_id = user_id
     }
     try {

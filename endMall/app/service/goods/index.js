@@ -64,7 +64,7 @@ class GoodsService extends Service {
   }
 
   /* 获取商品列表
-   * @param {Object} - {goods_id, goods_name, goods_classification, has_inventory, is_in_discount_time, create_time, listing_status} 商品id，商品名称，商品分类，是否有库存，是否打折期内，创建时间，上架状态
+   * @param {Object} - {goods_id, goods_name, goods_classification, has_inventory, is_in_discount_time, create_time, listing_status, is_admin, user_id} 商品id，商品名称，商品分类，是否有库存，是否打折期内，创建时间，上架状态, 是否是超管, 用户id
    * @returns {Object} 编辑信息
    */
   getGoodsList({
@@ -75,6 +75,8 @@ class GoodsService extends Service {
     is_in_discount_time,
     create_time,
     listing_status,
+    is_admin = true,
+    user_id,
     page_no = 1,
     page_size = 10,
   }) {
@@ -114,11 +116,21 @@ class GoodsService extends Service {
         [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
       }
     }
+    const subWhere = {}
+    if (!is_admin) {
+      // 如果不是超管则过滤订单，只搜索属于当前用户的订单
+      subWhere.seller_id = user_id
+    }
     return this.ctx.model.Goods.findAndCountAll({
       include: [
         {
           model: this.ctx.model.GoodsClassification,
           as: "classification",
+        },
+        {
+          model: this.ctx.model.Orders,
+          as: "goods_orders",
+          where: subWhere,
         },
       ],
       where,
