@@ -77,6 +77,33 @@ class MenuRoleService extends Service {
       order: [["create_time", "DESC"]],
     })
   }
+
+  // /* 获取售卖数据统计
+  //  * @param {Object} - {seller_id, goods_id, is_admin} 用户id，商品id, 是否是超管
+  //  * @returns {Object} 创建信息
+  //  */
+  // async getSalesDataStatistics({ seller_id, goods_id, is_admin }) {
+  //   const where = {
+  //     goods_id,
+  //   }
+  //   if (!is_admin) {
+  //     where.seller_id = seller_id
+  //   }
+  //   return this.ctx.model.Orders.findAll({
+  //     attributes: {
+  //       // 聚合id这列，起个别名为total
+  //       include: [[fn("COUNT", col("sales_num")), "total"]],
+  //     },
+  //     where,
+  //     include: [
+  //       {
+  //         model: this.ctx.model.User,
+  //         as: "user_info",
+  //       },
+  //     ],
+  //     group: "seller_id",
+  //   })
+  // }
 }
 
 module.exports = MenuRoleService

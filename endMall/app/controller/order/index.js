@@ -150,6 +150,56 @@ class OrderController extends BaseController {
       return this.error({ error_message: e.errors[0].message })
     }
   }
+
+  //   // 查询当前商品的售卖统计数据
+  //   async getSalesDataStatistics() {
+  //     // 获取参数
+  //     const params = this.ctx.query
+  //     // 参数校验rules
+  //     const rules = {
+  //       goods_id: "string",
+  //     }
+  //     // 校验参数
+  //     const errors = await this.app.validator.validate(rules, params)
+  //     if (errors) {
+  //       // 如果Errors有值,则代表参数校验失败，调用自定义的error返回结果
+  //       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
+  //       return
+  //     }
+
+  //     try {
+  //       // 判断当前用户是不是admin，如果是不是admin,则只能查看自己的售卖数据，如果是则查看所有的
+  //       const is_admin = await this.hasPermission("SUPPER_ADMIN")
+  //       if (is_admin) {
+  //         params.is_admin = true
+  //       }
+  //       // 获取当前用户id
+  //       const { user_id } = await this.getUserTokenVerify()
+  //       params.seller_id = user_id
+  //       const result = await this.ctx.service.order.index.getSalesDataStatistics(
+  //         params
+  //       )
+  //       const data = result
+  //         .filter((item) => {
+  //           return moment(item.dataValues?.create_time).isBetween(
+  //             moment().startOf("month").format("YYYY-MM-DD HH:ss:mm"),
+  //             moment().endOf("month").format("YYYY-MM-DD HH:ss:mm")
+  //           )
+  //         })
+  //         .map((item) => {
+  //           const currentResult = {
+  //             ...item.dataValues,
+  //             username: item.dataValues?.user_info.dataValues.username,
+  //           }
+  //           delete currentResult.user_info
+  //           return currentResult
+  //         })
+  //       return this.success(data)
+  //     } catch (e) {
+  //       console.log(e)
+  //       return this.error({ error_message: e.errors[0].message })
+  //     }
+  //   }
 }
 
 module.exports = OrderController
