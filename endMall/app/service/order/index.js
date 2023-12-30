@@ -1,5 +1,5 @@
 const { Service } = require("egg")
-const { Op } = require("sequelize")
+const { Op, fn, col } = require("sequelize")
 
 class MenuRoleService extends Service {
   /* 创建订单
@@ -78,32 +78,38 @@ class MenuRoleService extends Service {
     })
   }
 
-  // /* 获取售卖数据统计
-  //  * @param {Object} - {seller_id, goods_id, is_admin} 用户id，商品id, 是否是超管
-  //  * @returns {Object} 创建信息
-  //  */
-  // async getSalesDataStatistics({ seller_id, goods_id, is_admin }) {
-  //   const where = {
-  //     goods_id,
-  //   }
-  //   if (!is_admin) {
-  //     where.seller_id = seller_id
-  //   }
-  //   return this.ctx.model.Orders.findAll({
-  //     attributes: {
-  //       // 聚合id这列，起个别名为total
-  //       include: [[fn("COUNT", col("sales_num")), "total"]],
-  //     },
-  //     where,
-  //     include: [
-  //       {
-  //         model: this.ctx.model.User,
-  //         as: "user_info",
-  //       },
-  //     ],
-  //     group: "seller_id",
-  //   })
-  // }
+  /* 获取售卖数据统计
+   * @param {Object} - {seller_id, goods_id, is_admin} 用户id，商品id, 是否是超管
+   * @returns {Object} 创建信息
+   */
+  async getSalesDataStatistics({ seller_id, goods_id, is_admin, create_time }) {
+    const where = {
+      goods_id,
+    }
+    if (create_time) {
+      const parseCreateTime = JSON.parse(create_time)
+      where.create_time = {
+        [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
+      }
+    }
+    if (!is_admin) {
+      where.seller_id = seller_id
+    }
+    return this.ctx.model.Orders.findAll({
+      attributes: {
+        // 聚合id这列，起个别名为total
+        include: [[fn("SUM", col("sales_num")), "total_num"]],
+      },
+      where,
+      include: [
+        {
+          model: this.ctx.model.User,
+          as: "user_info",
+        },
+      ],
+      group: "seller_id",
+    })
+  }
 }
 
 module.exports = MenuRoleService

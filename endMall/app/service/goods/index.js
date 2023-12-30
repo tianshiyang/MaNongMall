@@ -110,13 +110,14 @@ class GoodsService extends Service {
     if (listing_status) {
       where.listing_status = listing_status
     }
+    const subWhere = {}
     if (create_time) {
+      // 这个的时间，是订单创建时间
       const parseCreateTime = JSON.parse(create_time)
-      where.create_time = {
+      subWhere.create_time = {
         [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
       }
     }
-    const subWhere = {}
     if (!is_admin) {
       // 如果不是超管则过滤订单，只搜索属于当前用户的订单
       subWhere.seller_id = user_id

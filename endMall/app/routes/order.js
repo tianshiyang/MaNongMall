@@ -17,6 +17,9 @@ module.exports = (app) => {
     controller.order.index.getOrderList
   )
 
-  // // 查询当前商品的售卖数据统计
-  // router.get("/api/order/getSalesDataStatistics", controller.order.index.getSalesDataStatistics)
+  // 查询当前商品的售卖数据统计
+  router.get(
+    "/api/order/getSalesDataStatistics",
+    controller.order.index.getSalesDataStatistics
+  )
 }
