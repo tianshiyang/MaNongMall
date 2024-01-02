@@ -18,8 +18,8 @@ class GoodsClassificationService extends Service {
   }
 
   /* 编辑
-   * @param {Object} - {classification_id, classification_name, classification_remark} 菜单唯一ID，菜单名称，菜单路径，父级菜单Id, 是否在菜单栏展示
-   * @returns {Object} 菜单信息
+   * @param {Object} - {classification_id, classification_name, classification_remark} 商品分类唯一ID，商品分类名称，商品分类详情
+   * @returns {Object} 商品分类信息
    */
   async updateGoodsClassification({
     classification_name,
@@ -56,6 +56,23 @@ class GoodsClassificationService extends Service {
       limit: Number(page_size),
       order: [["create_time", "DESC"]],
       distinct: true,
+    })
+  }
+
+  //
+  /* 获取分类详情
+   * @param {Object} - {classification_id} 商品份额里唯一ID
+   * @returns {Object} 分类信息
+   */
+  async getGoodsClassificationDetail({ classification_id }) {
+    return await this.ctx.model.GoodsClassification.findOne({
+      include: {
+        model: this.ctx.model.RoleGoodsClassification,
+        as: "role_list",
+      },
+      where: {
+        id: classification_id,
+      },
     })
   }
 }

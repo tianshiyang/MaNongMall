@@ -13,11 +13,19 @@ module.exports = (app) => {
   // 获取商品分类列表
   router.get(
     "/api/classification/getGoodsClassificationList",
+    __JWT,
     controller.classification.index.getGoodsClassificationList
   )
   // 获取当前角色所具有的分类
   router.get(
     "/api/classification/getCurrentUserHasClassificationList",
+    __JWT,
     controller.classification.index.getCurrentUserHasClassificationList
+  )
+  // 获取当前分类详情
+  router.get(
+    "/api/classification/getGoodsClassificationDetail",
+    __JWT,
+    controller.classification.index.getGoodsClassificationDetail
   )
 }

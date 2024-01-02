@@ -106,7 +106,7 @@ const getClassificationDetail = async () => {
     })
     formData.classification_name = data.classification_name
     formData.classification_remark = data.classification_remark
-    formData.role_list = data.role_list
+    formData.role_list = data.role_list.map((item: any) => item.role_id)
   } catch (e: any) {
     ElNotification({
       title: "失败",
