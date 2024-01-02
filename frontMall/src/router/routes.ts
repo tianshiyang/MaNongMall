@@ -36,7 +36,11 @@ const routes = [
       }, {
         path: "/classification-manager",
         name: "classificationManager",
-        component: () => import("@/views/Goods/Classification.vue")
+        component: () => import("@/views/Classification/Classification.vue")
+      }, {
+        path: "/goods-list",
+        name: "goodsList",
+        component: () => import("@/views/Goods/GoodsList.vue")
       }]
     }, 
   {
