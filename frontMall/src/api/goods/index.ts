@@ -28,3 +28,20 @@ export const getClassificationDetailAPI = (params: { classification_id: string |
     params
   })
 }
+
+// 获取当前角色可选择的商品分类
+export const getCurrentSalesCanSelectClassificationAPI = () => {
+  return request({
+    url: '/api/classification/getCurrentUserHasClassificationList',
+    method: 'get'
+  })
+}
+
+// 获取商品列表
+export const getGoodsListAPI = (params: any) => {
+  return request({
+    url: "/api/goods/getGoodsList",
+    method: "get",
+    params
+  })
+}
