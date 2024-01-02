@@ -33,6 +33,10 @@ const routes = [
         path: "/user",
         name: "user",
         component: () => import("@/views/Settings/User/User.vue")
+      }, {
+        path: "/classification-manager",
+        name: "classificationManager",
+        component: () => import("@/views/Goods/Classification.vue")
       }]
     }, 
   {

@@ -154,6 +154,7 @@ class RoleGoodsClassificationController extends BaseController {
       })
       return this.success({ list, total: result.count })
     } catch (err) {
+      console.log(err)
       return this.error({ error_message: err.errors[0].message })
     }
   }
