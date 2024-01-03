@@ -1,6 +1,6 @@
 import { request } from "@/utils/request";
 import type { BaseListRequest } from "@/types/interface/BaseInterface"
-import type { UpdateClassificationData } from "@/api/goods/types/index"
+import type { UpdateClassificationData, UpdateGoodsData } from "@/api/goods/types/index"
 
 // 获取分类列表
 export const getClassificationListAPI = (params: BaseListRequest) => {
@@ -53,6 +53,24 @@ export const updateGoodsStatusAPI = (data: {
 }) => { 
   return request({
     url: "/api/goods/UpdateListingStatus",
+    method: "post",
+    data
+  })
+}
+
+// 获取商品详情
+export const getGoodsDetailAPI = (params: { goods_id: string | number }) => { 
+  return request({
+    url: "/api/goods/getGoodsDetail",
+    method: "get",
+    params
+  })
+}
+
+// 更新商品信息
+export const updateGoodsAPI = (data: UpdateGoodsData) => { 
+  return request({
+    url: "/api/goods/updateGoods",
     method: "post",
     data
   })

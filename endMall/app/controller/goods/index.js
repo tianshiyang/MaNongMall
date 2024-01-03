@@ -52,6 +52,7 @@ class GoodsController extends BaseController {
           ...result.dataValues,
         })
       } catch (err) {
+        console.log(err)
         this.error({ error_message: err.errors[0].message })
       }
     }

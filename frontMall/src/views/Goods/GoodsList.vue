@@ -97,6 +97,15 @@
     </el-form-item>
   </el-form>
 
+  <section class="table-button-group">
+    <el-button
+      type="primary"
+      @click="handleCreateGoods"
+    >
+      新增商品
+    </el-button>
+  </section>
+
   <el-table
     :data="tableData.list"
     border
@@ -195,7 +204,17 @@
     <el-table-column
       fixed="right"
       label="操作"
-    />
+    >
+      <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleUpdateGoods(row)"
+        >
+          编辑
+        </el-button>
+      </template>
+    </el-table-column>
   </el-table>
 
   <el-pagination
@@ -208,6 +227,14 @@
     @size-change="getGoodsList"
     @current-change="getGoodsList"
   />
+
+  <!-- 编辑、创建商品 -->
+  <UpdateGoods
+    v-model="updateGoodsFormData.visible"
+    v-if="updateGoodsFormData.visible"
+    :goods_id="updateGoodsFormData.goods_id"
+    @updateSuccess="getGoodsList"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -217,6 +244,7 @@ import ClassificationSelectBySeller from "../Classification/components/Classific
 import { defaultTime } from "@/utils/DataFormat"
 import { getGoodsListAPI, updateGoodsStatusAPI } from "@/api/goods"
 import { ElNotification } from "element-plus"
+import UpdateGoods from "./components/UpdateGoods.vue"
 
 // 表单数据源
 const formData = reactive({
@@ -295,6 +323,23 @@ const handleUpdateListingStatus = async ({
     })
     getGoodsList()
   }
+}
+
+// 新增编辑商品数据源
+const updateGoodsFormData = reactive({
+  goods_id: "",
+  visible: false
+})
+
+// 新增商品
+const handleCreateGoods = () => {
+  updateGoodsFormData.visible = true
+}
+
+// 编辑商品
+const handleUpdateGoods = (row: any) => {
+  updateGoodsFormData.visible = true
+  updateGoodsFormData.goods_id = row.id
 }
 
 getGoodsList()
