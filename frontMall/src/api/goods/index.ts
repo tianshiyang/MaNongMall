@@ -45,3 +45,15 @@ export const getGoodsListAPI = (params: any) => {
     params
   })
 }
+
+// 更新商品上架状态
+export const updateGoodsStatusAPI = (data: {
+  goods_id: string | number,
+  listing_status: boolean
+}) => { 
+  return request({
+    url: "/api/goods/UpdateListingStatus",
+    method: "post",
+    data
+  })
+}

@@ -49,6 +49,7 @@
       </template>
     </el-table-column>
   </el-table>
+  
   <el-pagination
     class="el-pagination-class"
     v-model:current-page="formData.page_no"

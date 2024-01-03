@@ -1,5 +1,8 @@
 <template>
-  <el-form inline>
+  <el-form
+    inline
+    label-width="100px"
+  >
     <el-form-item label="角色名称">
       <RoleSelect v-model="formData.role_id" />
     </el-form-item>

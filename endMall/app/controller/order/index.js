@@ -187,7 +187,6 @@ class OrderController extends BaseController {
       })
       return this.success(data)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
   }

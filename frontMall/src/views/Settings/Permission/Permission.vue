@@ -1,5 +1,8 @@
 <template>
-  <el-form inline>
+  <el-form
+    inline
+    label-width="100px"
+  >
     <el-form-item label="权限名称">
       <PermissionSelect v-model="formData.permission_id" />
     </el-form-item>
@@ -173,3 +176,10 @@ const handleAddPermission = () => {
 // 初始化
 getPermissionList()
 </script>
+
+<style lang="scss" scoped>
+.el-select,
+.el-input {
+  width: 260px;
+}
+</style>

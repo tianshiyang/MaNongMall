@@ -1,5 +1,8 @@
 <template>
-  <el-form inline>
+  <el-form
+    inline
+    label-width="100px"
+  >
     <el-form-item label="菜单名称">
       <el-input
         v-model="form.menu_name"
@@ -225,4 +228,9 @@ const handleAddMenu = () => {
 initPageData()
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-select,
+.el-input {
+  width: 260px;
+}
+</style>
