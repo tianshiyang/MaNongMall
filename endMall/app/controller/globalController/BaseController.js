@@ -34,13 +34,13 @@ class BaseController extends Controller {
     )
   }
 
-  // 判断当前用户是否具有某个权限
-  async hasPermission(permission) {
+  // 判断当前用户是否具有某个角色
+  async hasRole(role_sign) {
     const { user_id } = await this.getUserTokenVerify()
     // 获取当前用户所拥有的角色标识
     const role = await this.ctx.service.userRole.index.getUserRole(user_id)
     const role_list = role.map((item) => item.role_info.role_sign)
-    return role_list.includes(permission)
+    return role_list.includes(role_sign)
   }
 }
 

@@ -72,7 +72,7 @@ class GoodsController extends BaseController {
   async getGoodsList() {
     const params = this.ctx.query
     // 判断当前用户是不是超管
-    const is_admin = await this.hasPermission("SUPPER_ADMIN")
+    const is_admin = await this.hasRole("SUPPER_ADMIN")
     // 获取用户id
     const { user_id } = await this.getUserTokenVerify()
     params.user_id = user_id
