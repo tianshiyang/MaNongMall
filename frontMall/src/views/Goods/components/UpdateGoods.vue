@@ -116,7 +116,6 @@ import { defaultTime } from "@/utils/DataFormat"
 const emit = defineEmits<{
   (event: "update:modelValue", value: boolean): void
   (event: "updateSuccess"): void
-  (event: "close"): void
 }>()
 
 const props = defineProps({
@@ -199,7 +198,6 @@ const getGoodsDetail = async () => {
 // 关闭
 const handleClose = () => {
   emit("update:modelValue", false)
-  emit("close")
 }
 
 // 提交

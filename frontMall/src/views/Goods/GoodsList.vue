@@ -223,7 +223,6 @@
     v-if="updateInventoryFormData.visible"
     :goods_id="updateInventoryFormData.goods_id"
     @updateSuccess="getGoodsList"
-    @close="updateInventoryFormData.goods_id = ''"
   />
 </template>
 

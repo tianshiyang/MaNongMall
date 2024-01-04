@@ -2,7 +2,7 @@
   <section class="table-button-group">
     <el-button
       type="primary"
-      @click="updateClassificationFormData.visible = true"
+      @click="handleCreateClassification"
     >
       新增分类
     </el-button>
@@ -49,7 +49,7 @@
       </template>
     </el-table-column>
   </el-table>
-  
+
   <el-pagination
     class="el-pagination-class"
     v-model:current-page="formData.page_no"
@@ -106,6 +106,12 @@ const updateClassificationFormData = reactive({
   visible: false,
   classification_id: ""
 })
+
+// 新增分类
+const handleCreateClassification = () => {
+  updateClassificationFormData.classification_id = ""
+  updateClassificationFormData.visible = true
+}
 
 // 打开编辑分类弹窗
 const handleUpdateClassification = (classification_id: string) => {
