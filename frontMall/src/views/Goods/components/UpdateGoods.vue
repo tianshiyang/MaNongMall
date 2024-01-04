@@ -206,6 +206,7 @@ const handleCommit = async () => {
     if (valid) {
       try {
         const data = {
+          goods_id: props.goods_id,
           ...formData,
           discount_time_start: formData.discount_time_start || null,
           discount_time_end: formData.discount_time_end || null,
@@ -219,10 +220,10 @@ const handleCommit = async () => {
         })
         emit("update:modelValue", false)
         emit("updateSuccess")
-      } catch (err) {
+      } catch (err: any) {
         ElNotification({
           title: "失败",
-          message: "更新失败",
+          message: err.error_message,
           type: "error"
         })
       }

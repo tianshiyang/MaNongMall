@@ -161,6 +161,7 @@ const handleReset = () => {
   formData.role_id = ""
   formData.role_sign = ""
   formData.create_time = ""
+  handleSearch()
 }
 
 // 删除角色

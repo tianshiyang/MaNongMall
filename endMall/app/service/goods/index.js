@@ -76,8 +76,6 @@ class GoodsService extends Service {
     is_in_discount_time,
     create_time,
     listing_status,
-    is_admin = true,
-    user_id,
     page_no = 1,
     page_size = 10,
   }) {
@@ -93,7 +91,7 @@ class GoodsService extends Service {
     if (goods_classification) {
       where.goods_classification = goods_classification
     }
-    if (is_in_discount_time) {
+    if (is_in_discount_time && is_in_discount_time === "true") {
       // 是否打折期内
       where.discount_time_start = {
         [Op.lte]: new Date(),
@@ -102,26 +100,26 @@ class GoodsService extends Service {
         [Op.gte]: new Date(),
       }
     }
-    if (has_inventory !== null) {
-      // 是否有库存
-      where.inventory = {
-        [Op.gt]: 0,
+    if (!["", null].includes(has_inventory)) {
+      if (has_inventory === "true") {
+        // 是否有库存
+        where.inventory = {
+          [Op.gt]: 0,
+        }
+      } else {
+        where.inventory = 0
       }
     }
-    if (listing_status) {
-      where.listing_status = listing_status
+    if (listing_status === "true") {
+      where.listing_status = true
+    } else if (listing_status === "false") {
+      where.listing_status = false
     }
-    const subWhere = {}
     if (create_time) {
-      // 这个的时间，是订单创建时间
       const parseCreateTime = JSON.parse(create_time)
-      subWhere.create_time = {
+      where.create_time = {
         [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
       }
-    }
-    if (!is_admin) {
-      // 如果不是超管则过滤订单，只搜索属于当前用户的订单
-      subWhere.seller_id = user_id
     }
     return this.ctx.model.Goods.findAndCountAll({
       include: [

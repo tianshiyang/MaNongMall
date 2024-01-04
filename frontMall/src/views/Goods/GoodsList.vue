@@ -7,7 +7,7 @@
       <GoodsSelect v-model="formData.goods_id" />
     </el-form-item>
     <el-form-item label="商品分类">
-      <ClassificationSelectBySeller v-model="formData.classification_id" />
+      <ClassificationSelectBySeller v-model="formData.goods_classification" />
     </el-form-item>
     <el-form-item label="是否有库存">
       <el-select
@@ -69,18 +69,6 @@
         :default-time="defaultTime"
       />
     </el-form-item>
-    <el-form-item label="订单创建时间">
-      <el-date-picker
-        v-model="formData.create_time"
-        type="datetimerange"
-        range-separator="到"
-        value-format="YYYY-MM-DD HH:mm:ss"
-        format="YYYY-MM-DD HH:mm:ss"
-        start-placeholder="开始时间"
-        end-placeholder="结束时间"
-        :default-time="defaultTime"
-      />
-    </el-form-item>
     <el-form-item>
       <el-button
         type="primary"
@@ -88,12 +76,7 @@
       >
         查询
       </el-button>
-      <el-button
-        type="primary"
-        @click="handleReset"
-      >
-        查询
-      </el-button>
+      <el-button @click="handleReset">重置</el-button>
     </el-form-item>
   </el-form>
 
@@ -239,10 +222,10 @@ import UpdateGoodsInventory from "./components/UpdateGoodsInventory.vue"
 // 表单数据源
 const formData = reactive({
   goods_id: "", // 商品ID
-  classification_id: "", // 商品分类ID
+  goods_classification: "", // 商品分类ID
   has_inventory: "", // 是否有库存
   is_in_discount_time: "", // 是否折扣期内
-  create_time: [], // 创建时间
+  create_time: "", // 创建时间
   listing_status: "", // 上架状态
   page_no: 1,
   page_size: 5
@@ -257,7 +240,13 @@ const tableData = reactive({
 // 获取数据
 const getGoodsList = async () => {
   try {
-    const data = await getGoodsListAPI(formData)
+    const params = {
+      ...formData,
+      create_time: formData.create_time
+        ? JSON.stringify(formData.create_time)
+        : null
+    }
+    const data = await getGoodsListAPI(params)
     tableData.list = data.list
     tableData.total = data.total
   } catch (err: any) {
@@ -278,10 +267,10 @@ const handleSearch = () => {
 // 重置
 const handleReset = () => {
   formData.goods_id = ""
-  formData.classification_id = ""
+  formData.goods_classification = ""
   formData.has_inventory = ""
   formData.is_in_discount_time = ""
-  formData.create_time = []
+  formData.create_time = ""
   formData.listing_status = ""
   handleSearch()
 }

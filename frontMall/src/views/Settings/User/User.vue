@@ -51,7 +51,7 @@
       >
         查询
       </el-button>
-      <el-button type="primary">重置</el-button>
+      <el-button @click="handleReset">重置</el-button>
     </el-form-item>
   </el-form>
 
@@ -209,6 +209,16 @@ const formData = reactive({
   page_no: 1,
   page_size: 5
 })
+
+// 重置
+const handleReset = () => {
+  formData.user_id = ""
+  formData.phone = ""
+  formData.role_id = ""
+  formData.is_depart = ""
+  formData.create_time = ""
+  getUserlist()
+}
 
 // 表格数据源
 const tableData = reactive({

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, defineEmits } from "vue"
+import { reactive, ref, defineEmits, watch } from "vue"
 import { ElNotification } from "element-plus"
 import { getCurrentSalesCanSelectClassificationAPI } from "@/api/goods"
 
@@ -59,4 +59,11 @@ getCurrentSalesCanSelectClassificationList()
 const handleChange = (e: string | number) => {
   emit("update:modelValue", e)
 }
+
+watch(
+  () => props.modelValue,
+  () => {
+    formData.modelValue = props.modelValue
+  }
+)
 </script>
