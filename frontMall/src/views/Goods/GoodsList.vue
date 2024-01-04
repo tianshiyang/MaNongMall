@@ -138,7 +138,7 @@
     />
     <el-table-column label="折扣">
       <template #default="{ row }">
-        <div v-if="Number(row.discount) === 1">暂无</div>
+        <div v-if="Number(row.discount) === 1 || !row.discount">暂无</div>
         <div v-else>{{ Number(row.discount) * 10 }}折</div>
       </template>
     </el-table-column>
@@ -214,6 +214,7 @@
     v-if="updateGoodsFormData.visible"
     :goods_id="updateGoodsFormData.goods_id"
     @updateSuccess="getGoodsList"
+    @close="updateGoodsFormData.goods_id = ''"
   />
 
   <!-- 更新库存 -->
@@ -222,6 +223,7 @@
     v-if="updateInventoryFormData.visible"
     :goods_id="updateInventoryFormData.goods_id"
     @updateSuccess="getGoodsList"
+    @close="updateInventoryFormData.goods_id = ''"
   />
 </template>
 

@@ -68,7 +68,7 @@
           v-model="formData.discount"
           placeholder="请输入商品折扣"
           clearable
-          oninput="value=value.replace(/[^\d]/g,'')"
+          oninput="value=value.replace(/^0[0-9]|^[2-9]|^1[0-9]|^1\.|[^\d.]/g,'')"
         />
       </el-form-item>
       <el-form-item
@@ -116,6 +116,7 @@ import { defaultTime } from "@/utils/DataFormat"
 const emit = defineEmits<{
   (event: "update:modelValue", value: boolean): void
   (event: "updateSuccess"): void
+  (event: "close"): void
 }>()
 
 const props = defineProps({
@@ -198,6 +199,7 @@ const getGoodsDetail = async () => {
 // 关闭
 const handleClose = () => {
   emit("update:modelValue", false)
+  emit("close")
 }
 
 // 提交
@@ -205,7 +207,13 @@ const handleCommit = async () => {
   await UpdateGoodsRef.value.validate(async (valid: boolean) => {
     if (valid) {
       try {
-        await updateGoodsAPI(formData)
+        const data = {
+          ...formData,
+          discount_time_start: formData.discount_time_start || null,
+          discount_time_end: formData.discount_time_end || null,
+          discount: formData.discount || null
+        }
+        await updateGoodsAPI(data)
         ElNotification({
           title: "成功",
           message: props.goods_id ? "编辑成功" : "新增成功",

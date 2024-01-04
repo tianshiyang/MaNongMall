@@ -13,8 +13,8 @@ export interface UpdateGoodsData {
   inventory: number | string
   purchase_price: number | string
   price: number | string
-  discount: number | string
-  discount_time_start: string
-  discount_time_end: string
+  discount: any
+  discount_time_start: any
+  discount_time_end: any
   listing_status: boolean
 }
