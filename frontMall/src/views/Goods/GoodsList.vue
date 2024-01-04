@@ -158,33 +158,6 @@
         {{ row.is_discount ? "是" : "否" }}
       </template>
     </el-table-column>
-    <el-table-column label="售卖数量">
-      <template #default="{ row }">
-        {{
-          row.goods_orders
-            ?.map((item: any) => item.sales_num)
-            ?.reduce?.((prev: any, cur: any) => Number(prev) + Number(cur))
-        }}
-      </template>
-    </el-table-column>
-    <el-table-column label="售卖金额">
-      <template #default="{ row }">
-        {{
-          row.goods_orders
-            ?.map((item: any) => item.transaction_volume)
-            ?.reduce?.((prev: any, cur: any) => Number(prev) + Number(cur))
-        }}
-      </template>
-    </el-table-column>
-    <el-table-column label="获利">
-      <template #default="{ row }">
-        {{
-          row.goods_orders
-            ?.map((item: any) => item.profit)
-            ?.reduce?.((prev: any, cur: any) => Number(prev) + Number(cur))
-        }}
-      </template>
-    </el-table-column>
     <el-table-column
       width="120px"
       label="商品上架状态"

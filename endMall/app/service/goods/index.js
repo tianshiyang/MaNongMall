@@ -129,11 +129,6 @@ class GoodsService extends Service {
           model: this.ctx.model.GoodsClassification,
           as: "classification",
         },
-        {
-          model: this.ctx.model.Orders,
-          as: "goods_orders",
-          where: subWhere,
-        },
       ],
       where,
       offset: (page_no - 1) * page_size,
