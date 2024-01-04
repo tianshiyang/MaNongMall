@@ -75,3 +75,15 @@ export const updateGoodsAPI = (data: UpdateGoodsData) => {
     data
   })
 }
+
+// 更新库存
+export const updateInventoryAPI = (data: {
+  goods_id: string | number,
+  inventory: string | number
+}) => { 
+  return request({
+    url: "/api/goods/updateInventory",
+    method: "post",
+    data
+  })
+}

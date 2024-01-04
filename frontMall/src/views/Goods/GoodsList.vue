@@ -186,6 +186,13 @@
         >
           编辑
         </el-button>
+        <el-button
+          type="primary"
+          link
+          @click="updateInventory(row)"
+        >
+          更新库存
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -208,6 +215,14 @@
     :goods_id="updateGoodsFormData.goods_id"
     @updateSuccess="getGoodsList"
   />
+
+  <!-- 更新库存 -->
+  <UpdateGoodsInventory
+    v-model="updateInventoryFormData.visible"
+    v-if="updateInventoryFormData.visible"
+    :goods_id="updateInventoryFormData.goods_id"
+    @updateSuccess="getGoodsList"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -218,6 +233,7 @@ import { defaultTime } from "@/utils/DataFormat"
 import { getGoodsListAPI, updateGoodsStatusAPI } from "@/api/goods"
 import { ElNotification } from "element-plus"
 import UpdateGoods from "./components/UpdateGoods.vue"
+import UpdateGoodsInventory from "./components/UpdateGoodsInventory.vue"
 
 // 表单数据源
 const formData = reactive({
@@ -313,6 +329,18 @@ const handleCreateGoods = () => {
 const handleUpdateGoods = (row: any) => {
   updateGoodsFormData.visible = true
   updateGoodsFormData.goods_id = row.id
+}
+
+// 更新库存数据源
+const updateInventoryFormData = reactive({
+  goods_id: "",
+  visible: false
+})
+
+// 更新库存
+const updateInventory = (row: any) => {
+  updateInventoryFormData.goods_id = row.id
+  updateInventoryFormData.visible = true
 }
 
 getGoodsList()
