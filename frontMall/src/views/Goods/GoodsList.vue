@@ -160,7 +160,7 @@
     <el-table-column
       fixed="right"
       label="操作"
-      width="200"
+      width="240"
     >
       <template #default="{ row }">
         <el-button

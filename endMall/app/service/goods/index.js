@@ -100,7 +100,7 @@ class GoodsService extends Service {
         [Op.gte]: new Date(),
       }
     }
-    if (!["", null].includes(has_inventory)) {
+    if (!["", null, undefined].includes(has_inventory)) {
       if (has_inventory === "true") {
         // 是否有库存
         where.inventory = {
