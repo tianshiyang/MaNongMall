@@ -4,6 +4,7 @@
     filterable
     remote
     reserve-keyword
+    :disabled="props.disabled"
     clearable
     placeholder="请输入商品名称"
     :remote-method="getGoodsList"
@@ -29,7 +30,8 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
-  modelValue: [Number, String]
+  modelValue: [Number, String],
+  disabled: Boolean
 })
 
 // 定义数据源
@@ -66,6 +68,9 @@ watch(
   () => {
     formData.modelValue = props.modelValue
     getGoodsList("", props.modelValue as string | number)
+  },
+  {
+    immediate: true
   }
 )
 // 更新modelValue

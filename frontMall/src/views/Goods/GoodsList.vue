@@ -160,8 +160,16 @@
     <el-table-column
       fixed="right"
       label="操作"
+      width="200"
     >
       <template #default="{ row }">
+        <el-button
+          type="primary"
+          link
+          @click="handleAddOrder(row)"
+        >
+          新增订单
+        </el-button>
         <el-button
           type="primary"
           link
@@ -207,6 +215,13 @@
     :goods_id="updateInventoryFormData.goods_id"
     @updateSuccess="getGoodsList"
   />
+
+  <AddGoods
+    v-model="addOrderFormData.visible"
+    v-if="addOrderFormData.visible"
+    :goods_id="addOrderFormData.goods_id"
+    @updateSuccess="getGoodsList"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -218,6 +233,7 @@ import { getGoodsListAPI, updateGoodsStatusAPI } from "@/api/goods"
 import { ElNotification } from "element-plus"
 import UpdateGoods from "./components/UpdateGoods.vue"
 import UpdateGoodsInventory from "./components/UpdateGoodsInventory.vue"
+import AddGoods from "../Order/components/AddGoods.vue"
 
 // 表单数据源
 const formData = reactive({
@@ -331,6 +347,18 @@ const updateInventoryFormData = reactive({
 const updateInventory = (row: any) => {
   updateInventoryFormData.goods_id = row.id
   updateInventoryFormData.visible = true
+}
+
+// 新增订单数据源
+const addOrderFormData = reactive({
+  visible: false,
+  goods_id: ""
+})
+
+// 新增订单
+const handleAddOrder = (row: any) => {
+  addOrderFormData.goods_id = row.id
+  addOrderFormData.visible = true
 }
 
 getGoodsList()
