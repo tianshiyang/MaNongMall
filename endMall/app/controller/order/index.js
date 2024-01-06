@@ -126,9 +126,9 @@ class OrderController extends BaseController {
     const params = this.ctx.query
     const { user_id } = await this.getUserTokenVerify()
 
-    // 判断当前用户是不是admin，如果是不是admin，则强制将params的seller_id，变成当前角色的id，已此实现数据的角色过滤需求
-    const is_admin = await this.hasRole("SUPPER_ADMIN")
-    if (!is_admin) {
+    // 判断当前用户是不是销售管理员，如果是不是销售管理员，则强制将params的seller_id，变成当前角色的id，已此实现数据的角色过滤需求
+    const is_sales_manager = await this.hasPermission("SALES_MANAGER")
+    if (!is_sales_manager) {
       params.seller_id = user_id
     }
     try {
@@ -172,9 +172,9 @@ class OrderController extends BaseController {
     }
 
     try {
-      // 判断当前用户是不是admin，如果是不是admin,则只能查看自己的售卖数据，如果是则查看所有的
-      const is_admin = await this.hasRole("SUPPER_ADMIN")
-      params.is_admin = is_admin
+      // 判断当前用户是不是销售管理员，如果不是销售管理员,则只能查看自己的售卖数据，如果是则查看所有的
+      const is_sales_manager = await this.hasPermission("SALES_MANAGER")
+      params.is_sales_manager = is_sales_manager
       // 获取当前用户id
       const { user_id } = await this.getUserTokenVerify()
       params.seller_id = user_id

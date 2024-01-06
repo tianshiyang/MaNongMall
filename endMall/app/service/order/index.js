@@ -79,10 +79,15 @@ class MenuRoleService extends Service {
   }
 
   /* 获取售卖数据统计
-   * @param {Object} - {seller_id, goods_id, is_admin} 用户id，商品id, 是否是超管
+   * @param {Object} - {seller_id, goods_id, is_sales_manager} 用户id，商品id, 是否是超管
    * @returns {Object} 创建信息
    */
-  async getSalesDataStatistics({ seller_id, goods_id, is_admin, create_time }) {
+  async getSalesDataStatistics({
+    seller_id,
+    goods_id,
+    is_sales_manager,
+    create_time,
+  }) {
     const where = {
       goods_id,
     }
@@ -92,7 +97,7 @@ class MenuRoleService extends Service {
         [Op.between]: [parseCreateTime[0], parseCreateTime[1]],
       }
     }
-    if (!is_admin) {
+    if (!is_sales_manager) {
       where.seller_id = seller_id
     }
     return this.ctx.model.Orders.findAll({

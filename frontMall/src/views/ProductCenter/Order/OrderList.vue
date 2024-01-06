@@ -9,7 +9,10 @@
     <el-form-item label="商品分类">
       <ClassificationSelectBySeller v-model="formData.classification_id" />
     </el-form-item>
-    <el-form-item label="销售人">
+    <el-form-item
+      label="销售人"
+      v-if="hasPermission('SALES_MANAGER')"
+    >
       <UserSelect v-model="formData.seller_id" />
     </el-form-item>
     <el-form-item label="订单时间">
