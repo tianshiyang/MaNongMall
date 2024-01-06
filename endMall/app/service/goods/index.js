@@ -64,7 +64,7 @@ class GoodsService extends Service {
   }
 
   /* 获取商品列表
-   * @param {Object} - {goods_id, goods_name, goods_classification, has_inventory, is_in_discount_time, create_time, listing_status, is_admin, user_id} 商品id，商品名称，商品分类，是否有库存，是否打折期内，创建时间，上架状态, 是否是超管, 用户id
+   * @param {Object} - {goods_id, goods_name, goods_classification, has_inventory, is_in_discount_time, create_time, listing_status, user_id} 商品id，商品名称，商品分类，是否有库存，是否打折期内，创建时间，上架状态, 是否是超管, 用户id
    * @returns {Object} 编辑信息
    */
   getGoodsList({
