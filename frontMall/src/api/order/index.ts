@@ -10,7 +10,7 @@ export const getOrderListAPI = (params: any) => {
 }
 
 // 新增订单
-export const addGoodsAPI = (data: {sales_num: string | number, goods_id: string}) => {
+export const addGoodsAPI = (data: {sales_num: string | number, goods_id: string | number}) => {
   return request({
     url: '/api/order/createOrder',
     method: 'post',
