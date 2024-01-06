@@ -84,6 +84,7 @@
     <el-button
       type="primary"
       @click="handleCreateGoods"
+      v-if="hasPermission('CREATE_GOODS')"
     >
       新增商品
     </el-button>
@@ -105,6 +106,7 @@
     />
     <el-table-column
       prop="purchase_price"
+      v-if="hasPermission('SHOW_PURCHASE_PRICE')"
       label="商品进价"
     />
     <el-table-column
@@ -166,6 +168,7 @@
         <el-button
           type="primary"
           link
+          v-if="hasPermission('CREATE_ORDER')"
           @click="handleAddOrder(row)"
         >
           新增订单
@@ -173,13 +176,15 @@
         <el-button
           type="primary"
           link
+          v-if="hasPermission('UPDATE_GOODS')"
           @click="handleUpdateGoods(row)"
         >
-          编辑
+          编辑商品
         </el-button>
         <el-button
           type="primary"
           link
+          v-if="hasPermission('UPDATE_INVENTORY')"
           @click="updateInventory(row)"
         >
           更新库存
@@ -225,7 +230,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { computed, reactive } from "vue"
 import GoodsSelect from "../Components/GoodsSelect.vue"
 import ClassificationSelectBySeller from "../Components/ClassificationSelectBySeller.vue"
 import { defaultTime } from "@/utils/DataFormat"
@@ -234,6 +239,16 @@ import { ElNotification } from "element-plus"
 import UpdateGoods from "./components/UpdateGoods.vue"
 import UpdateGoodsInventory from "./components/UpdateGoodsInventory.vue"
 import AddGoods from "../Order/components/AddGoods.vue"
+import { useUserPermissionStore } from "@/stores/useUserPermission"
+
+const permissionStore = useUserPermissionStore()
+
+// 判断用户是否具有某个权限
+const hasPermission = computed(() => {
+  return (val: string) => {
+    return permissionStore.permissionList.includes(val)
+  }
+})
 
 // 表单数据源
 const formData = reactive({

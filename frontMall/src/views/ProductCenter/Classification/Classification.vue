@@ -3,6 +3,7 @@
     <el-button
       type="primary"
       @click="handleCreateClassification"
+      v-if="hasPermission('CREATE_GOODS_CLASSIFICATION')"
     >
       新增分类
     </el-button>
@@ -42,9 +43,10 @@
         <el-button
           type="primary"
           link
+          v-if="hasPermission('UPDATE_GOODS_CLASSIFICATION')"
           @click="handleUpdateClassification(row.id)"
         >
-          编辑
+          编辑商品分类
         </el-button>
       </template>
     </el-table-column>
@@ -71,10 +73,20 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { reactive, computed } from "vue"
 import { getClassificationListAPI } from "@/api/goods"
 import { ElNotification } from "element-plus"
 import UpdateClassification from "./components/UpdateClassification.vue"
+import { useUserPermissionStore } from "@/stores/useUserPermission"
+
+const permissionStore = useUserPermissionStore()
+
+// 判断用户是否具有某个权限
+const hasPermission = computed(() => {
+  return (val: string) => {
+    return permissionStore.permissionList.includes(val)
+  }
+})
 
 const formData = reactive({
   page_size: 5,

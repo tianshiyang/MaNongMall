@@ -60,6 +60,7 @@
     />
     <el-table-column
       prop="profit"
+      v-if="hasPermission('SHOW_PROFIT')"
       label="获利"
     />
     <el-table-column
@@ -81,13 +82,23 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue"
+import { reactive, computed } from "vue"
 import { getOrderListAPI } from "@/api/order"
 import { ElNotification } from "element-plus"
 import GoodsSelect from "../Components/GoodsSelect.vue"
 import ClassificationSelectBySeller from "../Components/ClassificationSelectBySeller.vue"
 import { defaultTime } from "@/utils/DataFormat"
 import UserSelect from "@/views/Settings/components/UserSelect.vue"
+import { useUserPermissionStore } from "@/stores/useUserPermission"
+
+const permissionStore = useUserPermissionStore()
+
+// 判断用户是否具有某个权限
+const hasPermission = computed(() => {
+  return (val: string) => {
+    return permissionStore.permissionList.includes(val)
+  }
+})
 
 const formData = reactive({
   goods_id: "", // 商品名称
