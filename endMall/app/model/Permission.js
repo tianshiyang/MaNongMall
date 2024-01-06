@@ -18,7 +18,7 @@ module.exports = (app) => {
         comment: "权限名称",
       },
       permission_sign: {
-        type: STRING(20),
+        type: STRING(50),
         allowNull: false,
         comment: "权限标识",
       },

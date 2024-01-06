@@ -18,7 +18,7 @@ module.exports = (app) => {
         comment: "角色名称",
       },
       role_sign: {
-        type: STRING(20),
+        type: STRING(50),
         allowNull: false,
         comment: "角色标识",
         unique: true,
