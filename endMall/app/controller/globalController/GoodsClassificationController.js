@@ -6,9 +6,12 @@ class GoodsClassificationController extends BaseController {
     const userInfo = await this.getUserTokenVerify()
     // 判断当前用户是不是超管
     const is_admin = await this.hasRole("SUPPER_ADMIN")
+    // 判断当前角色是不是商品管理员
+    const is_goods_manager = await this.hasRole("GOODS_MANAGER")
+    const has_all_classification = is_goods_manager || is_admin
     try {
       let result = null
-      if (!is_admin) {
+      if (!has_all_classification) {
         // 获取当前用户所拥有的角色
         const role = await this.ctx.service.userRole.index.getUserRole(
           userInfo.user_id
@@ -20,7 +23,7 @@ class GoodsClassificationController extends BaseController {
             role_list
           )
       } else {
-        // 如果是admin角色，则不需要过滤商品分类
+        // 如果是admin角色或者商品管理员，则不需要过滤商品分类
         result =
           await this.ctx.service.roleGoodsClassification.index.getAllClassificationByRoleList()
       }
