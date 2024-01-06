@@ -304,7 +304,7 @@ class LoginController extends BaseController {
    */
   async getUserPermission() {
     try {
-      const result = await this.getUserPermission()
+      const result = await this.getUserAllPermission()
       this.success(result)
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })

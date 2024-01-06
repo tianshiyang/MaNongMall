@@ -8,6 +8,7 @@ import "@/assets/global.css"
 import App from './App.vue'
 import router from './router'
 import { useUserMenuStore } from "@/stores/useUserMenu"
+import { useUserPermissionStore } from '@/stores/useUserPermission'
 
 const app = createApp(App)
 
@@ -17,15 +18,19 @@ app.use(router)
 
 app.mount('#app')
 
-const store = useUserMenuStore()
+const menuStore = useUserMenuStore()
+const permissionStore = useUserPermissionStore()
 
 const whiteList = ['/login', '/', '/404', '/welcome'] // 不重定向白名单
 router.beforeEach(async (to, from, next) => {
-  if (!store.flatMenu?.length) {
+  if (!menuStore.flatMenu?.length) {
     // 如果没有flatMenu，则证明是第一次加载，第一次加载的时候，请求数据，之后便不再请求
-    await store.getUserMenu()
+    await menuStore.getUserMenu()
   }
-  if (!whiteList.includes(to.path) && !store.flatMenu.map(item => item.menu_path).includes(to.path)) {
+  if (!permissionStore.permissionList?.length) {
+    await permissionStore.getUserPermission()
+  }
+  if (!whiteList.includes(to.path) && !menuStore.flatMenu.map(item => item.menu_path).includes(to.path)) {
     // 如果当前用户没有该路由，则跳404
     next("/404")
   }
@@ -41,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
       title = "登录"
       break
     default: 
-      title = store.flatMenu.filter(item => item.menu_path == to.path)[0]?.menu_name || "码农商城"
+      title = menuStore.flatMenu.filter(item => item.menu_path == to.path)[0]?.menu_name || "码农商城"
   }
   next()
   document.title = title

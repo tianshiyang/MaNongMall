@@ -44,7 +44,7 @@ class BaseController extends Controller {
   }
 
   // 获取用户所有权限
-  async getUserPermission() {
+  async getUserAllPermission() {
     try {
       const userInfo = await this.getUserTokenVerify()
       // 获取用户所有角色
@@ -81,7 +81,7 @@ class BaseController extends Controller {
 
   // 判断当前用户是否具有某个权限
   async hasPermission(permission_sign) {
-    const result = await this.getUserPermission()
+    const result = await this.getUserAllPermission()
     const permission_list = result.map(
       (item) => item.dataValues.permission_sign
     )

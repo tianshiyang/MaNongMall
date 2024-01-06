@@ -15,3 +15,11 @@ export const getUserMenuAPI = () => {
     method: 'get'
   })
 }
+
+// 获取用户权限
+export const getUserPermissionAPI = () => { 
+  return request({
+    url: "/api/user/getUserPermission",
+    method: "get"
+  })
+}
