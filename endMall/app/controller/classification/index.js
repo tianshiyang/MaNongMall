@@ -1,6 +1,6 @@
-const BaseController = require("../globalController/BaseController")
+const GoodsClassificationController = require("../globalController/GoodsClassificationController")
 
-class RoleGoodsClassificationController extends BaseController {
+class RoleGoodsClassificationController extends GoodsClassificationController {
   // 更新、创建商品分类
   async updateGoodsClassification() {
     // 获取参数
@@ -161,30 +161,11 @@ class RoleGoodsClassificationController extends BaseController {
 
   // 获取当前用户所拥有的分类列表
   async getCurrentUserHasClassificationList() {
-    const userInfo = await this.getUserTokenVerify()
     try {
-      // 获取当前用户所拥有的角色
-      const role = await this.ctx.service.userRole.index.getUserRole(
-        userInfo.user_id
-      )
-      const role_list = role.map((item) => item.role_info.id)
-      // 获取每个角色所对应的所有分类
-      const result =
-        await this.ctx.service.roleGoodsClassification.index.getAllClassificationByRoleList(
-          role_list
-        )
-      // 去重数据, 并且转化为前端所需要的数据
-      const res = new Map()
-      const data = result
-        .filter(
-          (item) =>
-            !res.has(item.classification_info.dataValues.id) &&
-            res.set(item.classification_info.dataValues.id, 1)
-        )
-        .map((item) => item.classification_info)
-      return this.success(data)
-    } catch (e) {
-      return this.error({ error_message: e.errors[0].message })
+      const result = await this.getCurrentSellerCanSellGoodsClassification()
+      return this.success(result)
+    } catch (err) {
+      return this.error({ error_message: err.errors[0].message })
     }
   }
 

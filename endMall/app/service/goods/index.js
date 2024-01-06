@@ -89,7 +89,10 @@ class GoodsService extends Service {
       }
     }
     if (goods_classification) {
-      where.goods_classification = goods_classification
+      // 返回符合当前人员的商品分类
+      where.goods_classification = {
+        [Op.in]: goods_classification,
+      }
     }
     if (is_in_discount_time && is_in_discount_time === "true") {
       // 是否打折期内

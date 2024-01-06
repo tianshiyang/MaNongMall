@@ -1,7 +1,7 @@
-const BaseController = require("../globalController/BaseController")
+const GoodsClassificationController = require("../globalController/GoodsClassificationController")
 const moment = require("moment")
 
-class GoodsController extends BaseController {
+class GoodsController extends GoodsClassificationController {
   // 更新、创建商品分类
   async updateGoods() {
     // 获取参数
@@ -71,14 +71,19 @@ class GoodsController extends BaseController {
   // 获取商品列表
   async getGoodsList() {
     const params = this.ctx.query
-    // 判断当前用户是不是超管
-    // const is_admin = await this.hasRole("SUPPER_ADMIN")
-    // 获取用户id
-    // const { user_id } = await this.getUserTokenVerify()
-    // params.user_id = user_id
-    // params.is_admin = is_admin
     let result = null
     try {
+      // 获取当前人员所能售卖的分类列表
+      const classificationList =
+        await this.getCurrentSellerCanSellGoodsClassification()
+      const classification_ids = classificationList.map(
+        (item) => item.dataValues.id
+      )
+      if (!params.goods_classification) {
+        params.goods_classification = classification_ids
+      } else {
+        params.goods_classification = [params.goods_classification]
+      }
       result = await this.ctx.service.goods.index.getGoodsList(params)
       // 转化参数
       const list = result.rows.map((item) => {
@@ -105,6 +110,7 @@ class GoodsController extends BaseController {
         total: result.count,
       })
     } catch (err) {
+      console.log(err)
       this.error({ error_message: err.errors[0].message })
     }
   }

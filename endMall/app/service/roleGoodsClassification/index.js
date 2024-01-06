@@ -33,6 +33,13 @@ class RoleGoodsClassificationService extends Service {
    * @returns {Object} 返回信息
    */
   async getAllClassificationByRoleList(data) {
+    const where = {}
+    if (data) {
+      // 如果有data，则需要对商品分类进行过滤
+      where.role_id = {
+        [Op.in]: data,
+      }
+    }
     return await this.ctx.model.RoleGoodsClassification.findAll({
       include: [
         {
@@ -40,11 +47,7 @@ class RoleGoodsClassificationService extends Service {
           as: "classification_info",
         },
       ],
-      where: {
-        role_id: {
-          [Op.in]: data,
-        },
-      },
+      where,
     })
   }
 }
