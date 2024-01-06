@@ -154,7 +154,6 @@ class RoleGoodsClassificationController extends GoodsClassificationController {
       })
       return this.success({ list, total: result.count })
     } catch (err) {
-      console.log(err)
       return this.error({ error_message: err.errors[0].message })
     }
   }
@@ -195,7 +194,6 @@ class RoleGoodsClassificationController extends GoodsClassificationController {
         )
       this.success(data)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
   }

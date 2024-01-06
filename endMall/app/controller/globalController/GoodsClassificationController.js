@@ -25,7 +25,6 @@ class GoodsClassificationController extends BaseController {
           await this.ctx.service.roleGoodsClassification.index.getAllClassificationByRoleList()
       }
       // 去重数据, 并且转化为前端所需要的数据
-      console.log(result)
       const res = new Map()
       const data = result
         .filter(

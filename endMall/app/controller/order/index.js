@@ -146,7 +146,6 @@ class OrderController extends BaseController {
       })
       return this.success({ list, total: result.count })
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
   }

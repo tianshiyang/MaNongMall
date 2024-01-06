@@ -251,7 +251,6 @@ class RoleController extends BaseController {
     try {
       result = await this.ctx.service.role.index.getRoleList(params)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e })
     }
     this.success({

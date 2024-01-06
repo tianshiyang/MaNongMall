@@ -17,7 +17,6 @@ class GoodsService extends Service {
     discount_time_end = "",
     listing_status = true,
   }) {
-    console.log(discount_time_start, discount_time_end)
     return await this.ctx.model.Goods.create({
       goods_name,
       goods_classification,

@@ -269,7 +269,6 @@ class LoginController extends BaseController {
     try {
       result = await this.ctx.service.user.index.getUserList(params)
     } catch (e) {
-      console.log(e)
       return this.error({ error_message: e.errors[0].message })
     }
     const list = result.rows.map((item) => {
@@ -304,34 +303,8 @@ class LoginController extends BaseController {
    *  用户的所有权限为用户拥有的所有的角色的权限的集合
    */
   async getUserPermission() {
-    const userInfo = await this.getUserTokenVerify()
     try {
-      // 获取用户所有角色
-      const roleList = await this.ctx.service.userRole.index.getUserOnlyRole(
-        userInfo.user_id
-      )
-      // 获取当前用户的所有权限列表
-      const allPermissionIdsPromise = roleList.map(
-        async (item) =>
-          await this.ctx.service.permissionRole.index.getRolePermissions(
-            item.role_id
-          )
-      )
-      const allPermissionIds = await Promise.all(allPermissionIdsPromise)
-      // 去重allPermissionIds中permission重复的权限
-      const permissionIdsArr = [
-        ...new Set(allPermissionIds.flat(2).map((item) => item.permission_id)),
-      ]
-      // 返回权限详情
-      const result = await Promise.all(
-        permissionIdsArr.map(
-          // 通过权限ID查找权限详情
-          async (item) =>
-            await this.ctx.service.permission.index.getPermissionDetail({
-              permission_id: item,
-            })
-        )
-      )
+      const result = await this.getUserPermission()
       this.success(result)
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })

@@ -52,7 +52,6 @@ class GoodsController extends GoodsClassificationController {
           ...result.dataValues,
         })
       } catch (err) {
-        console.log(err)
         this.error({ error_message: err.errors[0].message })
       }
     }
@@ -110,7 +109,6 @@ class GoodsController extends GoodsClassificationController {
         total: result.count,
       })
     } catch (err) {
-      console.log(err)
       this.error({ error_message: err.errors[0].message })
     }
   }
@@ -133,6 +131,13 @@ class GoodsController extends GoodsClassificationController {
     }
     if (params.inventory < 0) {
       return this.error({ error_message: "库存不能小于0" })
+    }
+    const hasUpdateInventoryPermission = await this.hasPermission(
+      "UPDATE_INVENTORY"
+    )
+    if (!hasUpdateInventoryPermission) {
+      this.error({ error_message: "没有更新库存的权限" })
+      return
     }
     try {
       await this.ctx.service.goods.index.updateInventory(params)
