@@ -73,7 +73,7 @@ import { reactive, ref } from "vue"
 import { ElNotification } from "element-plus"
 import { getGoodsDetailAPI } from "@/api/goods/index"
 import { addGoodsAPI } from "@/api/order/index"
-import GoodsSelect from "@/views/Goods/components/GoodsSelect.vue"
+import GoodsSelect from "@/views/ProductCenter/Components/GoodsSelect.vue"
 
 const emit = defineEmits<{
   (event: "update:modelValue", value: boolean): void
@@ -109,7 +109,7 @@ const rules = {
 const getGoodsDetail = async () => {
   try {
     const data = await getGoodsDetailAPI({
-      goods_id: props.goods_id
+      goods_id: props.goods_id!
     })
     formData.current_price = data.current_price
     formData.price = data.price
@@ -134,7 +134,7 @@ const handleCommit = async () => {
     if (valid) {
       const data = {
         sales_num: formData.sales_num,
-        goods_id: formData.goods_id
+        goods_id: formData.goods_id!
       }
       try {
         await addGoodsAPI(data)

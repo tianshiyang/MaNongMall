@@ -36,15 +36,15 @@ const routes = [
       }, {
         path: "/classification-manager",
         name: "classificationManager",
-        component: () => import("@/views/Classification/Classification.vue")
+        component: () => import("@/views/ProductCenter/Classification/Classification.vue")
       }, {
         path: "/goods-list",
         name: "goodsList",
-        component: () => import("@/views/Goods/GoodsList.vue")
+        component: () => import("@/views/ProductCenter/Goods/GoodsList.vue")
       }, {
         path: "/order-list",
         name: "orderList",
-        component: () => import("@/views/Order/OrderList.vue")
+        component: () => import("@/views/ProductCenter/Order/OrderList.vue")
       }]
     }, 
   {

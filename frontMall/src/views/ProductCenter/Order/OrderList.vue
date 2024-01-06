@@ -84,8 +84,8 @@
 import { reactive } from "vue"
 import { getOrderListAPI } from "@/api/order"
 import { ElNotification } from "element-plus"
-import GoodsSelect from "../Goods/components/GoodsSelect.vue"
-import ClassificationSelectBySeller from "../Classification/components/ClassificationSelectBySeller.vue"
+import GoodsSelect from "../Components/GoodsSelect.vue"
+import ClassificationSelectBySeller from "../Components/ClassificationSelectBySeller.vue"
 import { defaultTime } from "@/utils/DataFormat"
 import UserSelect from "@/views/Settings/components/UserSelect.vue"
 

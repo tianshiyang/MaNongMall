@@ -226,8 +226,8 @@
 
 <script lang="ts" setup>
 import { reactive } from "vue"
-import GoodsSelect from "./components/GoodsSelect.vue"
-import ClassificationSelectBySeller from "../Classification/components/ClassificationSelectBySeller.vue"
+import GoodsSelect from "../Components/GoodsSelect.vue"
+import ClassificationSelectBySeller from "../Components/ClassificationSelectBySeller.vue"
 import { defaultTime } from "@/utils/DataFormat"
 import { getGoodsListAPI, updateGoodsStatusAPI } from "@/api/goods"
 import { ElNotification } from "element-plus"

@@ -110,7 +110,7 @@
 import { reactive, ref, watch } from "vue"
 import { ElNotification } from "element-plus"
 import { getGoodsDetailAPI, updateGoodsAPI } from "@/api/goods/index"
-import ClassificationSelectBySeller from "../../Classification/components/ClassificationSelectBySeller.vue"
+import ClassificationSelectBySeller from "../../components/ClassificationSelectBySeller.vue"
 import { defaultTime } from "@/utils/DataFormat"
 
 const emit = defineEmits<{
