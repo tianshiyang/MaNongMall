@@ -265,24 +265,25 @@ class LoginController extends BaseController {
   async getUserList() {
     // 获取参数
     const params = this.ctx.query
-    let result = null
     try {
-      result = await this.ctx.service.user.index.getUserList(params)
+      const result = await this.ctx.service.user.index.getUserList(params)
+      const list = result.rows.map((item) => {
+        item.dataValues.role_list = item.dataValues.role_list.map(
+          (role_item) => {
+            return {
+              ...role_item.role_info.dataValues,
+            }
+          }
+        )
+        return item.dataValues
+      })
+      return this.success({
+        total: result.count,
+        list,
+      })
     } catch (e) {
       return this.error({ error_message: e.errors[0].message })
     }
-    const list = result.rows.map((item) => {
-      item.dataValues.role_list = item.dataValues.role_list.map((role_item) => {
-        return {
-          ...role_item.role_info.dataValues,
-        }
-      })
-      return item.dataValues
-    })
-    return this.success({
-      total: result.count,
-      list,
-    })
   }
 
   // 获取员工角色
