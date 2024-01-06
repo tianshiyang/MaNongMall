@@ -48,6 +48,11 @@ class OrderController extends BaseController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
+    const hasCreateOrderPermission = await this.hasPermission("CREATE_ORDER")
+    if (!hasCreateOrderPermission) {
+      this.error({ error_message: "您没有创建订单的权限" })
+      return
+    }
     // 事务
     let transaction = null
     try {

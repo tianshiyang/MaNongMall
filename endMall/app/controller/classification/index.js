@@ -23,9 +23,23 @@ class RoleGoodsClassificationController extends GoodsClassificationController {
       return
     }
     if (params.classification_id) {
+      const hasUpdateGoodsClassification = await this.hasPermission(
+        "UPDATE_GOODS_CLASSIFICATION"
+      )
+      if (!hasUpdateGoodsClassification) {
+        this.error({ error_message: "您没有更新商品分类的权限" })
+        return
+      }
       // 编辑
       await this.compileHandleEditClassification(params)
     } else {
+      const hasCreateGoodsClassification = await this.hasPermission(
+        "CREATE_GOODS_CLASSIFICATION"
+      )
+      if (!hasCreateGoodsClassification) {
+        this.error({ error_message: "您没有创建商品分类的权限" })
+        return
+      }
       // 新增
       await this.compileHandleCreateClassification(params)
     }

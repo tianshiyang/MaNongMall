@@ -139,10 +139,10 @@ const handleCommit = async () => {
         })
         emit("update:modelValue", false)
         emit("updateSuccess")
-      } catch (err) {
+      } catch (err: any) {
         ElNotification({
           title: "失败",
-          message: "更新失败",
+          message: err.error_message,
           type: "error"
         })
       }

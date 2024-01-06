@@ -2,7 +2,7 @@ const GoodsClassificationController = require("../globalController/GoodsClassifi
 const moment = require("moment")
 
 class GoodsController extends GoodsClassificationController {
-  // 更新、创建商品分类
+  // 更新、创建商品
   async updateGoods() {
     // 获取参数
     const params = this.ctx.request.body
@@ -36,6 +36,11 @@ class GoodsController extends GoodsClassificationController {
     }
     if (params.goods_id) {
       // 编辑
+      const hasUpdateGoodsPermission = await this.hasPermission("UPDATE_GOODS")
+      if (!hasUpdateGoodsPermission) {
+        this.error({ error_message: "您没有编辑商品的权限！" })
+        return
+      }
       try {
         await this.editGoods(params)
         this.success({
@@ -46,6 +51,11 @@ class GoodsController extends GoodsClassificationController {
       }
     } else {
       // 新增
+      const hasCreateGoodsPermission = await this.hasPermission("CREATE_GOODS")
+      if (!hasCreateGoodsPermission) {
+        this.error({ error_message: "您没有创建商品的权限！" })
+        return
+      }
       try {
         const result = await this.addGoods(params)
         this.success({
