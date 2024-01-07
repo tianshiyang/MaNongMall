@@ -22,7 +22,7 @@ class GoodsClassificationController extends BaseController {
             role_list
           )
       } else {
-        // 如果是admin角色或者商品管理员，则不需要过滤商品分类
+        // 如果具有查看所有的商品分类权限，则不需要过滤商品分类
         result =
           await this.ctx.service.roleGoodsClassification.index.getAllClassificationByRoleList()
       }
