@@ -22,6 +22,16 @@ class RoleGoodsClassificationController extends GoodsClassificationController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
+    // 判断当前分类名称是否存在
+    const has_classification_name =
+      await this.ctx.service.goodsClassification.index.getGoodsClassificationList(
+        {
+          classification_name: params.classification_name,
+        }
+      )
+    if (has_classification_name.count > 0) {
+      return this.error({ error_message: "当前分类已存在，请勿重复创建" })
+    }
     if (params.classification_id) {
       const hasUpdateGoodsClassification = await this.hasPermission(
         "UPDATE_GOODS_CLASSIFICATION"

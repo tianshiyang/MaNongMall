@@ -38,7 +38,15 @@ class GoodsClassificationService extends Service {
   }
 
   // 获取分类列表
-  async getGoodsClassificationList({ page_no = 1, page_size = 10 }) {
+  async getGoodsClassificationList({
+    classification_name,
+    page_no = 1,
+    page_size = 10,
+  }) {
+    const where = {}
+    if (classification_name) {
+      where.classification_name = classification_name
+    }
     return await this.ctx.model.GoodsClassification.findAndCountAll({
       include: [
         {
@@ -52,6 +60,7 @@ class GoodsClassificationService extends Service {
           ],
         },
       ],
+      where,
       offset: (page_no - 1) * page_size,
       limit: Number(page_size),
       order: [["create_time", "DESC"]],
