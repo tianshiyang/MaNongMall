@@ -148,10 +148,13 @@
       label="商品上架状态"
     >
       <template #default="{ row }">
-        <el-switch
-          v-model="row.listing_status"
-          @change="handleUpdateListingStatus(row)"
-        />
+        <div v-if="hasPermission('GOODS_LISTING_STATUS')">
+          <el-switch
+            v-model="row.listing_status"
+            @change="handleUpdateListingStatus(row)"
+          />
+        </div>
+        <div v-else>{{ row.listing_status ? "已上架" : "未上架" }}</div>
       </template>
     </el-table-column>
     <el-table-column

@@ -175,6 +175,13 @@ class GoodsController extends GoodsClassificationController {
       this.error({ error_message: `${errors[0].field}: ${errors[0].message}` })
       return
     }
+    const hasGoodsListingStatusPermission = await this.hasPermission(
+      "GOODS_LISTING_STATUS"
+    )
+    if (!hasGoodsListingStatusPermission) {
+      this.error({ error_message: "没有更新商品上下架的权限" })
+      return
+    }
     try {
       await this.ctx.service.goods.index.updateListingStatus(params)
       this.success({
