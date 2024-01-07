@@ -39,18 +39,18 @@
       <el-form-item label="商品现价">
         <el-input
           v-model="formData.current_price"
-          placeholder="商品现价"
+          placeholder="请输入商品现价"
           clearable
           disabled
         />
       </el-form-item>
       <el-form-item
         prop="sales_num"
-        label="销售数量"
+        label="售卖数量"
       >
         <el-input
           v-model="formData.sales_num"
-          placeholder="销售数量"
+          placeholder="请输入售卖数量"
           clearable
           oninput="value=value.replace(/[^\d]/g,'')"
         />
