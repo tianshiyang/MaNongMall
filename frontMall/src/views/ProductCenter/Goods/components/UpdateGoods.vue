@@ -29,6 +29,7 @@
       </el-form-item>
       <el-form-item
         prop="inventory"
+        v-if="!props.goods_id"
         label="商品库存"
       >
         <el-input
@@ -90,6 +91,7 @@
       <el-form-item
         prop="listing_status"
         label="上架状态"
+        v-if="!props.goods_id"
       >
         <el-switch v-model="formData.listing_status" />
       </el-form-item>
