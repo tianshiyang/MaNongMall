@@ -93,15 +93,18 @@ class GoodsService extends Service {
         [Op.in]: goods_classification,
       }
     }
-    if (is_in_discount_time && is_in_discount_time === "true") {
-      // 是否打折期内
-      where.discount_time_start = {
-        [Op.lte]: new Date(),
-      }
-      where.discount_time_end = {
-        [Op.gte]: new Date(),
+    if (["", null, undefined].includes(is_in_discount_time)) {
+      if (is_in_discount_time === "true") {
+        // 是否打折期内
+        where.discount_time_start = {
+          [Op.lte]: new Date(),
+        }
+        where.discount_time_end = {
+          [Op.gte]: new Date(),
+        }
       }
     }
+
     if (!["", null, undefined].includes(has_inventory)) {
       if (has_inventory === "true") {
         // 是否有库存
@@ -183,16 +186,16 @@ class GoodsService extends Service {
     })
   }
 
-  // 获取该商品分类集合下的所有商品
-  async getAllGoodsByClassification(classification_ids) {
-    return this.ctx.model.Goods.findAll({
-      where: {
-        goods_classification: {
-          [Op.or]: classification_ids,
-        },
-      },
-    })
-  }
+  // // 获取该商品分类集合下的所有商品
+  // async getAllGoodsByClassification(classification_ids) {
+  //   return this.ctx.model.Goods.findAll({
+  //     where: {
+  //       goods_classification: {
+  //         [Op.or]: classification_ids,
+  //       },
+  //     },
+  //   })
+  // }
 }
 
 module.exports = GoodsService

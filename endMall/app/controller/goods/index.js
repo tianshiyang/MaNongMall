@@ -253,19 +253,19 @@ class GoodsController extends GoodsClassificationController {
     return data
   }
 
-  // 获取当前角色所能售卖的所有商品
-  async getCurrentRoleAllGoods() {
-    const userInfo = await this.getUserTokenVerify()
-    try {
-      // 获取当前角色所拥有的所有分类
-      const data = await this.getCurrentRoleAllClassification(userInfo)
-      const result =
-        await this.ctx.service.goods.index.getAllGoodsByClassification(data)
-      return this.success(result)
-    } catch (e) {
-      return this.error({ error_message: e.errors[0].message })
-    }
-  }
+  // // 获取当前角色所能售卖的所有商品
+  // async getCurrentRoleAllGoods() {
+  //   const userInfo = await this.getUserTokenVerify()
+  //   try {
+  //     // 获取当前角色所拥有的所有分类
+  //     const data = await this.getCurrentRoleAllClassification(userInfo)
+  //     const result =
+  //       await this.ctx.service.goods.index.getAllGoodsByClassification(data)
+  //     return this.success(result)
+  //   } catch (e) {
+  //     return this.error({ error_message: e.errors[0].message })
+  //   }
+  // }
 }
 
 module.exports = GoodsController
