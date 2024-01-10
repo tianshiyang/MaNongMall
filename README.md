@@ -215,11 +215,15 @@
 
 # 致谢、结语
 感谢您能看到这里，希望本项目能带给您一些收获。最后诚恳的请求大家，**给个 Star 吧**，这将是对我最大的鼓励！！！也是我持续维护此项目的动力！
-![求star](/Markdown/images/good.png "求star")
+
+<img src="/Markdown/images/good.png" width=200/>
 
 最后呢～如果您觉得此项目对您的学习有一些帮助，可以请作者喝一杯奶茶么～感谢大家！
 ![求star](/Markdown/images/panda.png "求star")
-![支付宝](/Markdown/images/zhifubao.jpeg "支付宝")
-![微信支付码](/Markdown/images/weixin.jpeg "微信支付码")
+
+<figure class="half">
+  <img src="/Markdown/images/zhifubao.jpeg" width=200/>
+  <img src="/Markdown/images/weixin.jpeg" width=200 style="margin-left: 20px" />
+</figure>
 
 📣📣📣最后还有一件事儿，我们也接外包、私活儿等，如果您有需求，可以联系我，**加我微信**，T_wit-winner
