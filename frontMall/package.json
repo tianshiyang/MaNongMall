@@ -11,6 +11,19 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
+  "keywords": [
+    "Vue3",
+    "ElementPlus",
+    "pinia",
+    "vite",
+    "Typescript",
+    "Egg.js",
+    "Mysql",
+    "多表查询",
+    "Sequelize",
+    "RBAC",
+    "后台管理系统"
+  ],
   "dependencies": {
     "axios": "^1.6.2",
     "element-plus": "^2.4.3",

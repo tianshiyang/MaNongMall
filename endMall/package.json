@@ -6,6 +6,19 @@
   "egg": {
     "declarations": true
   },
+  "keywords": [
+    "Vue3",
+    "ElementPlus",
+    "pinia",
+    "vite",
+    "Typescript",
+    "Egg.js",
+    "Mysql",
+    "多表查询",
+    "Sequelize",
+    "RBAC",
+    "后台管理系统"
+  ],
   "dependencies": {
     "egg": "^3.17.5",
     "egg-cors": "^2.2.3",
